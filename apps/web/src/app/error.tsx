@@ -2,11 +2,15 @@
 
 export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <main className="mx-auto flex max-w-2xl flex-col gap-4 p-8">
-      <h1 className="text-2xl font-semibold">Une erreur est survenue</h1>
-      <button className="w-fit underline" type="button" onClick={() => reset()}>
+    <section className="mx-auto flex max-w-2xl flex-col gap-4 px-4 py-16 sm:px-6">
+      <h1 className="text-3xl font-semibold text-navy">Une erreur est survenue</h1>
+      <button
+        className="w-fit rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white"
+        type="button"
+        onClick={() => reset()}
+      >
         Réessayer
       </button>
-    </main>
+    </section>
   )
 }

@@ -6,8 +6,16 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { Availability } from './collections/Availability'
+import { Bookings } from './collections/Bookings'
+import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
+import { QuoteRequests } from './collections/QuoteRequests'
+import { Realizations } from './collections/Realizations'
+import { Reviews } from './collections/Reviews'
+import { Services } from './collections/Services'
 import { Users } from './collections/Users'
+import { SiteSettings } from './globals/SiteSettings'
 import { plugins } from './plugins'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -51,7 +59,18 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [
+    Users,
+    Media,
+    Categories,
+    Services,
+    Availability,
+    Bookings,
+    QuoteRequests,
+    Realizations,
+    Reviews,
+  ],
+  globals: [SiteSettings],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',

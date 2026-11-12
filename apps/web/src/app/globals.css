@@ -6,4 +6,9 @@
 @theme {
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), sans-serif;
+  --color-navy: #071b4b;
+  --color-action: #0755f5;
+  --color-accent: #e52329;
+  --color-canvas: #f1f5fc;
+  --color-highlight: #f5b301;
 }

@@ -69,6 +69,13 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    categories: Category;
+    services: Service;
+    availability: Availability;
+    bookings: Booking;
+    quoteRequests: QuoteRequest;
+    realizations: Realization;
+    reviews: Review;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +85,13 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    availability: AvailabilitySelect<false> | AvailabilitySelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    quoteRequests: QuoteRequestsSelect<false> | QuoteRequestsSelect<true>;
+    realizations: RealizationsSelect<false> | RealizationsSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -87,8 +101,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    siteSettings: SiteSetting;
+  };
+  globalsSelect: {
+    siteSettings: SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -122,6 +140,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Les espaces client, employé, partenaire et immobilier s’ouvrent plus tard.
+   */
+  role: 'admin' | 'client' | 'employe' | 'partenaire' | 'gestionnaire_immobilier';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -162,6 +184,192 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Les quatre familles du site. Le plus petit ordre s’affiche en premier.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * Laissé vide, il est produit à partir du titre.
+   */
+  slug?: string | null;
+  /**
+   * Plus le nombre est petit, plus la catégorie apparaît tôt.
+   */
+  order?: number | null;
+  /**
+   * Décocher retire la catégorie du site.
+   */
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Prix et durées des modèles Automobile viennent de la maquette. Laissez-les masqués tant qu’ils ne sont pas validés.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  category: number | Category;
+  summary?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  included?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  duration?: string | null;
+  place?: string | null;
+  zone?: string | null;
+  /**
+   * Montant « à partir de », en dollars, à faire valider avant publication.
+   */
+  priceFrom?: number | null;
+  photo?: (number | null) | Media;
+  /**
+   * Plus le nombre est petit, plus le service apparaît tôt.
+   */
+  order?: number | null;
+  /**
+   * Décocher masque le service sur le site et dans l’API publique.
+   */
+  published?: boolean | null;
+  durationMinutes?: number | null;
+  /**
+   * Laissé vide, il est produit à partir du titre.
+   */
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Un jour ouvert propose des heures. Une fermeture retire toutes les heures de cette date.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "availability".
+ */
+export interface Availability {
+  id: number;
+  type: 'jour' | 'fermeture';
+  /**
+   * Rempli à partir du jour ou de la date.
+   */
+  label?: string | null;
+  day?: ('dimanche' | 'lundi' | 'mardi' | 'mercredi' | 'jeudi' | 'vendredi' | 'samedi') | null;
+  times?:
+    | {
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  date?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  /**
+   * Produite par le serveur à la création.
+   */
+  reference?: string | null;
+  service: number | Service;
+  date: string;
+  time: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  note?: string | null;
+  status:
+    | 'brouillon'
+    | 'en_attente'
+    | 'recue'
+    | 'a_estimer'
+    | 'devis_envoye'
+    | 'acceptee'
+    | 'confirmee'
+    | 'en_cours'
+    | 'terminee'
+    | 'annulee'
+    | 'non_disponible'
+    | 'litige';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quoteRequests".
+ */
+export interface QuoteRequest {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  category?: (number | null) | Category;
+  need: string;
+  status: 'recue' | 'en_traitement' | 'traitee' | 'annulee';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "realizations".
+ */
+export interface Realization {
+  id: number;
+  title: string;
+  /**
+   * Laissé vide, il est produit à partir du titre.
+   */
+  slug?: string | null;
+  summary?: string | null;
+  category: number | Category;
+  media?: (number | null) | Media;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  rating: number;
+  text: string;
+  service: number | Service;
+  media?: (number | Media)[] | null;
+  consent: boolean;
+  status: 'en_attente' | 'publie' | 'refuse';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -192,6 +400,34 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'availability';
+        value: number | Availability;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
+      } | null)
+    | ({
+        relationTo: 'quoteRequests';
+        value: number | QuoteRequest;
+      } | null)
+    | ({
+        relationTo: 'realizations';
+        value: number | Realization;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -240,6 +476,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -276,6 +513,123 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  order?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  summary?: T;
+  description?: T;
+  included?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  duration?: T;
+  place?: T;
+  zone?: T;
+  priceFrom?: T;
+  photo?: T;
+  order?: T;
+  published?: T;
+  durationMinutes?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "availability_select".
+ */
+export interface AvailabilitySelect<T extends boolean = true> {
+  type?: T;
+  label?: T;
+  day?: T;
+  times?:
+    | T
+    | {
+        time?: T;
+        id?: T;
+      };
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  reference?: T;
+  service?: T;
+  date?: T;
+  time?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  address?: T;
+  note?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quoteRequests_select".
+ */
+export interface QuoteRequestsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  category?: T;
+  need?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "realizations_select".
+ */
+export interface RealizationsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  category?: T;
+  media?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  rating?: T;
+  text?: T;
+  service?: T;
+  media?: T;
+  consent?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -316,6 +670,34 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteSettings".
+ */
+export interface SiteSetting {
+  id: number;
+  phone?: string | null;
+  email?: string | null;
+  area?: string | null;
+  homeTitle?: string | null;
+  homeIntro?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteSettings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  phone?: T;
+  email?: T;
+  area?: T;
+  homeTitle?: T;
+  homeIntro?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -34,3 +34,5 @@ next-env.d.ts
 public/media
 backend/api/public/media
 apps/web/public/media
+
+docs
