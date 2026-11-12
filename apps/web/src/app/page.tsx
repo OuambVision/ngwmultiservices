@@ -6,6 +6,7 @@ export default function HomePage() {
       <h1 className="text-3xl font-semibold">ngwmultiservices</h1>
       <p>Site public, port {WEB_PORT}. Aucune page métier n’est encore écrite.</p>
       <p>API Payload, port {API_PORT}, administration sur /admin.</p>
+      <p>Test</p>
     </main>
   )
 }
