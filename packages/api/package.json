@@ -1,0 +1,20 @@
+{
+  "name": "@repo/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./client": "./client.ts",
+    "./hooks": "./hooks/index.ts",
+    "./services/*": "./services/*.ts"
+  },
+  "dependencies": {
+    "axios": "^1.13.2"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.90.11",
+    "react": ">=19"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@repo/api": ["./packages/api"],
+      "@repo/api/*": ["./packages/api/*"],
+      "@repo/types": ["./packages/types"],
+      "@repo/types/*": ["./packages/types/*"],
+      "@repo/utils": ["./packages/utils"],
+      "@repo/utils/*": ["./packages/utils/*"],
+      "@repo/stores": ["./packages/stores"],
+      "@repo/stores/*": ["./packages/stores/*"],
+      "@repo/config": ["./packages/config"],
+      "@repo/config/*": ["./packages/config/*"]
+    }
+  }
+}

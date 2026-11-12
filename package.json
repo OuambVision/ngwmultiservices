@@ -1,0 +1,31 @@
+{
+  "name": "ngwmultiservices",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter=ngwmultiservices-api --filter=ngwmultiservices-web",
+    "dev:api": "turbo run dev --filter=ngwmultiservices-api",
+    "dev:web": "turbo run dev --filter=ngwmultiservices-web",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "generate:types": "pnpm --filter ngwmultiservices-api generate:types && node scripts/sync-payload-types.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.8.12",
+    "typescript": "5.7.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp"],
+    "overrides": {
+      "react": "19.2.3",
+      "react-dom": "19.2.3"
+    }
+  }
+}
