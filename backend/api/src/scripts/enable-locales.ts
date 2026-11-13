@@ -127,7 +127,7 @@ async function dump(payload: Payload): Promise<Backup> {
 }
 
 async function pushSchema(payload: Payload) {
-  const adapter = payload.db as {
+  const adapter = payload.db as unknown as {
     drizzle: unknown
     schema: Record<string, unknown>
     schemaName?: string
