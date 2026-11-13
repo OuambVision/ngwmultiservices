@@ -1,0 +1,112 @@
+import { Calendar, FileText, Leaf, MapPin, Shield } from 'lucide-react'
+import Link from 'next/link'
+
+import { NgwOrbitPreview } from '@/components/3d/ngw-orbit-preview'
+import { reservationHref, site } from '@/config/site'
+import { getT } from '@/i18n/server'
+import type { HomeContent } from '@/lib/home'
+
+import { HeroSlideshow } from './hero-slideshow'
+import { ReasonCards } from './reason-cards'
+import { Section } from './section'
+
+const highlightIcons = [
+  { icon: Shield, labelKey: 'home.reliable' },
+  { icon: Leaf, labelKey: 'home.products' },
+] as const
+
+function HeroTitle({ title }: { title: string }) {
+  const parts = title.split(/\s:\s/)
+  if (parts.length < 2) return title
+  const accent = parts.pop()
+  return (
+    <>
+      {parts.join(' : ')}
+      {'\u00A0: '}
+      <span className="text-highlight">{accent}</span>
+    </>
+  )
+}
+
+export async function HomeView({ content }: { content: HomeContent }) {
+  const t = await getT()
+  const highlights = highlightIcons.map((item) => ({ ...item, label: t(item.labelKey) }))
+
+  return (
+    <>
+      <section className="relative isolate overflow-hidden bg-navy text-white">
+        <HeroSlideshow images={content.heroImages} />
+        <div
+          aria-hidden
+          className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(7,27,75,0.94)_0%,rgba(7,27,75,0.84)_42%,rgba(7,27,75,0.62)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,27,75,0.96)_0%,rgba(7,27,75,0.9)_26%,rgba(7,27,75,0.62)_46%,rgba(7,27,75,0.22)_66%,transparent_82%)]"
+        />
+        <div className="relative z-10 mx-auto max-w-[90rem] px-4 py-14 sm:px-6 lg:py-16">
+          <div className="max-w-3xl">
+            <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-white/80 uppercase">
+              <span className="h-0.5 w-8 shrink-0 bg-highlight" aria-hidden />
+              {site.name}
+            </p>
+            <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+              <HeroTitle title={content.title} />
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-white/85">{content.intro}</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href={reservationHref}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                <Calendar className="size-4" aria-hidden />
+                {t('home.book')}
+              </Link>
+              <a
+                href="#services-3d"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/70 px-5 py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                <FileText className="size-4" aria-hidden />
+                {t('home.explore')}
+              </a>
+            </div>
+          </div>
+          <ul className="mt-10 grid max-w-3xl gap-4 sm:grid-cols-3">
+            {highlights.map((item) => (
+              <li key={item.label} className="flex items-center gap-3 text-sm font-medium">
+                <item.icon className="size-6 shrink-0" strokeWidth={1.75} aria-hidden />
+                {item.label}
+              </li>
+            ))}
+            <li className="flex items-center gap-3 text-sm font-medium">
+              <MapPin className="size-6 shrink-0" strokeWidth={1.75} aria-hidden />
+              {content.area}
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <Section
+        id="pourquoi-ngw"
+        className="bg-canvas text-navy"
+        eyebrow={t('home.reasonsEyebrow')}
+        title={t('home.reasonsTitle')}
+        subtitle={t('home.reasonsSubtitle')}
+      >
+        <ReasonCards
+          items={[
+            { title: t('home.reasonBookingTitle'), text: t('home.reasonBookingText') },
+            { title: t('home.reasonQuoteTitle'), text: t('home.reasonQuoteText') },
+            { title: t('home.reasonServicesTitle'), text: t('home.reasonServicesText') },
+          ]}
+        />
+      </Section>
+
+      <Section
+        id="services-3d"
+        eyebrow={t('home.showcaseEyebrow')}
+        title={t('home.showcaseTitle')}
+        backgroundImage="/construction.png"
+        bleed
+      >
+        <NgwOrbitPreview />
+      </Section>
+    </>
+  )
+}

@@ -21,7 +21,7 @@ export const Services = withSlug({
     delete: staff,
   },
   fields: [
-    { name: 'title', label: 'Titre', type: 'text', required: true },
+    { name: 'title', label: 'Titre', type: 'text', required: true, localized: true },
     {
       name: 'category',
       label: 'Catégorie',
@@ -30,21 +30,21 @@ export const Services = withSlug({
       required: true,
       index: true,
     },
-    { name: 'summary', label: 'Résumé', type: 'textarea' },
-    { name: 'description', label: 'Description', type: 'richText' },
+    { name: 'summary', label: 'Résumé', type: 'textarea', localized: true },
+    { name: 'description', label: 'Description', type: 'richText', localized: true },
     {
       name: 'included',
       label: 'Ce service inclut',
       type: 'array',
       labels: { singular: 'Élément', plural: 'Éléments' },
-      fields: [{ name: 'item', label: 'Élément', type: 'text', required: true }],
+      fields: [{ name: 'item', label: 'Élément', type: 'text', required: true, localized: true }],
     },
     {
       type: 'row',
       fields: [
-        { name: 'duration', label: 'Durée', type: 'text', admin: { placeholder: '1 à 2 heures' } },
-        { name: 'place', label: 'Lieu', type: 'text' },
-        { name: 'zone', label: 'Zone', type: 'text' },
+        { name: 'duration', label: 'Durée', type: 'text', localized: true, admin: { placeholder: '1 à 2 heures' } },
+        { name: 'place', label: 'Lieu', type: 'text', localized: true },
+        { name: 'zone', label: 'Zone', type: 'text', localized: true },
       ],
     },
     {

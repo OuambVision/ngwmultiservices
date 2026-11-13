@@ -35,4 +35,6 @@ public/media
 backend/api/public/media
 apps/web/public/media
 
+backend/api/.locale-backup
+
 docs

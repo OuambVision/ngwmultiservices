@@ -24,6 +24,7 @@ export const Media: CollectionConfig = {
       name: 'alt',
       label: 'Texte alternatif',
       type: 'text',
+      localized: true,
     },
   ],
 }

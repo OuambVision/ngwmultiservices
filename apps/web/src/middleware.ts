@@ -1,7 +1,19 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
-export function middleware() {
-  return NextResponse.next()
+import { localeCookie, localeMaxAge, resolveLocale } from '@/i18n/locale'
+
+export function middleware(request: NextRequest) {
+  const current = request.cookies.get(localeCookie)?.value
+  const locale = resolveLocale(current, request.headers.get('accept-language'))
+  const response = NextResponse.next()
+  if (current !== locale) {
+    response.cookies.set(localeCookie, locale, {
+      path: '/',
+      maxAge: localeMaxAge,
+      sameSite: 'lax',
+    })
+  }
+  return response
 }
 
 export const config = {

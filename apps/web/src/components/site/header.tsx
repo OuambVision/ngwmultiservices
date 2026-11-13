@@ -1,22 +1,26 @@
 'use client'
 
-import { Calendar, Menu, Phone, User, X } from 'lucide-react'
+import { Calendar, Mail, MapPin, Menu, Phone, User, X } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Logo } from '@/components/site/logo'
 import { clientSpaceHref, mainNav, reservationHref, site } from '@/config/site'
+import { isLocale, localeCookie, localeMaxAge, type Locale } from '@/i18n/locale'
+import type { SiteContact } from '@/lib/site-contact'
 import { cn } from '@/lib/utils'
 
-function HeaderTools({
-  locale,
-  onToggleLocale,
-}: {
-  locale: 'fr' | 'en'
-  onToggleLocale: () => void
-}) {
+function writeLocale(locale: Locale) {
+  document.cookie = `${localeCookie}=${locale}; Path=/; Max-Age=${localeMaxAge}; SameSite=Lax`
+  window.localStorage.setItem(localeCookie, locale)
+  document.documentElement.lang = locale
+}
+
+function HeaderTools({ locale, onToggleLocale }: { locale: Locale; onToggleLocale: () => void }) {
   const pathname = usePathname()
+  const { t } = useTranslation()
   const otherLocale = locale === 'fr' ? 'EN' : 'FR'
 
   return (
@@ -24,7 +28,7 @@ function HeaderTools({
       <Link
         href={clientSpaceHref}
         aria-current={isCurrent(pathname, clientSpaceHref) ? 'page' : undefined}
-        aria-label="Espace client"
+        aria-label={t('header.clientSpace')}
         className="inline-flex size-10 items-center justify-center rounded-full text-navy hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
       >
         <User className="size-5" aria-hidden />
@@ -32,7 +36,7 @@ function HeaderTools({
       <button
         type="button"
         onClick={onToggleLocale}
-        aria-label={locale === 'fr' ? 'Afficher le site en anglais' : 'Afficher le site en français'}
+        aria-label={locale === 'fr' ? t('header.showEnglish') : t('header.showFrench')}
         className="inline-flex h-10 items-center rounded-md px-2 text-sm font-semibold tracking-wide text-navy hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
       >
         {otherLocale}
@@ -46,24 +50,30 @@ function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function Header() {
+export function Header({ contact }: { contact: SiteContact }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [locale, setLocale] = useState<'fr' | 'en'>('fr')
+  const locale: Locale = i18n.language === 'en' ? 'en' : 'fr'
+  const synced = useRef(false)
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('ngw-locale')
-    if (saved === 'en' || saved === 'fr') {
-      setLocale(saved)
-      document.documentElement.lang = saved
+    if (synced.current) return
+    synced.current = true
+    const saved = window.localStorage.getItem(localeCookie)
+    if (isLocale(saved) && saved !== locale) {
+      writeLocale(saved)
+      void i18n.changeLanguage(saved)
+      router.refresh()
     }
-  }, [])
+  }, [i18n, locale, router])
 
   function toggleLocale() {
-    const next = locale === 'fr' ? 'en' : 'fr'
-    setLocale(next)
-    document.documentElement.lang = next
-    window.localStorage.setItem('ngw-locale', next)
+    const next: Locale = locale === 'fr' ? 'en' : 'fr'
+    writeLocale(next)
+    void i18n.changeLanguage(next)
+    router.refresh()
   }
 
   useEffect(() => {
@@ -80,20 +90,46 @@ export function Header() {
   }, [open])
 
   return (
+    <>
+    <div className="border-b border-action/15 bg-[#e4edfd] text-navy">
+      <ul className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-center gap-x-8 gap-y-1 px-4 py-2 text-sm sm:px-6">
+        <li>
+          <a
+            href={contact.phoneHref}
+            aria-label={t('header.phone', { value: contact.phoneDisplay })}
+            className="inline-flex items-center gap-2 rounded-sm hover:text-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
+          >
+            <Phone className="size-4 shrink-0 text-action" aria-hidden />
+            <span>{contact.phoneDisplay}</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href={`mailto:${contact.email}`}
+            aria-label={t('header.email', { value: contact.email })}
+            className="inline-flex items-center gap-2 rounded-sm hover:text-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
+          >
+            <Mail className="size-4 shrink-0 text-action" aria-hidden />
+            <span>{contact.email}</span>
+          </a>
+        </li>
+        <li className="inline-flex items-center gap-2">
+          <MapPin className="size-4 shrink-0 text-action" aria-hidden />
+          <span>{contact.area}</span>
+        </li>
+      </ul>
+    </div>
     <header className="sticky top-0 z-40 border-b border-navy/10 bg-white">
       <div className="mx-auto flex max-w-screen-2xl items-center gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"
           className="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-action"
         >
-          <span className="sr-only">{site.name}, retour à l’accueil</span>
+          <span className="sr-only">{t('header.home', { name: site.name })}</span>
           <Logo priority="header" />
         </Link>
 
-        <nav
-          className="ml-auto hidden items-center gap-6 lg:flex"
-          aria-label="Navigation principale"
-        >
+        <nav className="ml-auto hidden items-center gap-6 lg:flex" aria-label={t('nav.main')}>
           {mainNav.map((item) => {
             const current = isCurrent(pathname, item.href)
             return (
@@ -106,7 +142,7 @@ export function Header() {
                   current ? 'border-accent text-accent' : 'border-transparent text-navy',
                 )}
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             )
           })}
@@ -125,7 +161,7 @@ export function Header() {
             className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
           >
             <Calendar className="size-4" aria-hidden />
-            Réserver un service
+            {t('header.book')}
           </Link>
           <HeaderTools locale={locale} onToggleLocale={toggleLocale} />
         </div>
@@ -135,7 +171,7 @@ export function Header() {
           className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold whitespace-nowrap text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy lg:hidden"
         >
           <Calendar className="size-4" aria-hidden />
-          <span className="max-sm:sr-only">Rendez-vous</span>
+          <span className="max-sm:sr-only">{t('header.bookShort')}</span>
         </Link>
         <button
           type="button"
@@ -144,7 +180,7 @@ export function Header() {
           aria-controls="menu-mobile"
           onClick={() => setOpen((value) => !value)}
         >
-          <span className="sr-only">{open ? 'Fermer le menu' : 'Ouvrir le menu'}</span>
+          <span className="sr-only">{open ? t('header.closeMenu') : t('header.openMenu')}</span>
           {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
         </button>
       </div>
@@ -153,7 +189,7 @@ export function Header() {
         <nav
           id="menu-mobile"
           className="border-t border-navy/10 bg-white px-4 py-4 lg:hidden"
-          aria-label="Navigation mobile"
+          aria-label={t('nav.mobile')}
         >
           <ul className="flex flex-col gap-1">
             {mainNav.map((item) => {
@@ -168,7 +204,7 @@ export function Header() {
                       current ? 'bg-canvas text-accent' : 'text-navy',
                     )}
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                   </Link>
                 </li>
               )
@@ -177,22 +213,23 @@ export function Header() {
           <HeaderTools locale={locale} onToggleLocale={toggleLocale} />
           <div className="mt-4 flex flex-col gap-3">
             <a
-              href={site.phoneHref}
+              href={contact.phoneHref}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-action px-4 py-3 font-semibold text-action"
             >
               <Phone className="size-4" aria-hidden />
-              {site.phoneDisplay}
+              {contact.phoneDisplay}
             </a>
             <Link
               href={reservationHref}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 font-semibold text-white"
             >
               <Calendar className="size-4" aria-hidden />
-              Prendre rendez-vous
+              {t('header.bookLong')}
             </Link>
           </div>
         </nav>
       ) : null}
     </header>
+    </>
   )
 }

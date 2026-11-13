@@ -18,9 +18,9 @@ export const Realizations = withSlug({
     delete: staff,
   },
   fields: [
-    { name: 'title', label: 'Titre', type: 'text', required: true },
+    { name: 'title', label: 'Titre', type: 'text', required: true, localized: true },
     slugField(),
-    { name: 'summary', label: 'Résumé', type: 'textarea' },
+    { name: 'summary', label: 'Résumé', type: 'textarea', localized: true },
     {
       name: 'category',
       label: 'Catégorie',

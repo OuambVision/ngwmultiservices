@@ -47,6 +47,14 @@ export default buildConfig({
     supportedLanguages: { fr },
     fallbackLanguage: 'fr',
   },
+  localization: {
+    locales: [
+      { label: 'Français', code: 'fr' },
+      { label: 'English', code: 'en' },
+    ],
+    defaultLocale: 'fr',
+    fallback: true,
+  },
   serverURL: SERVER_URL,
   cors: trustedOrigins,
   csrf: trustedOrigins,

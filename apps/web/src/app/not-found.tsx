@@ -1,11 +1,9 @@
 import { PagePlaceholder } from '@/components/site/page-placeholder'
+import { getT } from '@/i18n/server'
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getT()
   return (
-    <PagePlaceholder
-      eyebrow="404"
-      title="Cette page n’existe pas."
-      description="Le lien est incorrect ou la page n’a pas encore été publiée. Revenez à l’accueil depuis le menu."
-    />
+    <PagePlaceholder eyebrow="404" title={t('notFound.title')} description={t('notFound.description')} />
   )
 }

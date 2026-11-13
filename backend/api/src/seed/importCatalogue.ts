@@ -1,14 +1,14 @@
-import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import ExcelJS, { type CellValue } from 'exceljs'
 import type { Payload } from 'payload'
 
 import { slugify } from '../lib/slug'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export const catalogueFile = path.resolve(dirname, '../../../../docs/catalogue-a-completer.csv')
+export const catalogueFile = path.resolve(dirname, '../../../../docs/catalogue-a-completer.xlsx')
 
 type RichTextNode = {
   [key: string]: unknown
@@ -41,52 +41,95 @@ type CatalogueRow = {
   zone?: string
 }
 
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = []
-  let row: string[] = []
-  let cell = ''
-  let quoted = false
-  const source = text.replace(/^\uFEFF/, '')
-
-  for (let index = 0; index < source.length; index += 1) {
-    const char = source[index]
-    if (quoted) {
-      if (char === '"') {
-        if (source[index + 1] === '"') {
-          cell += '"'
-          index += 1
-        } else {
-          quoted = false
-        }
-      } else {
-        cell += char
-      }
-      continue
-    }
-    if (char === '"') {
-      quoted = true
-    } else if (char === ';') {
-      row.push(cell)
-      cell = ''
-    } else if (char === '\n') {
-      row.push(cell)
-      rows.push(row)
-      row = []
-      cell = ''
-    } else if (char !== '\r') {
-      cell += char
-    }
+function cellText(value: CellValue): string {
+  if (value == null) return ''
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim()
   }
-
-  if (cell.length > 0 || row.length > 0) {
-    row.push(cell)
-    rows.push(row)
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  if (typeof value === 'object' && 'richText' in value && Array.isArray(value.richText)) {
+    return value.richText.map((part) => part.text).join('').trim()
   }
-  return rows
+  if (typeof value === 'object' && 'text' in value && typeof value.text === 'string') return value.text.trim()
+  if (typeof value === 'object' && 'result' in value) return cellText(value.result)
+  return ''
 }
 
-function value(row: string[], index: number): string {
-  return (row[index] ?? '').trim()
+function normalizeHeading(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
+
+export async function readCatalogue(file = catalogueFile): Promise<CatalogueRow[]> {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.readFile(file)
+  const sheet = workbook.getWorksheet('Catalogue')
+  if (!sheet) throw new Error('La feuille Catalogue est absente du classeur.')
+
+  const headerRow = sheet.getRow(1)
+  const columns = new Map<string, number>()
+  headerRow.eachCell((cell, column) => {
+    columns.set(normalizeHeading(cellText(cell.value)), column)
+  })
+
+  const column = (name: string) => {
+    const index = columns.get(name)
+    if (!index) throw new Error(`La colonne « ${name} » est absente.`)
+    return index
+  }
+
+  const categorySlugColumn = column('identifiant categorie')
+  const categoryTitleColumn = column('categorie')
+  const categoryOrderColumn = column('ordre categorie')
+  const serviceSlugColumn = column('identifiant service')
+  const serviceTitleColumn = column('service')
+  const summaryColumn = column('resume')
+  const descriptionColumn = column('description')
+  const includedColumn = column('inclus')
+  const durationColumn = column('duree')
+  const placeColumn = column('lieu')
+  const zoneColumn = column('zone')
+  const priceColumn = column('prix indicatif cad')
+  const serviceOrderColumn = column('ordre du service')
+  const publishedColumn = column('publier')
+
+  const rows: CatalogueRow[] = []
+  for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber += 1) {
+    const row = sheet.getRow(rowNumber)
+    const categoryTitle = cellText(row.getCell(categoryTitleColumn).value)
+    const categorySlug = slugify(cellText(row.getCell(categorySlugColumn).value) || categoryTitle)
+    if (!categorySlug || !categoryTitle) continue
+
+    const serviceTitle = cellText(row.getCell(serviceTitleColumn).value)
+    const serviceSlug = slugify(cellText(row.getCell(serviceSlugColumn).value) || serviceTitle)
+    const included = cellText(row.getCell(includedColumn).value)
+      .split(/\r?\n|\|/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+
+    rows.push({
+      categoryOrder: numberValue(cellText(row.getCell(categoryOrderColumn).value)),
+      categorySlug,
+      categoryTitle,
+      description: cellText(row.getCell(descriptionColumn).value) || undefined,
+      duration: cellText(row.getCell(durationColumn).value) || undefined,
+      included: included.length > 0 ? included : undefined,
+      place: cellText(row.getCell(placeColumn).value) || undefined,
+      priceFrom: numberValue(cellText(row.getCell(priceColumn).value)),
+      published: publishedValue(cellText(row.getCell(publishedColumn).value)),
+      serviceOrder: numberValue(cellText(row.getCell(serviceOrderColumn).value)),
+      serviceSlug: serviceTitle ? serviceSlug : undefined,
+      serviceTitle: serviceTitle || undefined,
+      summary: cellText(row.getCell(summaryColumn).value) || undefined,
+      zone: cellText(row.getCell(zoneColumn).value) || undefined,
+    })
+  }
+
+  return rows
 }
 
 function numberValue(input: string): number | undefined {
@@ -138,46 +181,6 @@ function paragraph(text: string) {
   }
 }
 
-export function readCatalogue(file = catalogueFile): CatalogueRow[] {
-  const table = parseCsv(readFileSync(file, 'utf8'))
-  const headerIndex = table.findIndex((row) => row[0]?.trim() === 'identifiant_categorie')
-  if (headerIndex < 0) {
-    throw new Error('Le fichier catalogue ne contient pas la ligne d’en-têtes.')
-  }
-
-  return table.slice(headerIndex + 1).flatMap((row) => {
-    const categoryTitle = value(row, 1)
-    const categorySlug = slugify(value(row, 0) || categoryTitle)
-    if (!categorySlug || !categoryTitle || categorySlug.startsWith('#')) return []
-
-    const serviceTitle = value(row, 4)
-    const serviceSlug = slugify(value(row, 3) || serviceTitle)
-    const included = value(row, 7)
-      .split('|')
-      .map((item) => item.trim())
-      .filter(Boolean)
-
-    return [
-      {
-        categoryOrder: numberValue(value(row, 2)),
-        categorySlug,
-        categoryTitle,
-        description: value(row, 6) || undefined,
-        duration: value(row, 8) || undefined,
-        included: included.length > 0 ? included : undefined,
-        place: value(row, 9) || undefined,
-        priceFrom: numberValue(value(row, 11)),
-        published: publishedValue(value(row, 13)),
-        serviceOrder: numberValue(value(row, 12)),
-        serviceSlug: serviceTitle ? serviceSlug : undefined,
-        serviceTitle: serviceTitle || undefined,
-        summary: value(row, 5) || undefined,
-        zone: value(row, 10) || undefined,
-      },
-    ]
-  })
-}
-
 async function findBySlug(payload: Payload, collection: 'categories' | 'services', slug: string) {
   const result = await payload.find({
     collection,
@@ -203,7 +206,7 @@ export async function importCatalogue(payload: Payload, file = catalogueFile): P
   }
   const categoryIds = new Map<string, number>()
 
-  for (const row of readCatalogue(file)) {
+  for (const row of await readCatalogue(file)) {
     let categoryId = categoryIds.get(row.categorySlug)
     if (categoryId == null) {
       const existing = await findBySlug(payload, 'categories', row.categorySlug)

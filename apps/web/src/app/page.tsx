@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
 
-import { PagePlaceholder } from '@/components/site/page-placeholder'
+import { HomeView } from '@/components/site/home-view'
+import { site } from '@/config/site'
+import { getT } from '@/i18n/server'
+import { loadHome } from '@/lib/home'
 
-export const metadata: Metadata = {
-  title: 'Accueil',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT()
+  return { title: { absolute: `${t('nav.home')} — ${site.name}` } }
 }
 
-export default function HomePage() {
-  return (
-    <PagePlaceholder
-      eyebrow="NGW Cleaning Services"
-      title="Nettoyage professionnel à Ottawa et environs."
-      description="L’accueil présentera bientôt les services, les réalisations et les deux actions : prendre rendez-vous ou demander une soumission."
-    />
-  )
+export const dynamic = 'force-dynamic'
+
+export default async function HomePage() {
+  const content = await loadHome()
+  return <HomeView content={content} />
 }

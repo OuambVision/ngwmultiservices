@@ -100,14 +100,14 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('fr' | 'en') | ('fr' | 'en')[];
   globals: {
     siteSettings: SiteSetting;
   };
   globalsSelect: {
     siteSettings: SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
-  locale: null;
+  locale: 'fr' | 'en';
   user: User & {
     collection: 'users';
   };
@@ -682,6 +682,19 @@ export interface SiteSetting {
   area?: string | null;
   homeTitle?: string | null;
   homeIntro?: string | null;
+  /**
+   * Ces images défilent dans le bandeau d’accueil, dans cet ordre. L’adresse publique est enregistrée automatiquement.
+   */
+  heroImages?:
+    | {
+        image: number | Media;
+        /**
+         * Utilisée par le site. Elle se met à jour quand l’image change.
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -695,6 +708,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   area?: T;
   homeTitle?: T;
   homeIntro?: T;
+  heroImages?:
+    | T
+    | {
+        image?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

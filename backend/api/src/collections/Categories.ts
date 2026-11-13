@@ -20,7 +20,7 @@ export const Categories = withSlug({
     delete: staff,
   },
   fields: [
-    { name: 'title', label: 'Titre', type: 'text', required: true },
+    { name: 'title', label: 'Titre', type: 'text', required: true, localized: true },
     slugField(),
     {
       name: 'order',

@@ -21,7 +21,7 @@ export const Reviews: CollectionConfig = {
   },
   fields: [
     { name: 'rating', label: 'Note', type: 'number', required: true, min: 1, max: 5 },
-    { name: 'text', label: 'Texte', type: 'textarea', required: true },
+    { name: 'text', label: 'Texte', type: 'textarea', required: true, localized: true },
     {
       name: 'service',
       label: 'Service',

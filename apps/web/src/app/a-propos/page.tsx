@@ -1,17 +1,20 @@
 import type { Metadata } from 'next'
 
 import { PagePlaceholder } from '@/components/site/page-placeholder'
+import { getT } from '@/i18n/server'
 
-export const metadata: Metadata = {
-  title: 'À propos',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT()
+  return { title: t('about.metaTitle') }
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const t = await getT()
   return (
     <PagePlaceholder
-      eyebrow="À propos"
-      title="NGW MULTISERVICES"
-      description="La présentation de l’entreprise, sa zone et sa façon de travailler seront rédigées avec les textes fournis par NGW."
+      eyebrow={t('about.eyebrow')}
+      title={t('about.title')}
+      description={t('about.description')}
     />
   )
 }
