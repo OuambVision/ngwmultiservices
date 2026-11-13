@@ -18,7 +18,6 @@ const ENTER_SLIDE = 6
 const ENTER_STAGGER = 0.22
 const ENTER_DURATION = 0.85
 
-const scratch = new Vector3()
 const forward = new Vector3()
 const screenRight = new Vector3()
 

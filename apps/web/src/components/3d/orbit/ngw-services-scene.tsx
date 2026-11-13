@@ -3,7 +3,7 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useRef } from 'react'
-import { PerspectiveCamera, Quaternion, Raycaster, Vector2, Vector3, type Object3D } from 'three'
+import { PerspectiveCamera, Quaternion, Vector2, Vector3, type Object3D } from 'three'
 
 import { createCategoryRing, type CategoryRing } from '@/components/3d/orbit/category-ring'
 

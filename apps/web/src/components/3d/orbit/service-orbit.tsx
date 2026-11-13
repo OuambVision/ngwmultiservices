@@ -1,8 +1,8 @@
 'use client'
 
 import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
-import { Quaternion, Vector3, type MutableRefObject } from 'three'
+import { useRef, type MutableRefObject } from 'react'
+import { Quaternion, Vector3 } from 'three'
 
 import { paintServiceMaterial } from '@/components/3d/orbit/orbit-materials'
 import type { CategoryRuntime, OrbitInput } from '@/components/3d/orbit/types'
