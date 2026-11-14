@@ -1,9 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
 
-import { cn } from '@/lib/utils'
+import { ScrollReveal } from '@/components/site/scroll-reveal'
 
 const images = [
   '/Reservation simplifiee au bureau-1.png',
@@ -16,60 +15,33 @@ type ReasonCardsProps = {
 }
 
 export function ReasonCards({ items }: ReasonCardsProps) {
-  const listRef = useRef<HTMLUListElement>(null)
-  const [shown, setShown] = useState(false)
-
-  useEffect(() => {
-    const list = listRef.current
-    if (!list) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setShown(true)
-      return
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0]?.isIntersecting) return
-        setShown(true)
-        observer.disconnect()
-      },
-      { threshold: 0.35 },
-    )
-    observer.observe(list)
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <ul ref={listRef} className="grid gap-5 md:grid-cols-3">
+    <ul className="grid gap-4 md:grid-cols-3">
       {items.map((item, index) => {
         const image = images[index] ?? images[0]
+        const stepLabel = String(index + 1).padStart(2, '0')
         return (
-          <li key={item.title}>
-            <article
-              className={cn(
-                'relative flex h-full min-h-[21rem] flex-col justify-end overflow-hidden rounded-2xl bg-white p-6 shadow-[0_16px_36px_-24px_rgba(7,27,75,0.55)] ring-1 ring-navy/10 transition duration-700 ease-out sm:p-7',
-                shown ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
-                'hover:-translate-y-1.5 hover:shadow-lg',
-              )}
-              style={{ transitionDelay: shown ? `${index * 160}ms` : '0ms' }}
-            >
-              <Image
-                src={image}
-                alt=""
-                fill
-                sizes="(min-width: 768px) 30vw, 100vw"
-                className="object-cover object-[center_35%] brightness-[0.86]"
-              />
-              <div aria-hidden className="absolute inset-0 bg-navy/20" />
-              <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-white from-16% via-white/80 via-38% to-transparent"
-              />
-              <div className="relative">
-                <h3 className="text-xl font-semibold tracking-tight text-navy">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-navy/75">{item.text}</p>
+          <ScrollReveal key={item.title} as="li">
+            <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(7,27,75,0.14)]">
+              <div className="relative aspect-[2/1] overflow-hidden sm:aspect-[16/10]">
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 30vw, 100vw"
+                  className="object-cover object-[center_35%] transition duration-500 ease-out group-hover:scale-105"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-navy/35 via-transparent to-transparent" aria-hidden />
+                <span className="absolute top-3 left-3 inline-flex size-9 items-center justify-center rounded-full bg-white/95 text-xs font-bold tracking-wide text-[#1e2b6e] ring-1 ring-navy/10">
+                  {stepLabel}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-4 sm:p-5">
+                <h3 className="text-lg font-bold tracking-tight text-[#1e2b6e]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-navy/70">{item.text}</p>
               </div>
             </article>
-          </li>
+          </ScrollReveal>
         )
       })}
     </ul>

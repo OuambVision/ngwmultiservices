@@ -12,16 +12,22 @@ export function Logo({ tone = 'dark', priority = 'footer' }: LogoProps) {
   const muted = tone === 'light' ? 'text-white/75' : 'text-navy/70'
 
   return (
-    <span className="flex items-center gap-3">
-      <Image src="/logo.png" alt={site.name} width={50} height={50} />
+    <span className="flex items-center gap-2 sm:gap-3">
+      <Image
+        src="/logo.png"
+        alt={site.name}
+        width={50}
+        height={50}
+        className="size-9 sm:size-[50px]"
+      />
       <span className="min-w-0 text-left">
-        <span className={cn('block text-lg font-bold leading-none tracking-tight', word)}>
+        <span className={cn('block text-[0.8125rem] font-bold leading-none tracking-tight sm:text-lg', word)}>
           <span className="text-accent">NGW</span>{' '}
           <span className={tone === 'light' ? 'text-white' : 'text-action'}>MULTISERVICES</span>
         </span>
         <span
           className={cn(
-            'mt-0.5 text-[11px] leading-none',
+            'mt-0.5 text-[10px] leading-none sm:text-[11px]',
             muted,
             priority === 'header' && 'max-lg:hidden',
           )}

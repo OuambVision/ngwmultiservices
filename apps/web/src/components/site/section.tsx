@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 
+import { ScrollReveal } from '@/components/site/scroll-reveal'
+
 type SectionHeadingProps = {
   id?: string
   eyebrow?: string
@@ -22,8 +24,8 @@ export function SectionHeading({
   const light = tone === 'light'
   const titleClass =
     as === 'h1'
-      ? `mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl ${light ? 'text-white' : 'text-navy'}`
-      : `mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl ${light ? 'text-white' : 'text-navy'}`
+      ? `mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:mt-4 sm:text-5xl ${light ? 'text-white' : 'text-navy'}`
+      : `mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-balance sm:mt-4 sm:text-3xl lg:text-4xl ${light ? 'text-white' : 'text-navy'}`
 
   return (
     <div className="max-w-3xl">
@@ -74,7 +76,7 @@ export function Section({
     <section
       id={id}
       aria-labelledby={`${id}-titre`}
-      className={`relative isolate scroll-mt-20 overflow-hidden py-24 lg:py-32 ${className ?? ''}`}
+      className={`relative isolate scroll-mt-20 overflow-hidden py-14 sm:py-20 lg:py-32 ${className ?? ''}`}
     >
       {backgroundImage ? (
         <div aria-hidden className="absolute inset-0">
@@ -89,13 +91,15 @@ export function Section({
         </div>
       ) : null}
       <div className="relative mx-auto max-w-[90rem] px-4 sm:px-6">
-        <SectionHeading
-          id={`${id}-titre`}
-          eyebrow={eyebrow}
-          title={title}
-          subtitle={subtitle}
-          tone={backgroundImage ? 'light' : 'navy'}
-        />
+        <ScrollReveal>
+          <SectionHeading
+            id={`${id}-titre`}
+            eyebrow={eyebrow}
+            title={title}
+            subtitle={subtitle}
+            tone={backgroundImage ? 'light' : 'navy'}
+          />
+        </ScrollReveal>
       </div>
       {children ? (
         <div

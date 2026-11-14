@@ -21,6 +21,7 @@ import { categoryImage, formatPrice, serviceImage } from '@/lib/catalog'
 import type { ServiceScore } from '@/lib/reviews'
 import type { Category, Service } from '@repo/types'
 
+import { MobileCategorySelect } from './mobile-category-select'
 import { ServiceRating } from './service-rating'
 
 const categoryIcons: Record<string, LucideIcon> = {
@@ -139,59 +140,52 @@ export function CategoryCatalog({
       </section>
 
       <section className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 lg:py-10">
-        <div className="grid items-start gap-6 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
-          <div className="space-y-5">
-            <nav aria-label={t('services.categories')} className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-navy/10">
-              <p className="px-3 pt-2 pb-3 text-sm font-semibold text-navy">{t('services.categories')}</p>
-              <ul className="space-y-1.5">
-                {categories.map((item) => {
-                  const active = item.slug === category.slug
-                  const Icon = (item.slug && categoryIcons[item.slug]) || Sparkles
-                  return (
-                    <li key={item.id}>
-                      {item.slug ? (
-                        <Link
-                          href={`/services/${item.slug}`}
-                          aria-current={active ? 'page' : undefined}
-                          className={
-                            active
-                              ? 'flex cursor-pointer items-center gap-3 rounded-xl bg-accent px-3 py-3 text-sm font-semibold text-white'
-                              : 'flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-navy hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action'
-                          }
-                        >
-                          <Icon className="size-4 shrink-0" aria-hidden />
-                          <span className="min-w-0 flex-1 truncate">{item.title}</span>
-                          <ChevronRight className="size-4 shrink-0" aria-hidden />
-                        </Link>
-                      ) : (
-                        <span className="flex items-center gap-3 px-3 py-3 text-sm font-semibold text-navy">
-                          {item.title}
-                        </span>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-            </nav>
+        <MobileCategorySelect
+          currentSlug={category.slug ?? ''}
+          categories={categories.flatMap((item) =>
+            item.slug ? [{ id: item.id, slug: item.slug, title: item.title }] : [],
+          )}
+        />
 
-            <aside className="rounded-2xl bg-[#e7eefb] p-5 ring-1 ring-navy/5">
-              <span className="inline-flex size-10 items-center justify-center rounded-full bg-white text-action shadow-sm">
-                <QuoteIcon className="size-5" aria-hidden />
-              </span>
-              <h2 className="mt-4 text-lg font-semibold tracking-tight text-navy">{t('services.quoteTitle')}</h2>
-              <p className="mt-2 text-sm leading-6 text-navy/70">{t('services.quoteText')}</p>
-              <Link
-                href={quoteHref}
-                className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-navy/15 bg-white px-4 py-2.5 text-sm font-semibold text-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
-              >
-                <MessageCircle className="size-4 text-action" aria-hidden />
-                {t('services.quoteAction')}
-              </Link>
-            </aside>
-          </div>
+        <div className="grid items-start gap-6 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
+          <nav
+            aria-label={t('services.categories')}
+            className="order-1 hidden rounded-2xl bg-white p-3 shadow-sm ring-1 ring-navy/10 lg:col-start-1 lg:row-start-1 lg:block"
+          >
+            <p className="px-3 pt-2 pb-3 text-sm font-semibold text-navy">{t('services.categories')}</p>
+            <ul className="space-y-1.5">
+              {categories.map((item) => {
+                const active = item.slug === category.slug
+                const Icon = (item.slug && categoryIcons[item.slug]) || Sparkles
+                return (
+                  <li key={item.id}>
+                    {item.slug ? (
+                      <Link
+                        href={`/services/${item.slug}`}
+                        aria-current={active ? 'page' : undefined}
+                        className={
+                          active
+                            ? 'flex cursor-pointer items-center gap-3 rounded-xl bg-accent px-3 py-3 text-sm font-semibold text-white'
+                            : 'flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-navy hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action'
+                        }
+                      >
+                        <Icon className="size-4 shrink-0" aria-hidden />
+                        <span className="min-w-0 flex-1 truncate">{item.title}</span>
+                        <ChevronRight className="size-4 shrink-0" aria-hidden />
+                      </Link>
+                    ) : (
+                      <span className="flex items-center gap-3 px-3 py-3 text-sm font-semibold text-navy">
+                        {item.title}
+                      </span>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
 
           {services.length > 0 ? (
-            <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="order-2 grid gap-5 sm:grid-cols-2 lg:col-start-2 lg:row-span-2 lg:row-start-1 xl:grid-cols-3">
               {services.map((service) => {
                 const image = serviceImage(service)
                 const price = typeof service.priceFrom === 'number' ? formatPrice(service.priceFrom, locale) : null
@@ -269,10 +263,25 @@ export function CategoryCatalog({
               })}
             </ul>
           ) : (
-            <p className="rounded-2xl bg-white px-6 py-10 text-navy/70 ring-1 ring-navy/10">
+            <p className="order-2 rounded-2xl bg-white px-6 py-10 text-navy/70 ring-1 ring-navy/10 lg:col-start-2 lg:row-span-2 lg:row-start-1">
               {t('services.emptyCategory')}
             </p>
           )}
+
+          <aside className="order-3 rounded-2xl bg-[#e7eefb] p-5 ring-1 ring-navy/5 lg:col-start-1 lg:row-start-2">
+            <span className="inline-flex size-10 items-center justify-center rounded-full bg-white text-action shadow-sm">
+              <QuoteIcon className="size-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 text-lg font-semibold tracking-tight text-navy">{t('services.quoteTitle')}</h2>
+            <p className="mt-2 text-sm leading-6 text-navy/70">{t('services.quoteText')}</p>
+            <Link
+              href={quoteHref}
+              className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-navy/15 bg-white px-4 py-2.5 text-sm font-semibold text-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
+            >
+              <MessageCircle className="size-4 text-action" aria-hidden />
+              {t('services.quoteAction')}
+            </Link>
+          </aside>
         </div>
       </section>
 

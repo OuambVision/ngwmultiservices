@@ -66,7 +66,7 @@ export function RealizationsGallery({
               <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
               {t('projects.eyebrow')}
             </p>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#1e2b6e] sm:text-5xl">{t('projects.title')}</h1>
+            <h1 className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">{t('projects.title')}</h1>
             <p className="mt-3 max-w-xl text-navy/70">{t('projects.text')}</p>
           </div>
           <ul className="grid gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-navy/10 sm:grid-cols-3 lg:min-w-[34rem]">
@@ -150,7 +150,7 @@ export function RealizationsGallery({
               <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
               {t('projects.ctaEyebrow')}
             </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl">
+            <h2 className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">
               {t('projects.ctaTitle')} <span className="text-accent">{t('projects.ctaAccent')}</span> {t('projects.ctaEnd')}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-navy/70">{t('projects.ctaText')}</p>

@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 
 import { CategoryServiceCard } from '@/components/3d/category-service-card'
+import { MobileServiceCategories } from '@/components/3d/mobile-service-categories'
+import { ScrollReveal } from '@/components/site/scroll-reveal'
 import type { ServiceScore } from '@/lib/reviews'
 
 const NgwOrbitCanvas = dynamic(
@@ -18,9 +20,12 @@ export function NgwOrbitPreview({ ratings = {} }: { ratings?: Record<string, Ser
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
 
   return (
-    <div className="relative h-[22rem] w-full sm:h-[26rem] lg:h-[34rem]">
-      <NgwOrbitCanvas onHover={setHoveredCategory} />
-      <CategoryServiceCard name={hoveredCategory} ratings={ratings} />
-    </div>
+    <>
+      <MobileServiceCategories ratings={ratings} />
+      <ScrollReveal className="relative mt-2 hidden h-[22rem] w-full sm:h-[26rem] lg:mt-0 lg:block lg:h-[34rem]">
+        <NgwOrbitCanvas onHover={setHoveredCategory} />
+        <CategoryServiceCard name={hoveredCategory} ratings={ratings} />
+      </ScrollReveal>
+    </>
   )
 }

@@ -68,8 +68,8 @@ export function ContactPageView({ contact }: { contact: SiteContact }) {
               <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
               {t('about.eyebrow')}
             </p>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#1e2b6e] sm:text-5xl">{t('about.title')}</h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-navy/75">{t('about.lead')}</p>
+            <h1 className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">{t('about.title')}</h1>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-navy/65 sm:text-lg sm:leading-8 sm:text-navy/75">{t('about.lead')}</p>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-navy/65">{t('about.text')}</p>
 
             <div className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-navy/10 sm:p-6">
@@ -83,7 +83,7 @@ export function ContactPageView({ contact }: { contact: SiteContact }) {
                 <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
                 {t('contact.eyebrow')}
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#1e2b6e]">{t('contact.title')}</h2>
+              <h2 className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-3xl">{t('contact.title')}</h2>
               <p className="mt-3 max-w-xl text-navy/70">{t('contact.lead')}</p>
             </div>
 
@@ -139,7 +139,7 @@ export function ContactPageView({ contact }: { contact: SiteContact }) {
           </div>
 
           <aside className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-navy/10 sm:p-6 lg:sticky lg:top-24">
-            <h2 className="text-2xl font-bold text-[#1e2b6e]">{t('contact.formTitle')}</h2>
+            <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-2xl">{t('contact.formTitle')}</h2>
             {sent ? (
               <div className="mt-4">
                 <span className="inline-flex size-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">

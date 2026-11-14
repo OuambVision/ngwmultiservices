@@ -13,6 +13,7 @@ import { HomeFeatured, type FeaturedService } from './home-featured'
 import { HomeReviews } from './reviews-board'
 import { HeroSlideshow } from './hero-slideshow'
 import { ReasonCards } from './reason-cards'
+import { ScrollReveal } from './scroll-reveal'
 import { Section } from './section'
 
 const highlightIcons = [
@@ -81,7 +82,7 @@ export async function HomeView({ content }: { content: HomeContent }) {
               <span className="h-0.5 w-8 shrink-0 bg-highlight" aria-hidden />
               {site.name}
             </p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
               <HeroTitle title={content.title} />
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-8 text-white/85">{content.intro}</p>
@@ -117,21 +118,29 @@ export async function HomeView({ content }: { content: HomeContent }) {
         </div>
       </section>
 
-      <Section
-        id="pourquoi-ngw"
-        className="bg-canvas text-navy"
-        eyebrow={t('home.reasonsEyebrow')}
-        title={t('home.reasonsTitle')}
-        subtitle={t('home.reasonsSubtitle')}
-      >
-        <ReasonCards
-          items={[
-            { title: t('home.reasonBookingTitle'), text: t('home.reasonBookingText') },
-            { title: t('home.reasonQuoteTitle'), text: t('home.reasonQuoteText') },
-            { title: t('home.reasonServicesTitle'), text: t('home.reasonServicesText') },
-          ]}
-        />
-      </Section>
+      <section id="pourquoi-ngw" className="scroll-mt-20 bg-canvas" aria-labelledby="pourquoi-ngw-titre">
+        <div className="mx-auto w-full max-w-[90rem] px-4 py-12 sm:px-6 sm:py-16 lg:py-24">
+          <ScrollReveal>
+            <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
+              <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
+              {t('home.reasonsEyebrow')}
+            </p>
+            <h2 id="pourquoi-ngw-titre" className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">
+              {t('home.reasonsTitle')}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-navy/70 sm:text-lg">{t('home.reasonsSubtitle')}</p>
+          </ScrollReveal>
+          <div className="mt-8">
+            <ReasonCards
+              items={[
+                { title: t('home.reasonBookingTitle'), text: t('home.reasonBookingText') },
+                { title: t('home.reasonQuoteTitle'), text: t('home.reasonQuoteText') },
+                { title: t('home.reasonServicesTitle'), text: t('home.reasonServicesText') },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
 
       <Section
         id="services-3d"

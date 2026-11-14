@@ -33,7 +33,7 @@ export function ReservationConfirmation({ reference }: { reference: string }) {
         <span className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
           <Check className="size-8" strokeWidth={3} aria-hidden />
         </span>
-        <h1 className="mt-5 text-3xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl">
+        <h1 className="mt-5 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">
           {t('reservation.confirmTitle')}
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-navy/70">{t('reservation.confirmText')}</p>

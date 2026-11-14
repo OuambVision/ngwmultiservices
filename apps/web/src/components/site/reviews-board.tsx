@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { createReview } from '@/app/avis/actions'
+import { ScrollReveal } from '@/components/site/scroll-reveal'
 import { fieldClass, fieldErrorClass, namePattern } from '@/lib/form-rules'
 import type { ReviewCard } from '@/lib/reviews'
 
@@ -124,7 +125,7 @@ export function ReviewsBoard({
               <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
               {t('reviews.eyebrow')}
             </p>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#1e2b6e] sm:text-5xl">{t('reviews.title')}</h1>
+            <h1 className="mt-3 text-2xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">{t('reviews.title')}</h1>
             <p className="mt-3 text-lg text-navy/70">{t('reviews.lead')}</p>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-navy/60">{t('reviews.text')}</p>
           </div>
@@ -284,19 +285,21 @@ export function HomeReviews({ reviews }: { reviews: ReviewCard[] }) {
   return (
     <section className="bg-canvas" aria-labelledby="avis-clients-titre">
       <div className="mx-auto w-full max-w-[90rem] px-4 py-16 sm:px-6 lg:py-24">
-        <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
-          <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
-          {t('reviews.eyebrow')}
-        </p>
-        <h2 id="avis-clients-titre" className="mt-3 text-4xl font-bold tracking-tight text-[#1e2b6e] sm:text-5xl">
-          {t('reviews.title')}
-        </h2>
-        <p className="mt-3 max-w-2xl text-lg text-navy/70">{t('reviews.lead')}</p>
+        <ScrollReveal>
+          <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
+            <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
+            {t('reviews.eyebrow')}
+          </p>
+          <h2 id="avis-clients-titre" className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">
+            {t('reviews.title')}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-navy/70 sm:text-lg">{t('reviews.lead')}</p>
+        </ScrollReveal>
         <ul className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {reviews.map((review) => {
             const Icon = familyIcon[review.categorySlug] ?? Sparkles
             return (
-              <li key={review.id}>
+              <ScrollReveal key={review.id} as="li">
                 <article className="flex h-full flex-col rounded-3xl bg-white p-5 shadow-sm ring-1 ring-navy/10">
                   <div className="flex items-center gap-3">
                     <span
@@ -323,11 +326,11 @@ export function HomeReviews({ reviews }: { reviews: ReviewCard[] }) {
                   <p className="mt-3 text-sm leading-6 text-navy/75">{review.text}</p>
                   <ReviewPhotos review={review} />
                 </article>
-              </li>
+              </ScrollReveal>
             )
           })}
         </ul>
-        <div className="mt-8 text-center">
+        <ScrollReveal className="mt-8 text-center">
           <Link
             href="/avis"
             className="inline-flex items-center gap-2 rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0544c4]"
@@ -335,7 +338,7 @@ export function HomeReviews({ reviews }: { reviews: ReviewCard[] }) {
             {t('reviews.seeAll')}
             <ArrowRight className="size-4" aria-hidden />
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )
@@ -431,7 +434,7 @@ function ReviewForm({ initialServiceId, services }: { initialServiceId?: number;
 
   return (
     <aside className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-navy/10 lg:sticky lg:top-24">
-      <h2 className="text-2xl font-bold text-[#1e2b6e]">{t('reviews.formTitle')}</h2>
+      <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-2xl">{t('reviews.formTitle')}</h2>
       {sent ? (
         <p className="mt-3 text-sm leading-6 text-navy/70">
           <span className="block font-bold text-[#1e2b6e]">{t('reviews.successTitle')}</span>

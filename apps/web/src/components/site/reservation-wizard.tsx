@@ -317,7 +317,7 @@ export function ReservationWizard({
     <div className="bg-canvas">
       {step === 1 ? (
         <div className="mx-auto w-full max-w-[90rem] px-4 pt-10 sm:px-6">
-          <h1 className="text-3xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl">
+          <h1 className="text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">
             {t('reservation.step1Title')}
           </h1>
           <div className="mt-8">
@@ -344,7 +344,7 @@ export function ReservationWizard({
             </nav>
             {step === 2 ? (
               <>
-                <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                <h1 className="mt-4 text-xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
                   {t('reservation.step2Title')}
                 </h1>
                 <p className="mt-2 max-w-2xl text-white/80">{t('reservation.step2Text')}</p>
@@ -355,7 +355,7 @@ export function ReservationWizard({
                   <span className="h-0.5 w-8 bg-highlight" aria-hidden />
                   {t('reservation.eyebrow')}
                 </p>
-                <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                <h1 className="mt-3 text-xl font-bold tracking-tight text-white sm:text-3xl lg:text-5xl">
                   {t('reservation.step3Title')} <span className="text-highlight">{t('reservation.step3Accent')}</span>
                 </h1>
                 <p className="mt-2 max-w-2xl text-white/80">{t('reservation.step3Text')}</p>
@@ -379,7 +379,7 @@ export function ReservationWizard({
         {step === 1 ? (
           <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(18rem,0.86fr)_minmax(0,1.14fr)]">
             <div>
-              <h2 className="text-2xl font-bold text-[#1e2b6e]">{t('reservation.chooseService')}</h2>
+              <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-2xl">{t('reservation.chooseService')}</h2>
               <p className="mt-1 text-sm text-navy/60">{t('reservation.chooseServiceText')}</p>
               <div className="mt-5 space-y-3">
                 {categories.map((category) => {
@@ -459,7 +459,7 @@ export function ReservationWizard({
                 </div>
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#1e2b6e]">{service.title}</h2>
+                    <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-2xl">{service.title}</h2>
                     {service.ratingCount > 0 ? (
                       <ServiceRating
                         average={service.ratingAverage}
@@ -473,7 +473,7 @@ export function ReservationWizard({
                   {service.price ? (
                     <p className="text-[#1e2b6e]">
                       <span className="text-sm font-semibold">{t('services.from')}</span>{' '}
-                      <span className="text-3xl font-extrabold tracking-tight">{service.price}</span>
+                      <span className="text-xl font-extrabold tracking-tight sm:text-3xl">{service.price}</span>
                     </p>
                   ) : null}
                 </div>
@@ -644,7 +644,7 @@ export function ReservationWizard({
                   void submitContact()
                 }}
               >
-                <h2 className="text-xl font-bold text-[#1e2b6e]">{t('reservation.yourInfo')}</h2>
+                <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-xl">{t('reservation.yourInfo')}</h2>
                 <p className="mt-1 text-sm text-navy/60">{t('reservation.yourInfoText')}</p>
                 <fieldset className="mt-5">
                   <legend className="text-sm font-semibold text-navy">
@@ -754,7 +754,7 @@ export function ReservationWizard({
                 </div>
               </form>
               <aside className="rounded-3xl bg-white p-5 ring-1 ring-navy/10">
-                <h2 className="text-xl font-bold text-[#1e2b6e]">{t('reservation.summary')}</h2>
+                <h2 className="text-lg font-bold text-[#1e2b6e] sm:text-xl">{t('reservation.summary')}</h2>
                 <p className="mt-1 text-sm text-navy/60">{t('reservation.summaryText')}</p>
                 <div className="mt-4 flex gap-3">
                   <span className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-canvas">

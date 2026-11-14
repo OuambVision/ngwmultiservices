@@ -135,21 +135,21 @@ export default async function ServicePage({ params }: PageProps) {
 
         <div className="grid items-start gap-8 lg:col-span-2 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.9fr)]">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-[#1e2b6e]">{service.title}</h1>
+            <h1 className="text-lg font-semibold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">{service.title}</h1>
             {score ? (
               <ServiceRating
                 average={score.average}
                 count={score.count}
                 href={`/avis?service=${service.slug}`}
-                size="md"
-                className="mt-3"
+                size="sm"
+                className="mt-2"
               />
             ) : (
-              <Link href={`/avis?service=${service.slug}`} className="mt-3 inline-flex text-sm font-semibold text-action hover:underline">
+              <Link href={`/avis?service=${service.slug}`} className="mt-2 inline-flex text-sm font-semibold text-action hover:underline">
                 {t('services.noReviews')}
               </Link>
             )}
-            <span className="mt-2 block h-1 w-16 rounded-full bg-highlight" aria-hidden />
+            <span className="mt-2 block h-0.5 w-12 rounded-full bg-highlight" aria-hidden />
             {description.length > 0 ? (
               <div className="mt-4 max-w-2xl space-y-3 text-[15px] leading-7 text-navy/70">
                 {description.map((paragraph) => (
@@ -159,8 +159,8 @@ export default async function ServicePage({ params }: PageProps) {
             ) : null}
             {price ? (
               <p className="mt-5">
-                <span className="text-lg font-bold text-[#1e2b6e]">{t('services.from')}</span>{' '}
-                <span className="text-4xl font-extrabold tracking-tight text-accent">{price}</span>
+                <span className="text-sm font-bold text-[#1e2b6e] sm:text-lg">{t('services.from')}</span>{' '}
+                <span className="text-xl font-extrabold tracking-tight text-accent sm:text-3xl lg:text-4xl">{price}</span>
               </p>
             ) : null}
             <Link
@@ -195,22 +195,22 @@ export default async function ServicePage({ params }: PageProps) {
         {reviews.length > 0 ? (
           <section className="lg:col-span-2" aria-labelledby="service-reviews">
             <div className="flex flex-wrap items-end justify-between gap-3">
-              <h2 id="service-reviews" className="text-2xl font-bold text-[#1e2b6e]">
+              <h2 id="service-reviews" className="text-base font-semibold text-[#1e2b6e] sm:text-xl">
                 {t('services.reviewsTitle')}
               </h2>
-              <Link href={`/avis?service=${service.slug}`} className="text-sm font-semibold text-action hover:underline">
+              <Link href={`/avis?service=${service.slug}`} className="text-xs font-semibold text-action hover:underline sm:text-sm">
                 {t('services.seeReviews')}
               </Link>
             </div>
             <ul className="mt-4 grid gap-3 md:grid-cols-2">
               {reviews.slice(0, 2).map((review) => (
-                <li key={review.id} className="rounded-2xl bg-white p-4 ring-1 ring-navy/10">
+                <li key={review.id} className="rounded-2xl bg-white p-3.5 ring-1 ring-navy/10 sm:p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="font-bold text-[#1e2b6e]">{review.author}</span>
-                    <span className="text-xs text-navy/50">{review.date}</span>
+                    <span className="text-sm font-semibold text-[#1e2b6e]">{review.author}</span>
+                    <span className="text-[11px] text-navy/50">{review.date}</span>
                   </div>
-                  <div className="mt-2">
-                    <StarRow label={`${review.rating} / 5`} size="sm" value={review.rating} />
+                  <div className="mt-1.5">
+                    <StarRow label={`${review.rating} / 5`} size="xs" value={review.rating} />
                   </div>
                   <p className="mt-2 line-clamp-3 text-sm leading-6 text-navy/70">{review.text}</p>
                 </li>

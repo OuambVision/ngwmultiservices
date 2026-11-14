@@ -4,6 +4,7 @@ import { ArrowRight, Clock, Tag } from 'lucide-react'
 
 import type { getT } from '@/i18n/server'
 
+import { ScrollReveal } from './scroll-reveal'
 import { ServiceRating } from './service-rating'
 
 const familyLabel: Record<string, string> = {
@@ -39,22 +40,24 @@ export function HomeFeatured({
   if (services.length === 0) return null
   return (
     <section className="bg-white" aria-labelledby="services-phares-titre">
-      <div className="mx-auto w-full max-w-[90rem] px-4 py-16 sm:px-6 lg:py-24">
-        <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
-          <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
-          {t('home.featuredEyebrow')}
-        </p>
-        <h2 id="services-phares-titre" className="mt-3 text-4xl font-bold tracking-tight text-[#1e2b6e] sm:text-5xl">
-          {t('home.featuredTitle')}
-        </h2>
-        <p className="mt-3 max-w-2xl text-lg text-navy/70">{t('home.featuredText')}</p>
+      <div className="mx-auto w-full max-w-[90rem] px-4 py-12 sm:px-6 sm:py-16 lg:py-24">
+        <ScrollReveal>
+          <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
+            <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
+            {t('home.featuredEyebrow')}
+          </p>
+          <h2 id="services-phares-titre" className="mt-3 text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">
+            {t('home.featuredTitle')}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-navy/70 sm:text-lg">{t('home.featuredText')}</p>
+        </ScrollReveal>
         <ul className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {services.map((service) => (
-            <li key={service.id}>
+            <ScrollReveal key={service.id} as="li">
               <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-canvas shadow-sm ring-1 ring-navy/10">
                 <Link href={service.href} className="absolute inset-0 z-0" aria-label={service.title} />
                 <div className="pointer-events-none relative z-10 flex flex-1 flex-col">
-                  <div className="relative aspect-[16/10] overflow-hidden">
+                  <div className="relative aspect-[2/1] overflow-hidden sm:aspect-[16/10]">
                     <Image
                       src={service.imageSrc}
                       alt={service.imageAlt}
@@ -67,7 +70,7 @@ export function HomeFeatured({
                     </span>
                   </div>
                   <div className="flex flex-1 flex-col p-4">
-                    <h3 className="text-lg font-bold tracking-tight text-[#0c45b0]">{service.title}</h3>
+                    <h3 className="text-base font-bold tracking-tight text-[#0c45b0] sm:text-lg">{service.title}</h3>
                     <ServiceRating
                       average={service.average}
                       count={service.count}
@@ -95,10 +98,10 @@ export function HomeFeatured({
                   </div>
                 </div>
               </article>
-            </li>
+            </ScrollReveal>
           ))}
         </ul>
-        <div className="mt-8 text-center">
+        <ScrollReveal className="mt-8 text-center">
           <Link
             href="/services"
             className="inline-flex items-center gap-2 rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0544c4]"
@@ -106,7 +109,7 @@ export function HomeFeatured({
             {t('home.featuredAll')}
             <ArrowRight className="size-4" aria-hidden />
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )
