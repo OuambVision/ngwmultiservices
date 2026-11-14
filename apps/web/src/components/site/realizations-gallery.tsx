@@ -106,7 +106,7 @@ export function RealizationsGallery({
         {visible.length === 0 ? (
           <p className="mt-8 rounded-2xl bg-white px-5 py-8 text-sm text-navy/60 ring-1 ring-navy/10">{t('projects.empty')}</p>
         ) : (
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <ul className="ngw-card-grid ngw-card-grid--4 mt-6 gap-5">
             {visible.map((card) => {
               const Icon = badgeIcon[card.categorySlug] ?? Sparkles
               return (

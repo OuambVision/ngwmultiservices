@@ -94,7 +94,14 @@ async function checkCatalog(payload: Payload) {
     })
     assert(restored.docs.length === 2, 'Le service republié est absent de l’API.')
 
-    const categorySlugs = ['automobile', 'residentiel', 'commercial', 'specialise']
+    const categorySlugs = [
+      'automobile',
+      'residentiel',
+      'commercial',
+      'demenagement',
+      'petite-maintenance',
+      'specialise',
+    ]
     const categories = await payload.find({
       collection: 'categories',
       depth: 0,

@@ -8,7 +8,10 @@ import { slugify } from '../lib/slug'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export const catalogueFile = path.resolve(dirname, '../../../../docs/catalogue-a-completer.xlsx')
+export const catalogueFile = path.resolve(
+  dirname,
+  '../../../../docs/catalogue-completer-seed.xlsx',
+)
 
 type RichTextNode = {
   [key: string]: unknown

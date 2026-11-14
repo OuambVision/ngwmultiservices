@@ -200,7 +200,7 @@ export function ReviewsBoard({
                 {focus ? t('reviews.serviceEmpty') : t('reviews.empty')}
               </p>
             ) : (
-              <ul className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <ul className="ngw-card-grid ngw-card-grid--4 mt-5 gap-4">
                 {shown.map((review) => {
                   const Icon = familyIcon[review.categorySlug] ?? Sparkles
                   return (
@@ -295,7 +295,7 @@ export function HomeReviews({ reviews }: { reviews: ReviewCard[] }) {
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-navy/70 sm:text-lg">{t('reviews.lead')}</p>
         </ScrollReveal>
-        <ul className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <ul className="ngw-card-grid ngw-card-grid--4 mt-8 gap-4">
           {reviews.map((review) => {
             const Icon = familyIcon[review.categorySlug] ?? Sparkles
             return (

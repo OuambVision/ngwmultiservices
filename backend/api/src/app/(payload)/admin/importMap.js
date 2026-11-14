@@ -29,6 +29,7 @@ import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../co
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { HeaderSearch as HeaderSearch_f480760f54e85607d00cdef929c57b91 } from '../../../components/admin/HeaderSearch'
 import { HeaderNotifications as HeaderNotifications_b87523bade245b5adef097896e50b5ea } from '../../../components/admin/HeaderNotifications'
+import { DashboardNavLink as DashboardNavLink_fc56cb2194b7502b86cb11a3f2f00e19 } from '../../../components/admin/DashboardNavLink'
 import { InstallableAdmin as InstallableAdmin_47be3af8893954dd278cdd42eb9232fd } from '../../../components/admin/InstallableAdmin'
 import { KeepNavDocked as KeepNavDocked_4a28093bbf96f4a24e10245bc6fcfc53 } from '../../../components/admin/KeepNavDocked'
 import { NgwDashboard as NgwDashboard_1d4cb9f96f1554792a01955e7abe902a } from '../../../components/admin/dashboard/NgwDashboard'
@@ -65,6 +66,7 @@ export const importMap = {
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/HeaderSearch#HeaderSearch": HeaderSearch_f480760f54e85607d00cdef929c57b91,
   "/components/admin/HeaderNotifications#HeaderNotifications": HeaderNotifications_b87523bade245b5adef097896e50b5ea,
+  "/components/admin/DashboardNavLink#DashboardNavLink": DashboardNavLink_fc56cb2194b7502b86cb11a3f2f00e19,
   "/components/admin/InstallableAdmin#InstallableAdmin": InstallableAdmin_47be3af8893954dd278cdd42eb9232fd,
   "/components/admin/KeepNavDocked#KeepNavDocked": KeepNavDocked_4a28093bbf96f4a24e10245bc6fcfc53,
   "/components/admin/dashboard/NgwDashboard#NgwDashboard": NgwDashboard_1d4cb9f96f1554792a01955e7abe902a

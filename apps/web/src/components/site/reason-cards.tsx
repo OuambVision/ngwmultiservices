@@ -16,7 +16,7 @@ type ReasonCardsProps = {
 
 export function ReasonCards({ items }: ReasonCardsProps) {
   return (
-    <ul className="grid gap-4 md:grid-cols-3">
+    <ul className="ngw-card-grid gap-4">
       {items.map((item, index) => {
         const image = images[index] ?? images[0]
         const stepLabel = String(index + 1).padStart(2, '0')

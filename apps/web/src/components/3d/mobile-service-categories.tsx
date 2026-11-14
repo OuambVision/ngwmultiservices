@@ -52,7 +52,7 @@ function MobileCategoryCard({
             src={imageSrc}
             alt=""
             fill
-            sizes="(max-width: 1024px) 100vw, 24rem"
+            sizes="(min-width: 924px) 30vw, (min-width: 540px) 45vw, 100vw"
             className="object-cover transition duration-500 ease-out group-hover:scale-105"
           />
           <span className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/35 to-navy/10" aria-hidden />
@@ -117,10 +117,13 @@ export function MobileServiceCategories({
   ratings?: Record<string, ServiceScore>
 }) {
   return (
-    <ul className="flex flex-col gap-5 px-5 pb-2 sm:px-6 lg:hidden">
-      {MOBILE_CATEGORIES.map((name) => (
-        <MobileCategoryCard key={name} name={name} ratings={ratings} />
-      ))}
-    </ul>
+    // Wrapper : lg:hidden doit rester hors de .ngw-card-grid (display:grid écraserait le hide).
+    <div className="px-5 pb-2 sm:px-6 lg:hidden">
+      <ul className="ngw-card-grid ngw-card-grid--4 gap-5">
+        {MOBILE_CATEGORIES.map((name) => (
+          <MobileCategoryCard key={name} name={name} ratings={ratings} />
+        ))}
+      </ul>
+    </div>
   )
 }

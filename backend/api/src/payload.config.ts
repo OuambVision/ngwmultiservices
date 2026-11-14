@@ -79,6 +79,7 @@ export default buildConfig({
         '/components/admin/InstallableAdmin#InstallableAdmin',
         '/components/admin/KeepNavDocked#KeepNavDocked',
       ],
+      beforeNavLinks: ['/components/admin/DashboardNavLink#DashboardNavLink'],
       graphics: {
         Logo: '/components/admin/Logo',
         Icon: '/components/admin/Icon',

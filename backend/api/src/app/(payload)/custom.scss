@@ -208,7 +208,6 @@ html[data-theme='dark'] {
     stroke: #ffffff !important;
     stroke-width: 1.75px;
   }
-
 }
 
 /*
@@ -260,13 +259,43 @@ body.ngw-nav-overlay-open .template-default__nav-toggler {
 .nav .nav__link,
 .template-default .nav__link {
   color: #e8eefc;
+  font-size: 0.875rem; /* 14px — même taille que les listes admin */
+  line-height: 1.4;
+  font-weight: 400;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Lien tableau de bord — même base que les autres .nav__link */
+.nav .ngw-dashboard-nav,
+.nav a.ngw-dashboard-nav {
+  color: #e8eefc !important;
+  margin-bottom: 0.35rem;
+  background: transparent;
+}
+
+.nav .ngw-dashboard-nav .nav__label {
+  color: inherit !important;
+  background: transparent !important;
 }
 
 /* Titres de groupe (Contenu, Catalogue…) — lisibles sans hover */
 .nav .nav-group__toggle,
 .nav .nav-group__toggle .nav__label {
   color: #c5d4f0 !important;
+  font-size: 0.875rem; /* 14px */
   font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Globals (ex. Réglages du site) : même taille que les collections */
+.nav .nav__link .nav__label,
+.nav a .nav__label {
+  font-size: inherit;
+  font-weight: 400;
 }
 
 .nav .nav-group__toggle svg .stroke {
@@ -288,23 +317,60 @@ body.ngw-nav-overlay-open .template-default__nav-toggler {
 /* Sous-éléments légèrement décalés sous les titres de groupe */
 .nav .nav-group .nav__link,
 .nav .nav-group a.nav__link {
-  margin-inline-start: 0.75rem;
-  padding-inline-start: 0.35rem;
-  width: calc(100% - 0.75rem);
+  margin-inline-start: 0.55rem;
+  width: calc(100% - 0.55rem);
 }
 
-.nav .nav__link:hover,
-.nav a:hover {
-  background: color-mix(in srgb, #0755f5 28%, transparent);
+.nav .nav-group__toggle {
+  padding: 0.4rem 0.55rem;
   border-radius: 8px;
-  color: #fff;
+}
+
+/*
+  Hover et actif = même fond.
+  Actif Payload = .nav__link-indicator (trait blanc, loin à gauche).
+*/
+.nav .nav__link:hover,
+.nav a.nav__link:hover,
+.nav .ngw-dashboard-nav:hover,
+.nav a.ngw-dashboard-nav:hover,
+.nav .nav__link.active,
+.nav .nav__link[aria-current='page'],
+.nav .nav__link:has(.nav__link-indicator),
+.nav a.nav__link.active,
+.nav a.nav__link[aria-current='page'],
+.nav a.nav__link:has(.nav__link-indicator),
+.nav .ngw-dashboard-nav.active,
+.nav .ngw-dashboard-nav[aria-current='page'],
+.nav a.ngw-dashboard-nav.active,
+.nav a.ngw-dashboard-nav[aria-current='page'] {
+  background: color-mix(in srgb, #ffffff 18%, transparent) !important;
+  color: #fff !important;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
 }
 
 .nav .nav__link.active,
-.nav .nav__link[aria-current='page'] {
-  background: #0755f5 !important;
-  border-radius: 8px;
+.nav .nav__link[aria-current='page'],
+.nav .nav__link:has(.nav__link-indicator),
+.nav .ngw-dashboard-nav.active,
+.nav .ngw-dashboard-nav[aria-current='page'] {
+  font-weight: 600;
+}
+
+.nav .nav__link:has(.nav__link-indicator) .nav__link-label,
+.nav .nav__link:has(.nav__link-indicator) .nav__label,
+.nav .nav__link.active .nav__link-label,
+.nav .nav__link.active .nav__label,
+.nav .ngw-dashboard-nav.active .nav__label {
   color: #fff !important;
+  font-weight: 600;
+}
+
+/* Trait blanc : position d’origine Payload, loin à gauche */
+.nav .nav__link-indicator {
+  background: #ffffff !important;
+  inset-inline-start: -1rem !important;
 }
 
 .template-default {

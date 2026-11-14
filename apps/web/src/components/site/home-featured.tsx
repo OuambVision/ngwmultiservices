@@ -51,7 +51,7 @@ export function HomeFeatured({
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-navy/70 sm:text-lg">{t('home.featuredText')}</p>
         </ScrollReveal>
-        <ul className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <ul className="ngw-card-grid ngw-card-grid--4 mt-8 gap-4">
           {services.map((service) => (
             <ScrollReveal key={service.id} as="li">
               <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-canvas shadow-sm ring-1 ring-navy/10">
