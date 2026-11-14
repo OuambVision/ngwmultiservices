@@ -16,7 +16,9 @@ export const submitReview: Endpoint = {
   handler: async (req) => {
     let form: FormData
     try {
-      form = await req.formData()
+      const parsed = await req.formData?.()
+      if (!parsed) return fail('missing')
+      form = parsed
     } catch {
       return fail('missing')
     }
@@ -60,7 +62,15 @@ export const submitReview: Endpoint = {
       collection: 'reviews',
       locale: 'fr',
       overrideAccess: true,
-      data: { author, consent: true, media, rating, service: serviceId, text },
+      data: {
+        author,
+        consent: true,
+        media,
+        rating,
+        service: serviceId,
+        status: 'en_attente',
+        text,
+      },
     })
     await req.payload.update({
       collection: 'reviews',

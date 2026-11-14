@@ -22,6 +22,7 @@ export type FeaturedService = {
   id: number
   imageAlt: string
   imageSrc: string
+  order: number
   price: string
   slug: string
   summary: string

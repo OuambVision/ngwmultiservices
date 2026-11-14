@@ -65,7 +65,7 @@ export async function HomeView({ content }: { content: HomeContent }) {
         },
       ]
     }),
-  ).map(({ order: _order, ...service }) => service)
+  )
 
   return (
     <>

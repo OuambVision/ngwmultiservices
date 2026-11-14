@@ -28,7 +28,9 @@ export const submitContact: Endpoint = {
   handler: async (req) => {
     let body: Record<string, unknown>
     try {
-      body = (await req.json()) as Record<string, unknown>
+      const parsed = await req.json?.()
+      if (!parsed || typeof parsed !== 'object') return fail('missing')
+      body = parsed as Record<string, unknown>
     } catch {
       return fail('missing')
     }
