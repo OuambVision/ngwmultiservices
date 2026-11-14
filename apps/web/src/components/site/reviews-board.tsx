@@ -284,7 +284,7 @@ export function HomeReviews({ reviews }: { reviews: ReviewCard[] }) {
   if (reviews.length === 0) return null
   return (
     <section className="bg-canvas" aria-labelledby="avis-clients-titre">
-      <div className="mx-auto w-full max-w-[90rem] px-4 py-16 sm:px-6 lg:py-24">
+      <div className="mx-auto w-full max-w-[90rem] px-5 py-16 sm:px-6 lg:py-24">
         <ScrollReveal>
           <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-navy/70 uppercase">
             <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />

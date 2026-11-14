@@ -90,7 +90,7 @@ export function Section({
           <div className="absolute inset-0 bg-[#071b4b]/42" />
         </div>
       ) : null}
-      <div className="relative mx-auto max-w-[90rem] px-4 sm:px-6">
+      <div className="relative mx-auto max-w-[90rem] px-5 sm:px-6">
         <ScrollReveal>
           <SectionHeading
             id={`${id}-titre`}
@@ -106,7 +106,7 @@ export function Section({
           className={
             bleed
               ? 'relative mt-2 lg:mt-3'
-              : 'relative mx-auto mt-10 max-w-[90rem] px-4 sm:px-6 lg:mt-12'
+              : 'relative mx-auto mt-10 max-w-[90rem] px-5 sm:px-6 lg:mt-12'
           }
         >
           {children}

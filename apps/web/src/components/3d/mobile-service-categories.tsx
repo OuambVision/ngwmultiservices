@@ -117,7 +117,7 @@ export function MobileServiceCategories({
   ratings?: Record<string, ServiceScore>
 }) {
   return (
-    <ul className="flex flex-col gap-5 px-3 pb-2 sm:px-4 lg:hidden">
+    <ul className="flex flex-col gap-5 px-5 pb-2 sm:px-6 lg:hidden">
       {MOBILE_CATEGORIES.map((name) => (
         <MobileCategoryCard key={name} name={name} ratings={ratings} />
       ))}
