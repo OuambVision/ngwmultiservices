@@ -7,7 +7,7 @@ import { ScrollReveal } from '@/components/site/scroll-reveal'
 const images = [
   '/Reservation simplifiee au bureau-1.png',
   '/Soumission transparente sur ordinateur-2.png',
-  '/Plusieurs services, un seul contact-3.png',
+  '/plusieurs-services-un-seul-contact-3.png',
 ]
 
 type ReasonCardsProps = {
