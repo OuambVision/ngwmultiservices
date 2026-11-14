@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'ngw-admin-install-dismissed'
 const SHOW_DELAY_MS = 2000
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
@@ -21,11 +22,19 @@ function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent)
 }
 
-function isMobileViewport() {
-  return window.matchMedia('(max-width: 1023px)').matches
+function isSnoozed() {
+  const raw = window.localStorage.getItem(STORAGE_KEY)
+  if (!raw || raw === '1') return false
+  const at = Number(raw)
+  if (!Number.isFinite(at)) return false
+  return Date.now() - at < SNOOZE_MS
 }
 
-/** Injecte le manifest / meta installables + petit prompt mobile. */
+function snooze() {
+  window.localStorage.setItem(STORAGE_KEY, String(Date.now()))
+}
+
+/** Injecte le manifest / meta installables + prompt d’installation. */
 export function InstallableAdmin({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(false)
   const [iosHelp, setIosHelp] = useState(false)
@@ -68,7 +77,7 @@ export function InstallableAdmin({ children }: { children: React.ReactNode }) {
     ensureMeta('apple-mobile-web-app-title', 'NGW Admin')
     ensureMeta('apple-mobile-web-app-status-bar-style', 'default')
 
-    if (isStandalone() || !isMobileViewport() || window.localStorage.getItem(STORAGE_KEY) === '1') {
+    if (isStandalone() || isSnoozed()) {
       return () => {
         for (const tag of tags) tag.remove()
       }
@@ -81,8 +90,7 @@ export function InstallableAdmin({ children }: { children: React.ReactNode }) {
     window.addEventListener('beforeinstallprompt', onBeforeInstall)
 
     const timer = window.setTimeout(() => {
-      if (isStandalone() || !isMobileViewport()) return
-      if (window.localStorage.getItem(STORAGE_KEY) === '1') return
+      if (isStandalone() || isSnoozed()) return
       setVisible(true)
       if (isIos()) setIosHelp(true)
     }, SHOW_DELAY_MS)
@@ -95,7 +103,7 @@ export function InstallableAdmin({ children }: { children: React.ReactNode }) {
   }, [])
 
   function dismiss() {
-    window.localStorage.setItem(STORAGE_KEY, '1')
+    snooze()
     setVisible(false)
   }
 
@@ -122,6 +130,8 @@ export function InstallableAdmin({ children }: { children: React.ReactNode }) {
             right: 12,
             bottom: 'max(12px, env(safe-area-inset-bottom))',
             zIndex: 10000,
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
           <div
@@ -129,6 +139,8 @@ export function InstallableAdmin({ children }: { children: React.ReactNode }) {
               display: 'flex',
               gap: 12,
               alignItems: 'flex-start',
+              width: '100%',
+              maxWidth: 480,
               padding: 12,
               borderRadius: 16,
               background: 'rgba(255,255,255,0.97)',

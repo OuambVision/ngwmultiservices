@@ -9,6 +9,8 @@ import { site } from '@/config/site'
 
 const STORAGE_KEY = 'ngw-install-prompt-dismissed'
 const SHOW_DELAY_MS = 1800
+/** Réaffiche le prompt 7 jours après « Plus tard » / fermeture. */
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
@@ -28,9 +30,16 @@ function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent)
 }
 
-function isMobileViewport() {
-  if (typeof window === 'undefined') return false
-  return window.matchMedia('(max-width: 1023px)').matches
+function isSnoozed() {
+  const raw = window.localStorage.getItem(STORAGE_KEY)
+  if (!raw || raw === '1') return false
+  const at = Number(raw)
+  if (!Number.isFinite(at)) return false
+  return Date.now() - at < SNOOZE_MS
+}
+
+function snooze() {
+  window.localStorage.setItem(STORAGE_KEY, String(Date.now()))
 }
 
 export function InstallAppPrompt() {
@@ -40,8 +49,7 @@ export function InstallAppPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
-    if (isStandalone() || !isMobileViewport()) return
-    if (window.localStorage.getItem(STORAGE_KEY) === '1') return
+    if (isStandalone() || isSnoozed()) return
 
     const onBeforeInstall = (event: Event) => {
       event.preventDefault()
@@ -50,8 +58,7 @@ export function InstallAppPrompt() {
     window.addEventListener('beforeinstallprompt', onBeforeInstall)
 
     const timer = window.setTimeout(() => {
-      if (isStandalone() || !isMobileViewport()) return
-      if (window.localStorage.getItem(STORAGE_KEY) === '1') return
+      if (isStandalone() || isSnoozed()) return
       setVisible(true)
       if (isIos()) setIosHelp(true)
     }, SHOW_DELAY_MS)
@@ -63,7 +70,7 @@ export function InstallAppPrompt() {
   }, [])
 
   function dismiss() {
-    window.localStorage.setItem(STORAGE_KEY, '1')
+    snooze()
     setVisible(false)
   }
 
@@ -83,11 +90,11 @@ export function InstallAppPrompt() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-[60] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition duration-500 lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-[60] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition duration-500 sm:px-4"
       role="dialog"
       aria-label={t('install.title')}
     >
-      <div className="mx-auto flex max-w-lg items-start gap-3 rounded-2xl border border-navy/10 bg-white/95 p-3 shadow-[0_18px_40px_rgba(7,27,75,0.22)] backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-lg items-start gap-3 rounded-2xl border border-navy/10 bg-white/95 p-3 shadow-[0_18px_40px_rgba(7,27,75,0.22)] backdrop-blur-md sm:p-4">
         <Image
           src="/icons/icon-192.png"
           alt=""
