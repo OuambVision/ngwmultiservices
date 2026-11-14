@@ -1,11 +1,15 @@
 'use client'
 
 import { Building2, Car, Check, Home, Layers, ShieldCheck, type LucideIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getCategoryCard, type NgwCategoryName } from '@/data/ngw-service-catalog'
+import type { ServiceScore } from '@/lib/reviews'
 import { cn } from '@/lib/utils'
+
+import { ServiceRating } from '@/components/site/service-rating'
 
 const CATEGORY_ICONS: Record<NgwCategoryName, { icon: LucideIcon; tile: string }> = {
   NGW_Automotive: { icon: Car, tile: 'bg-accent text-white' },
@@ -15,18 +19,37 @@ const CATEGORY_ICONS: Record<NgwCategoryName, { icon: LucideIcon; tile: string }
   NGW_AllServices: { icon: Layers, tile: 'bg-navy text-white' },
 }
 
-export function CategoryServiceCard({ name }: { name: string | null }) {
+export function CategoryServiceCard({
+  name,
+  ratings = {},
+}: {
+  name: string | null
+  ratings?: Record<string, ServiceScore>
+}) {
   const { i18n } = useTranslation()
   const [shown, setShown] = useState<string | null>(name)
+  const [holding, setHolding] = useState(false)
+  const releaseTimer = useRef<number | null>(null)
+
+  const holdCard = () => {
+    if (releaseTimer.current) window.clearTimeout(releaseTimer.current)
+    setHolding(true)
+  }
+
+  const releaseCard = () => {
+    if (releaseTimer.current) window.clearTimeout(releaseTimer.current)
+    releaseTimer.current = window.setTimeout(() => setHolding(false), 160)
+  }
 
   useEffect(() => {
     if (name) {
       setShown(name)
       return
     }
-    const timeout = window.setTimeout(() => setShown(null), 140)
+    if (holding) return
+    const timeout = window.setTimeout(() => setShown(null), 180)
     return () => window.clearTimeout(timeout)
-  }, [name])
+  }, [holding, name])
 
   const card = shown ? getCategoryCard(shown, i18n.language) : null
   const visual = shown && shown in CATEGORY_ICONS ? CATEGORY_ICONS[shown as NgwCategoryName] : null
@@ -67,7 +90,14 @@ export function CategoryServiceCard({ name }: { name: string | null }) {
                   {card.eyebrow}
                 </p>
                 <h3 className="mt-1 text-lg font-semibold tracking-tight text-navy sm:text-xl">
-                  {card.title}
+                  <Link
+                    href={card.href}
+                    className="pointer-events-auto cursor-pointer rounded-sm hover:text-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
+                    onMouseEnter={holdCard}
+                    onMouseLeave={releaseCard}
+                  >
+                    {card.title}
+                  </Link>
                 </h3>
                 <p className="text-xs text-navy/55">{countLabel}</p>
               </div>
@@ -78,12 +108,33 @@ export function CategoryServiceCard({ name }: { name: string | null }) {
                 wide ? 'grid-cols-2 gap-y-1' : 'grid-cols-1 gap-y-0.5',
               )}
             >
-              {card.services.map((service) => (
-                <li key={service} className="flex gap-2 py-1 text-sm leading-5 text-navy/80">
-                  <Check className="mt-0.5 size-3.5 shrink-0 text-action" aria-hidden />
-                  <span>{service}</span>
-                </li>
-              ))}
+              {card.services.map((service) => {
+                const slug = service.href.split('/').filter(Boolean).pop() ?? ''
+                const score = ratings[slug]
+                return (
+                  <li key={service.href} className="flex items-center gap-2">
+                    <Link
+                      href={service.href}
+                      className="pointer-events-auto flex min-w-0 flex-1 cursor-pointer gap-2 rounded-md py-1 text-sm leading-5 text-navy/80 hover:text-action focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action"
+                      onMouseEnter={holdCard}
+                      onMouseLeave={releaseCard}
+                    >
+                      <Check className="mt-0.5 size-3.5 shrink-0 text-action" aria-hidden />
+                      <span className="truncate">{service.label}</span>
+                    </Link>
+                    {score ? (
+                      <span className="pointer-events-auto shrink-0" onMouseEnter={holdCard} onMouseLeave={releaseCard}>
+                        <ServiceRating
+                          average={score.average}
+                          count={score.count}
+                          href={`/avis?service=${slug}`}
+                          size="xs"
+                        />
+                      </span>
+                    ) : null}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </article>

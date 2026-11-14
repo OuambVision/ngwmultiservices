@@ -14,7 +14,7 @@ type SubmissionArgs = {
 
 export function forcePublicStatus(status: string) {
   return ({ data, operation, req }: SubmissionArgs) => {
-    if (operation === 'create' && !req.user && data) data.status = status
+    if (operation === 'create' && !req.user && req.context?.allowStatus !== true && data) data.status = status
     return data
   }
 }

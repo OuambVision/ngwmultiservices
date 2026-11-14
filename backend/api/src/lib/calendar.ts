@@ -43,6 +43,44 @@ export function dayRange(day: string) {
   }
 }
 
+export const bookingWindow = {
+  start: '2026-11-01',
+  end: '2026-12-31',
+} as const
+
+export function todayInToronto(now = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Toronto',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+}
+
+export function nowMinutesInToronto(now = new Date()): number {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'America/Toronto',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(now)
+  const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0')
+  const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0')
+  return hour * 60 + minute
+}
+
+export function eachDay(start: string, end: string): string[] {
+  const days: string[] = []
+  let cursor = start
+  while (cursor <= end) {
+    days.push(cursor)
+    const next = nextCalendarDay(cursor)
+    if (next === cursor) break
+    cursor = next
+  }
+  return days
+}
+
 export const weekdayOptions = WEEKDAYS.map((day) => ({
   label: day.charAt(0).toUpperCase() + day.slice(1),
   value: day,

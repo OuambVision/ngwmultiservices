@@ -9,9 +9,10 @@ export const Categories = withSlug({
   defaultSort: 'order',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'order', 'published'],
+    defaultColumns: ['title', 'image', 'order', 'published'],
+    listSearchableFields: ['title', 'slug'],
     group: 'Catalogue',
-    description: 'Les quatre familles du site. Le plus petit ordre s’affiche en premier.',
+    description: 'Les familles du site. Le plus petit ordre s’affiche en premier. Filtrez par publication.',
   },
   access: {
     create: staff,
@@ -21,6 +22,20 @@ export const Categories = withSlug({
   },
   fields: [
     { name: 'title', label: 'Titre', type: 'text', required: true, localized: true },
+    {
+      name: 'description',
+      label: 'Description',
+      type: 'textarea',
+      localized: true,
+      admin: { description: 'Texte d’introduction affiché sur la page de la famille.' },
+    },
+    {
+      name: 'image',
+      label: 'Image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Image du bandeau, affichée à droite du titre.' },
+    },
     slugField(),
     {
       name: 'order',

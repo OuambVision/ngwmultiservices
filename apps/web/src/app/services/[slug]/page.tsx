@@ -1,48 +1,36 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { API_URL } from '@repo/api'
-import type { Category } from '@repo/types'
 
-import { PagePlaceholder } from '@/components/site/page-placeholder'
-import { withLocale } from '@/i18n/locale'
+import { CategoryCatalog } from '@/components/site/category-catalog'
 import { getLocale, getT } from '@/i18n/server'
+import { loadCategories, loadCategory, loadCategoryServices } from '@/lib/catalog'
+import { loadReviewCards, scoresByService } from '@/lib/reviews'
 
 type PageProps = {
   params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const t = await getT()
   const category = await loadCategory((await params).slug)
-  return { title: category?.title ?? t('services.metaTitle') }
+  return { title: category?.title ?? 'Services' }
 }
 
-export default async function ServiceFamilyPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: PageProps) {
+  const slug = (await params).slug
   const t = await getT()
   const locale = await getLocale()
-  const category = await loadCategory((await params).slug)
+  const [category, categories] = await Promise.all([loadCategory(slug), loadCategories()])
   if (!category) notFound()
+  const [services, reviews] = await Promise.all([loadCategoryServices(category.id), loadReviewCards()])
 
   return (
-    <PagePlaceholder
-      eyebrow={category.title}
-      title={t('services.familyTitle', { title: category.title.toLocaleLowerCase(locale) })}
-      description={t('services.familyDescription')}
+    <CategoryCatalog
+      categories={categories}
+      category={category}
+      locale={locale}
+      ratings={scoresByService(reviews).byId}
+      services={services}
+      t={t}
     />
   )
-}
-
-async function loadCategory(slug: string): Promise<Category | null> {
-  const locale = await getLocale()
-  try {
-    const response = await fetch(
-      `${API_URL}${withLocale(`/categories?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=0`, locale)}`,
-      { cache: 'no-store' },
-    )
-    if (!response.ok) return null
-    const body = (await response.json()) as { docs?: Category[] }
-    return body.docs?.[0] ?? null
-  } catch {
-    return null
-  }
 }

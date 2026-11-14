@@ -2,7 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import type { CollectionConfig } from 'payload'
 
-import { staff } from '../access'
+import { anyone, staff } from '../access'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -12,7 +12,7 @@ export const Media: CollectionConfig = {
   admin: { group: 'Contenu' },
   access: {
     create: staff,
-    read: staff,
+    read: anyone,
     update: staff,
     delete: staff,
   },

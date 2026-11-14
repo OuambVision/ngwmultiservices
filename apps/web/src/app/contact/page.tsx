@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { PagePlaceholder } from '@/components/site/page-placeholder'
+import { ContactPageView } from '@/components/site/contact-page'
 import { getT } from '@/i18n/server'
 import { loadSiteContact } from '@/lib/site-contact'
 
@@ -10,17 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const t = await getT()
   const contact = await loadSiteContact()
-  return (
-    <PagePlaceholder
-      eyebrow={t('contact.eyebrow')}
-      title={t('contact.title')}
-      description={t('contact.description', {
-        phone: contact.phoneDisplay,
-        email: contact.email,
-        area: contact.area,
-      })}
-    />
-  )
+  return <ContactPageView contact={contact} />
 }

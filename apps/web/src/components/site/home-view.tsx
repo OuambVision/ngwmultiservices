@@ -3,9 +3,14 @@ import Link from 'next/link'
 
 import { NgwOrbitPreview } from '@/components/3d/ngw-orbit-preview'
 import { reservationHref, site } from '@/config/site'
-import { getT } from '@/i18n/server'
+import { getLocale, getT } from '@/i18n/server'
+import { categoryOf, formatPrice, loadServices, serviceImage } from '@/lib/catalog'
+import { pickTopRated } from '@/lib/featured'
 import type { HomeContent } from '@/lib/home'
+import { loadReviewCards, mixedReviews, scoresByService } from '@/lib/reviews'
 
+import { HomeFeatured, type FeaturedService } from './home-featured'
+import { HomeReviews } from './reviews-board'
 import { HeroSlideshow } from './hero-slideshow'
 import { ReasonCards } from './reason-cards'
 import { Section } from './section'
@@ -30,7 +35,37 @@ function HeroTitle({ title }: { title: string }) {
 
 export async function HomeView({ content }: { content: HomeContent }) {
   const t = await getT()
+  const locale = await getLocale()
   const highlights = highlightIcons.map((item) => ({ ...item, label: t(item.labelKey) }))
+  const [reviewCards, services] = await Promise.all([loadReviewCards(), loadServices()])
+  const reviews = mixedReviews(reviewCards)
+  const scores = scoresByService(reviewCards)
+  const ratings = scores.bySlug
+  const featured: FeaturedService[] = pickTopRated(
+    services.flatMap((service) => {
+      const category = categoryOf(service)
+      const score = scores.byId[service.id]
+      if (!service.slug || !category?.slug || !score) return []
+      const image = serviceImage(service)
+      return [
+        {
+          average: score.average,
+          categorySlug: category.slug,
+          count: score.count,
+          duration: service.duration ?? '',
+          href: `/services/${category.slug}/${service.slug}`,
+          id: service.id,
+          imageAlt: image.alt,
+          imageSrc: image.src,
+          order: service.order ?? 0,
+          price: typeof service.priceFrom === 'number' ? formatPrice(service.priceFrom, locale) : '',
+          slug: service.slug,
+          summary: service.summary ?? '',
+          title: service.title,
+        },
+      ]
+    }),
+  ).map(({ order: _order, ...service }) => service)
 
   return (
     <>
@@ -105,8 +140,11 @@ export async function HomeView({ content }: { content: HomeContent }) {
         backgroundImage="/construction.png"
         bleed
       >
-        <NgwOrbitPreview />
+        <NgwOrbitPreview ratings={ratings} />
       </Section>
+
+      <HomeFeatured services={featured} t={t} />
+      <HomeReviews reviews={reviews} />
     </>
   )
 }

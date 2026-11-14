@@ -184,7 +184,7 @@ export interface Media {
   focalY?: number | null;
 }
 /**
- * Les quatre familles du site. Le plus petit ordre s’affiche en premier.
+ * Les familles du site. Le plus petit ordre s’affiche en premier. Filtrez par publication.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
@@ -192,6 +192,14 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
+  /**
+   * Texte d’introduction affiché sur la page de la famille.
+   */
+  description?: string | null;
+  /**
+   * Image du bandeau, affichée à droite du titre.
+   */
+  image?: (number | null) | Media;
   /**
    * Laissé vide, il est produit à partir du titre.
    */
@@ -208,7 +216,7 @@ export interface Category {
   createdAt: string;
 }
 /**
- * Prix et durées des modèles Automobile viennent de la maquette. Laissez-les masqués tant qu’ils ne sont pas validés.
+ * Ajoutez un service, rattachez-le à une catégorie, puis cochez Publié. Filtrez par catégorie ou par publication.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
@@ -243,10 +251,14 @@ export interface Service {
   place?: string | null;
   zone?: string | null;
   /**
-   * Montant « à partir de », en dollars, à faire valider avant publication.
+   * Montant « à partir de », en dollars canadiens.
    */
   priceFrom?: number | null;
   photo?: (number | null) | Media;
+  /**
+   * Jusqu’à cinq images. Elles s’affichent dans le bandeau de la fiche.
+   */
+  photos?: (number | Media)[] | null;
   /**
    * Plus le nombre est petit, plus le service apparaît tôt.
    */
@@ -264,13 +276,16 @@ export interface Service {
   createdAt: string;
 }
 /**
- * Un jour ouvert propose des heures. Une fermeture retire toutes les heures de cette date.
+ * Pour fermer une journée : créer une entrée, Type = Date fermée, choisir la date. Un jour ouvert propose les heures réservables.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "availability".
  */
 export interface Availability {
   id: number;
+  /**
+   * Date fermée = journée entière indisponible à la réservation.
+   */
   type: 'jour' | 'fermeture';
   /**
    * Rempli à partir du jour ou de la date.
@@ -288,6 +303,8 @@ export interface Availability {
   createdAt: string;
 }
 /**
+ * Filtrez par statut ou par service. Ouvrez une demande pour Confirmer ou Annuler en un clic.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings".
  */
@@ -302,8 +319,15 @@ export interface Booking {
   time: string;
   name: string;
   email: string;
-  phone: string;
-  address: string;
+  phone?: string | null;
+  /**
+   * Où le service sera réalisé.
+   */
+  location: 'client' | 'ngw';
+  /**
+   * Requise lorsque le service a lieu chez le client.
+   */
+  address?: string | null;
   note?: string | null;
   status:
     | 'brouillon'
@@ -322,6 +346,8 @@ export interface Booking {
   createdAt: string;
 }
 /**
+ * Filtrez par statut ou par catégorie. Ouvrez une demande pour la traiter ou l’annuler.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "quoteRequests".
  */
@@ -329,14 +355,20 @@ export interface QuoteRequest {
   id: number;
   name: string;
   email: string;
-  phone: string;
+  phone?: string | null;
   category?: (number | null) | Category;
+  /**
+   * Le client n’a pas trouvé sa catégorie dans la liste.
+   */
+  other?: boolean | null;
   need: string;
   status: 'recue' | 'en_traitement' | 'traitee' | 'annulee';
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Filtrez par catégorie ou publication. Affichez ou masquez une réalisation depuis sa fiche.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "realizations".
  */
@@ -348,21 +380,49 @@ export interface Realization {
    */
   slug?: string | null;
   summary?: string | null;
+  /**
+   * Texte de la fiche. Il raconte ce qui a été fait.
+   */
+  description?: string | null;
+  /**
+   * Liste affichée sur la fiche. Un tiret long sépare le titre du détail.
+   */
+  details?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
   category: number | Category;
-  media?: (number | null) | Media;
+  /**
+   * Jusqu’à cinq images. La première sert de vignette.
+   */
+  photos?: (number | Media)[] | null;
+  /**
+   * Décochez pour masquer cette réalisation. Une nouvelle réalisation est affichée par défaut.
+   */
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Filtrez par statut ou par service. Publiez ou refusez depuis la fiche avis.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "reviews".
  */
 export interface Review {
   id: number;
+  /**
+   * Nom court affiché sur le site, par exemple Jean D.
+   */
+  author: string;
   rating: number;
   text: string;
   service: number | Service;
+  /**
+   * Jusqu’à cinq photos ou vidéos. 10 Mo par fichier sur le formulaire public.
+   */
   media?: (number | Media)[] | null;
   consent: boolean;
   status: 'en_attente' | 'publie' | 'refuse';
@@ -520,6 +580,8 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
+  image?: T;
   slug?: T;
   order?: T;
   published?: T;
@@ -546,6 +608,7 @@ export interface ServicesSelect<T extends boolean = true> {
   zone?: T;
   priceFrom?: T;
   photo?: T;
+  photos?: T;
   order?: T;
   published?: T;
   durationMinutes?: T;
@@ -583,6 +646,7 @@ export interface BookingsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   phone?: T;
+  location?: T;
   address?: T;
   note?: T;
   status?: T;
@@ -598,6 +662,7 @@ export interface QuoteRequestsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   category?: T;
+  other?: T;
   need?: T;
   status?: T;
   updatedAt?: T;
@@ -611,8 +676,15 @@ export interface RealizationsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   summary?: T;
+  description?: T;
+  details?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
   category?: T;
-  media?: T;
+  photos?: T;
   published?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -622,6 +694,7 @@ export interface RealizationsSelect<T extends boolean = true> {
  * via the `definition` "reviews_select".
  */
 export interface ReviewsSelect<T extends boolean = true> {
+  author?: T;
   rating?: T;
   text?: T;
   service?: T;
@@ -672,6 +745,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Coordonnées et textes d’accueil visibles sur le site public. Les pages Contact, Confidentialité et Annulation restent dans le site ; leurs coordonnées viennent d’ici.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "siteSettings".
  */

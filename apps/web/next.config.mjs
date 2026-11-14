@@ -22,6 +22,12 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
+  serverActions: {
+    bodySizeLimit: '52mb',
+  },
+  async redirects() {
+    return [{ source: '/a-propos', destination: '/contact', permanent: true }]
+  },
 }
 
 export default nextConfig

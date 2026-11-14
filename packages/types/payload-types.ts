@@ -193,6 +193,14 @@ export interface Category {
   id: number;
   title: string;
   /**
+   * Texte d’introduction affiché sur la page de la famille.
+   */
+  description?: string | null;
+  /**
+   * Image du bandeau, affichée à droite du titre.
+   */
+  image?: (number | null) | Media;
+  /**
    * Laissé vide, il est produit à partir du titre.
    */
   slug?: string | null;
@@ -247,6 +255,10 @@ export interface Service {
    */
   priceFrom?: number | null;
   photo?: (number | null) | Media;
+  /**
+   * Jusqu’à cinq images. Elles s’affichent dans le bandeau de la fiche.
+   */
+  photos?: (number | Media)[] | null;
   /**
    * Plus le nombre est petit, plus le service apparaît tôt.
    */
@@ -303,7 +315,14 @@ export interface Booking {
   name: string;
   email: string;
   phone: string;
-  address: string;
+  /**
+   * Où le service sera réalisé.
+   */
+  location: 'client' | 'ngw';
+  /**
+   * Requise lorsque le service a lieu chez le client.
+   */
+  address?: string | null;
   note?: string | null;
   status:
     | 'brouillon'
@@ -331,6 +350,10 @@ export interface QuoteRequest {
   email: string;
   phone: string;
   category?: (number | null) | Category;
+  /**
+   * Le client n’a pas trouvé sa catégorie dans la liste.
+   */
+  other?: boolean | null;
   need: string;
   status: 'recue' | 'en_traitement' | 'traitee' | 'annulee';
   updatedAt: string;
@@ -348,8 +371,27 @@ export interface Realization {
    */
   slug?: string | null;
   summary?: string | null;
+  /**
+   * Texte de la fiche. Il raconte ce qui a été fait.
+   */
+  description?: string | null;
+  /**
+   * Liste affichée sur la fiche. Un tiret long sépare le titre du détail.
+   */
+  details?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
   category: number | Category;
-  media?: (number | null) | Media;
+  /**
+   * Jusqu’à cinq images. La première sert de vignette.
+   */
+  photos?: (number | Media)[] | null;
+  /**
+   * Décochez pour masquer cette réalisation. Une nouvelle réalisation est affichée par défaut.
+   */
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -360,6 +402,10 @@ export interface Realization {
  */
 export interface Review {
   id: number;
+  /**
+   * Nom court affiché sur le site, par exemple Jean D.
+   */
+  author: string;
   rating: number;
   text: string;
   service: number | Service;
@@ -520,6 +566,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   slug?: T;
   order?: T;
   published?: T;
@@ -546,6 +593,7 @@ export interface ServicesSelect<T extends boolean = true> {
   zone?: T;
   priceFrom?: T;
   photo?: T;
+  photos?: T;
   order?: T;
   published?: T;
   durationMinutes?: T;
@@ -583,6 +631,7 @@ export interface BookingsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   phone?: T;
+  location?: T;
   address?: T;
   note?: T;
   status?: T;
@@ -598,6 +647,7 @@ export interface QuoteRequestsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   category?: T;
+  other?: T;
   need?: T;
   status?: T;
   updatedAt?: T;
@@ -611,8 +661,10 @@ export interface RealizationsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   summary?: T;
+  description?: T;
+  details?: T;
   category?: T;
-  media?: T;
+  photos?: T;
   published?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -622,6 +674,7 @@ export interface RealizationsSelect<T extends boolean = true> {
  * via the `definition` "reviews_select".
  */
 export interface ReviewsSelect<T extends boolean = true> {
+  author?: T;
   rating?: T;
   text?: T;
   service?: T;

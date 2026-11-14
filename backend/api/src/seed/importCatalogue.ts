@@ -215,7 +215,7 @@ export async function importCatalogue(payload: Payload, file = catalogueFile): P
           collection: 'categories',
           id: existing.id,
           overrideAccess: true,
-          data: defined({ order: row.categoryOrder, title: row.categoryTitle }),
+          data: defined({ order: row.categoryOrder }),
         })
         categoryId = existing.id
         report.categoriesUpdated += 1

@@ -1,1 +1,516 @@
-/* Admin style overrides. */
+/* NGW admin theme — tokens aligned with apps/web globals.css */
+
+:root {
+  --ngw-navy: #071b4b;
+  --ngw-action: #0755f5;
+  --ngw-accent: #e52329;
+  --ngw-canvas: #f1f5fc;
+  --ngw-highlight: #f5b301;
+
+  --theme-elevation-0: #f1f5fc;
+  --theme-elevation-50: #e8eefc;
+  --theme-elevation-100: #d9e3f8;
+  --theme-elevation-150: #c7d4ef;
+  --theme-elevation-200: #b3c4e6;
+  --theme-elevation-250: #9bb0d8;
+  --theme-elevation-300: #8299c7;
+  --theme-elevation-350: #6a82b3;
+  --theme-elevation-400: #556c9c;
+  --theme-elevation-450: #425784;
+  --theme-elevation-500: #34466d;
+  --theme-elevation-550: #2a3a5c;
+  --theme-elevation-600: #21304f;
+  --theme-elevation-650: #1a2742;
+  --theme-elevation-700: #142038;
+  --theme-elevation-750: #0f1a30;
+  --theme-elevation-800: #0c1629;
+  --theme-elevation-850: #0a1324;
+  --theme-elevation-900: #08101f;
+  --theme-elevation-950: #071b4b;
+  --theme-elevation-1000: #04102f;
+
+  --theme-bg: var(--theme-elevation-0);
+  --theme-text: var(--ngw-navy);
+  --theme-input-bg: #ffffff;
+  --theme-border-color: color-mix(in srgb, var(--ngw-navy) 14%, transparent);
+
+  --color-success-50: #e8f0ff;
+  --color-success-100: #d4e4ff;
+  --color-success-200: #a8c8ff;
+  --color-success-300: #74a6ff;
+  --color-success-400: #3f84ff;
+  --color-success-500: #0755f5;
+  --color-success-600: #0646cc;
+  --color-success-700: #0538a3;
+  --color-success-800: #042b7a;
+  --color-success-900: #031f57;
+  --color-success-950: #02163d;
+
+  --theme-success-50: var(--color-success-50);
+  --theme-success-100: var(--color-success-100);
+  --theme-success-200: var(--color-success-200);
+  --theme-success-300: var(--color-success-300);
+  --theme-success-400: var(--color-success-400);
+  --theme-success-500: var(--color-success-500);
+  --theme-success-600: var(--color-success-600);
+  --theme-success-700: var(--color-success-700);
+  --theme-success-800: var(--color-success-800);
+  --theme-success-900: var(--color-success-900);
+  --theme-success-950: var(--color-success-950);
+
+  --color-error-500: #e52329;
+  --color-error-600: #c41d22;
+  --theme-error-500: #e52329;
+  --theme-error-600: #c41d22;
+
+  --color-warning-500: #f5b301;
+  --theme-warning-500: #f5b301;
+
+  --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --style-radius-s: 6px;
+  --style-radius-m: 10px;
+  --style-radius-l: 14px;
+  --accessibility-outline: 2px solid var(--ngw-action);
+  --accessibility-outline-offset: 2px;
+  /* Largeur de la sidebar ouverte */
+  --nav-width: 210px;
+  /*
+    Seuil UNIQUE docké/overlay (KeepNavDocked NGW_NAV_DOCKED_MIN = 860).
+    Payload JS ferme encore dès ≤1440 — KeepNavDocked contrecarre jusqu’à 860.
+    ≥860 docké | <860 overlay. Ne pas diverger CSS vs JS.
+  */
+  --ngw-nav-docked-min: 860px;
+}
+
+html[data-theme='dark'] {
+  --theme-elevation-0: #07101f;
+  --theme-elevation-50: #0c1629;
+  --theme-elevation-100: #12203a;
+  --theme-elevation-150: #18294a;
+  --theme-elevation-200: #1f3259;
+  --theme-elevation-500: #9bb0d8;
+  --theme-elevation-800: #d9e3f8;
+  --theme-elevation-1000: #f1f5fc;
+  --theme-bg: var(--theme-elevation-0);
+  --theme-text: #e8eefc;
+  --theme-input-bg: #0c1629;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nav-trans-time: 0ms;
+  }
+}
+
+/* Sidebar navy — maquette 10 */
+.nav {
+  --theme-elevation-0: #071b4b;
+  --theme-elevation-50: #0c2340;
+  --theme-elevation-100: #123056;
+  --theme-text: #f1f5fc;
+  background: linear-gradient(180deg, #071b4b 0%, #0a1f52 100%) !important;
+  border-right: 0 !important;
+  color: #f1f5fc;
+}
+
+/*
+  1) Override du breakpoint Payload (1441px → 860px)
+     Source d’origine : node_modules/@payloadcms/next/dist/templates/Default/Wrapper/index.scss
+     Redéfinition : ce fichier (custom.scss), variables --ngw-nav-docked-min et --nav-width ci-dessus.
+*/
+@media (min-width: 860px) {
+  .template-default {
+    grid-template-columns: 0 auto;
+  }
+
+  .template-default.template-default--nav-open {
+    grid-template-columns: var(--nav-width) auto;
+  }
+
+  .template-default .nav {
+    display: unset !important;
+  }
+}
+
+/* Petit écran : nav en overlay (par-dessus), le contenu ne se décale pas */
+@media (max-width: 859px) {
+  .template-default {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .template-default:not(.template-default--nav-hydrated) .nav {
+    display: none;
+  }
+
+  .template-default--nav-hydrated,
+  .template-default--nav-hydrated.template-default--nav-open {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .template-default--nav-hydrated .nav {
+    display: block !important;
+    height: 100dvh !important;
+    left: 0;
+    max-height: 100dvh;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed !important;
+    top: 0;
+    transform: translateX(-100%);
+    transition:
+      transform var(--nav-trans-time, 200ms) ease,
+      opacity var(--nav-trans-time, 200ms) ease;
+    width: min(var(--nav-width), 86vw);
+    z-index: 100;
+  }
+
+  .template-default--nav-open .nav {
+    box-shadow: 12px 0 40px rgba(4, 16, 47, 0.45);
+    opacity: 1 !important;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  .template-default--nav-open .template-default__wrap::before {
+    background: rgba(4, 16, 47, 0.45);
+    content: '';
+    cursor: pointer;
+    inset: 0;
+    opacity: 1;
+    pointer-events: auto;
+    position: fixed;
+    visibility: visible;
+    z-index: 90;
+  }
+
+  /* Croix blanche lisible dans la nav */
+  .nav__mobile-close {
+    align-items: center;
+    display: inline-flex !important;
+    height: 2rem;
+    justify-content: center;
+    width: 2rem;
+  }
+
+  .nav__mobile-close .hamburger {
+    background: transparent !important;
+    box-shadow: none !important;
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+  }
+
+  .nav__mobile-close .hamburger:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: none !important;
+  }
+
+  .nav__mobile-close .stroke {
+    stroke: #ffffff !important;
+    stroke-width: 1.75px;
+  }
+
+}
+
+/*
+  Le nav-toggler Payload est porté sur body (hors .template-default).
+  Classe posée par KeepNavDocked quand overlay < 860px est ouvert.
+*/
+body.ngw-nav-overlay-open .template-default__nav-toggler {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/*
+  2) Sidebar fixe tant qu’elle est dockée (≥ 860px).
+     Seul .template-default__wrap défile.
+*/
+@media (min-width: 860px) {
+  .template-default.template-default--nav-open {
+    align-items: stretch;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .template-default--nav-open .nav {
+    align-self: stretch;
+    height: 100dvh !important;
+    max-height: 100dvh;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+  }
+
+  .template-default--nav-open .nav__scroll {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .template-default--nav-open .template-default__wrap {
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.nav a,
+.nav .nav__link,
+.template-default .nav__link {
+  color: #e8eefc;
+}
+
+/* Titres de groupe (Contenu, Catalogue…) — lisibles sans hover */
+.nav .nav-group__toggle,
+.nav .nav-group__toggle .nav__label {
+  color: #c5d4f0 !important;
+  font-weight: 600;
+}
+
+.nav .nav-group__toggle svg .stroke {
+  stroke: #9bb0d8 !important;
+}
+
+.nav .nav-group__toggle:hover,
+.nav .nav-group__toggle:focus-visible,
+.nav .nav-group__toggle:hover .nav__label,
+.nav .nav-group__toggle:focus-visible .nav__label {
+  color: #ffffff !important;
+}
+
+.nav .nav-group__toggle:hover svg .stroke,
+.nav .nav-group__toggle:focus-visible svg .stroke {
+  stroke: #ffffff !important;
+}
+
+/* Sous-éléments légèrement décalés sous les titres de groupe */
+.nav .nav-group .nav__link,
+.nav .nav-group a.nav__link {
+  margin-inline-start: 0.75rem;
+  padding-inline-start: 0.35rem;
+  width: calc(100% - 0.75rem);
+}
+
+.nav .nav__link:hover,
+.nav a:hover {
+  background: color-mix(in srgb, #0755f5 28%, transparent);
+  border-radius: 8px;
+  color: #fff;
+}
+
+.nav .nav__link.active,
+.nav .nav__link[aria-current='page'] {
+  background: #0755f5 !important;
+  border-radius: 8px;
+  color: #fff !important;
+}
+
+.template-default {
+  background: var(--ngw-canvas);
+}
+
+.app-header {
+  background: #fff !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--ngw-navy) 10%, transparent) !important;
+}
+
+.login {
+  background-color: #071b4b;
+  background-image:
+    linear-gradient(
+      160deg,
+      rgba(7, 27, 75, 0.55) 0%,
+      rgba(7, 27, 75, 0.4) 45%,
+      rgba(4, 16, 47, 0.6) 100%
+    ),
+    url('/login-bg.png?v=construction');
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100dvh;
+}
+
+.login .template-minimal__wrap {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(4, 16, 47, 0.35);
+  padding: 2rem 1.75rem 1.75rem;
+  backdrop-filter: blur(10px);
+}
+
+.login .login__brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.ngw-logo {
+  align-items: center;
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.ngw-logo img {
+  display: block;
+  height: 5.5rem;
+  width: 5.5rem;
+}
+
+.ngw-logo__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.ngw-logo__name {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ngw-logo__ngw {
+  color: #e52329;
+}
+
+.ngw-logo__multi {
+  color: #0755f5;
+}
+
+.ngw-logo__tagline {
+  color: var(--theme-elevation-600);
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+.login .graphic-logo,
+.login .ngw-logo {
+  margin-bottom: 0.5rem;
+}
+
+.login .ngw-logo img {
+  height: 6.25rem;
+  width: 6.25rem;
+}
+
+.login .ngw-logo__name {
+  font-size: 1.85rem;
+}
+
+.login .ngw-logo__tagline {
+  font-size: 0.9rem;
+}
+
+.btn.btn--style-primary,
+.btn--style-primary {
+  background: var(--ngw-action) !important;
+  border-color: var(--ngw-action) !important;
+}
+
+.btn.btn--style-error,
+.btn--style-error {
+  background: var(--ngw-accent) !important;
+  border-color: var(--ngw-accent) !important;
+}
+
+/* Sélecteur de locale : masquer « Paramètres régionaux » et les codes (fr)/(en) */
+.localizer-button__label {
+  display: none !important;
+}
+
+.localizer__locale-code {
+  display: none !important;
+}
+
+/* Actions header : la recherche doit tenir dans la zone Payload (avant localizer) */
+.app-header__controls-wrapper {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.localizer-button.app-header__localizer-spacing {
+  flex-shrink: 0;
+}
+
+.ngw-header-search {
+  display: block;
+  max-width: 15rem;
+  min-width: 9rem;
+  position: relative;
+  width: min(15rem, 30vw);
+}
+
+.ngw-header-search input {
+  background: #f4f7fd;
+  border: 1px solid color-mix(in srgb, var(--ngw-navy) 12%, transparent);
+  border-radius: 999px;
+  box-sizing: border-box;
+  color: var(--ngw-navy);
+  display: block;
+  font-size: 0.85rem;
+  height: 2.25rem;
+  padding: 0 2.35rem 0 0.9rem;
+  width: 100%;
+}
+
+.ngw-header-search button {
+  align-items: center;
+  background: var(--ngw-action);
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  height: 1.7rem;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 0.28rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.7rem;
+}
+
+.ngw-header-search button svg {
+  display: block;
+}
+
+.ngw-header-bell {
+  align-items: center;
+  color: var(--ngw-navy);
+  display: inline-flex;
+  height: 2.25rem;
+  justify-content: center;
+  position: relative;
+  text-decoration: none;
+  width: 2.25rem;
+}
+
+.ngw-header-bell__icon svg {
+  display: block;
+}
+
+.ngw-header-bell__badge {
+  background: var(--ngw-accent);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 1.1rem;
+  padding: 0.2rem 0.3rem;
+  position: absolute;
+  right: -0.1rem;
+  text-align: center;
+  top: -0.15rem;
+}
+
+@media (max-width: 768px) {
+  .ngw-header-search {
+    display: none;
+  }
+}

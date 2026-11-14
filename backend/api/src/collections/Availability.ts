@@ -1,6 +1,7 @@
 import { ValidationError, type CollectionConfig } from 'payload'
 
 import { staff } from '../access'
+import { availabilityDays } from '../endpoints/availabilityDays'
 import { availabilitySlots } from '../endpoints/availabilitySlots'
 import { TIME, weekdayOptions } from '../lib/calendar'
 
@@ -10,9 +11,10 @@ export const Availability: CollectionConfig = {
   admin: {
     useAsTitle: 'label',
     defaultColumns: ['label', 'type', 'day', 'date'],
-    group: 'Demandes',
+    listSearchableFields: ['label'],
+    group: 'Planning',
     description:
-      'Un jour ouvert propose des heures. Une fermeture retire toutes les heures de cette date.',
+      'Pour fermer une journée : créer une entrée, Type = Date fermée, choisir la date. Un jour ouvert propose les heures réservables.',
   },
   access: {
     create: staff,
@@ -20,17 +22,21 @@ export const Availability: CollectionConfig = {
     update: staff,
     delete: staff,
   },
-  endpoints: [availabilitySlots],
+  endpoints: [availabilitySlots, availabilityDays],
   fields: [
     {
       name: 'type',
       label: 'Type',
       type: 'select',
       required: true,
+      index: true,
       options: [
         { label: 'Jour ouvert', value: 'jour' },
         { label: 'Date fermée', value: 'fermeture' },
       ],
+      admin: {
+        description: 'Date fermée = journée entière indisponible à la réservation.',
+      },
     },
     {
       name: 'label',

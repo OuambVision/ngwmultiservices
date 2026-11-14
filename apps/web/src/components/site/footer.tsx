@@ -22,7 +22,7 @@ export async function Footer({ contact }: { contact: SiteContact }) {
         <nav aria-label={t('nav.footer')}>
           <h2 className="text-sm font-semibold">{t('footer.quick')}</h2>
           <ul className="mt-4 space-y-2">
-            {mainNav.map((item) => (
+            {[...mainNav, { href: '/avis', labelKey: 'nav.reviews' }].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -80,9 +80,19 @@ export async function Footer({ contact }: { contact: SiteContact }) {
         </div>
       </div>
       <div className="border-t border-white/15">
-        <p className="mx-auto max-w-screen-2xl px-4 py-4 text-xs text-white/60 sm:px-6">
-          © {new Date().getFullYear()} {site.legalName}. {t('footer.rights')}
-        </p>
+        <div className="mx-auto flex max-w-screen-2xl flex-col gap-3 px-4 py-4 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <p>
+            © {new Date().getFullYear()} {site.legalName}. {t('footer.rights')}
+          </p>
+          <nav aria-label={t('footer.legal')} className="flex flex-wrap gap-4">
+            <Link href="/confidentialite" className="underline-offset-4 hover:underline">
+              {t('footer.privacy')}
+            </Link>
+            <Link href="/annulation" className="underline-offset-4 hover:underline">
+              {t('footer.cancel')}
+            </Link>
+          </nav>
+        </div>
       </div>
     </footer>
   )

@@ -6,7 +6,11 @@ import { fillHeroImageUrls } from '../hooks/heroImages'
 export const SiteSettings: GlobalConfig = {
   slug: 'siteSettings',
   label: 'Réglages du site',
-  admin: { group: 'Site' },
+  admin: {
+    group: 'Site',
+    description:
+      'Coordonnées et textes d’accueil visibles sur le site public. Les pages Contact, Confidentialité et Annulation restent dans le site ; leurs coordonnées viennent d’ici.',
+  },
   access: {
     read: anyone,
     update: staff,

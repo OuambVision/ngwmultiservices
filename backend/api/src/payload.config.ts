@@ -15,6 +15,7 @@ import { Realizations } from './collections/Realizations'
 import { Reviews } from './collections/Reviews'
 import { Services } from './collections/Services'
 import { Users } from './collections/Users'
+import { submitContact } from './endpoints/submitContact'
 import { SiteSettings } from './globals/SiteSettings'
 import { plugins } from './plugins'
 
@@ -50,7 +51,7 @@ export default buildConfig({
   localization: {
     locales: [
       { label: 'Français', code: 'fr' },
-      { label: 'English', code: 'en' },
+      { label: 'Anglais', code: 'en' },
     ],
     defaultLocale: 'fr',
     fallback: true,
@@ -60,11 +61,30 @@ export default buildConfig({
   csrf: trustedOrigins,
   admin: {
     user: Users.slug,
+    theme: 'light',
     meta: {
-      titleSuffix: '— ngwmultiservices',
+      titleSuffix: '— NGW MULTISERVICES',
+      description: 'Administration NGW MULTISERVICES',
+      icons: [{ rel: 'icon', url: '/logo.png' }],
     },
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    components: {
+      providers: ['/components/admin/KeepNavDocked#KeepNavDocked'],
+      graphics: {
+        Logo: '/components/admin/Logo',
+        Icon: '/components/admin/Icon',
+      },
+      actions: [
+        '/components/admin/HeaderSearch#HeaderSearch',
+        '/components/admin/HeaderNotifications#HeaderNotifications',
+      ],
+      views: {
+        dashboard: {
+          Component: '/components/admin/dashboard/NgwDashboard#NgwDashboard',
+        },
+      },
     },
   },
   collections: [
@@ -79,6 +99,7 @@ export default buildConfig({
     Reviews,
   ],
   globals: [SiteSettings],
+  endpoints: [submitContact],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',

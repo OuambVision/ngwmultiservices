@@ -2,10 +2,12 @@
 
 import { useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
+import { useRouter } from 'next/navigation'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { PerspectiveCamera, Quaternion, Vector2, Vector3, type Object3D } from 'three'
 
 import { createCategoryRing, type CategoryRing } from '@/components/3d/orbit/category-ring'
+import { categoryPageHref } from '@/data/ngw-service-catalog'
 
 const MODEL_PATH = '/3d/ngw-services-orbit.glb'
 const IDLE_SPIN = 0.07
@@ -17,6 +19,7 @@ const RADIANS_PER_PIXEL = 0.006
 const WHEEL_VELOCITY_PER_PIXEL = 0.015
 const MAX_VELOCITY = 2.2
 const HOLD_STILL_MS = 70
+const CLICK_DISTANCE = 8
 const VELOCITY_DAMPING = 5
 
 const pointerNdc = new Vector2()
@@ -50,6 +53,10 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
   const velocity = useRef(0)
   const onHoverRef = useRef(onHover)
   const hoveredName = useRef<string | null>(null)
+  const pressX = useRef(0)
+  const pressY = useRef(0)
+  const pressCategory = useRef<string | null>(null)
+  const router = useRouter()
   onHoverRef.current = onHover
 
   const reportHover = (object: Object3D | null) => {
@@ -123,6 +130,9 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
       if (dragging.current) return
       aimRay(event)
       if (!insideRing()) return
+      pressX.current = event.clientX
+      pressY.current = event.clientY
+      pressCategory.current = ringRef.current?.categoryAt(raycaster)?.name ?? null
       dragging.current = true
       pointerId.current = event.pointerId
       lastX.current = event.clientX
@@ -137,9 +147,10 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
       if (!dragging.current || event.pointerId !== pointerId.current) {
         aimRay(event)
         const inside = insideRing()
-        reportHover(ringRef.current?.categoryAt(raycaster) ?? null)
+        const category = ringRef.current?.categoryAt(raycaster) ?? null
+        reportHover(category)
         element.style.touchAction = inside ? 'none' : 'pan-y'
-        element.style.cursor = inside ? 'grab' : 'auto'
+        element.style.cursor = category ? 'pointer' : inside ? 'grab' : 'auto'
         return
       }
       const now = performance.now()
@@ -154,7 +165,7 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
       lastMoveTime.current = now
     }
 
-    const finishDrag = (event: PointerEvent) => {
+    const finishDrag = (event: PointerEvent, navigate: boolean) => {
       if (!dragging.current || event.pointerId !== pointerId.current) return
       if (performance.now() - lastMoveTime.current > HOLD_STILL_MS) velocity.current = 0
       dragging.current = false
@@ -162,8 +173,12 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
       element.style.touchAction = 'pan-y'
       if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId)
       aimRay(event)
-      element.style.cursor = insideRing() ? 'grab' : 'auto'
+      const category = ringRef.current?.categoryAt(raycaster) ?? null
+      const moved = Math.hypot(event.clientX - pressX.current, event.clientY - pressY.current)
+      const href = pressCategory.current ? categoryPageHref(pressCategory.current) : null
+      element.style.cursor = category ? 'pointer' : insideRing() ? 'grab' : 'auto'
       element.style.touchAction = insideRing() ? 'none' : 'pan-y'
+      if (navigate && moved < CLICK_DISTANCE && href) router.push(href)
     }
 
     const onWheel = (event: WheelEvent) => {
@@ -185,8 +200,10 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
     element.addEventListener('pointerdown', onPointerDown)
     element.addEventListener('pointerleave', onPointerLeave)
     element.addEventListener('pointermove', onPointerMove)
-    element.addEventListener('pointerup', finishDrag)
-    element.addEventListener('pointercancel', finishDrag)
+    const onPointerUp = (event: PointerEvent) => finishDrag(event, true)
+    const onPointerCancel = (event: PointerEvent) => finishDrag(event, false)
+    element.addEventListener('pointerup', onPointerUp)
+    element.addEventListener('pointercancel', onPointerCancel)
     element.addEventListener('wheel', onWheel, { passive: false })
 
     return () => {
@@ -195,11 +212,11 @@ export function NGWServicesScene({ onHover }: { onHover?: (name: string | null) 
       element.removeEventListener('pointerdown', onPointerDown)
       element.removeEventListener('pointerleave', onPointerLeave)
       element.removeEventListener('pointermove', onPointerMove)
-      element.removeEventListener('pointerup', finishDrag)
-      element.removeEventListener('pointercancel', finishDrag)
+      element.removeEventListener('pointerup', onPointerUp)
+      element.removeEventListener('pointercancel', onPointerCancel)
       element.removeEventListener('wheel', onWheel)
     }
-  }, [camera, gl, raycaster])
+  }, [camera, gl, raycaster, router])
 
   useEffect(() => {
     const element = gl.domElement

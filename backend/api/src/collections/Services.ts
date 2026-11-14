@@ -10,9 +10,10 @@ export const Services = withSlug({
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'priceFrom', 'duration', 'order', 'published'],
+    listSearchableFields: ['title', 'slug'],
     group: 'Catalogue',
     description:
-      'Prix et durées des modèles Automobile viennent de la maquette. Laissez-les masqués tant qu’ils ne sont pas validés.',
+      'Ajoutez un service, rattachez-le à une catégorie, puis cochez Publié. Filtrez par catégorie ou par publication.',
   },
   access: {
     create: staff,
@@ -54,10 +55,21 @@ export const Services = withSlug({
       min: 0,
       admin: {
         step: 1,
-        description: 'Montant « à partir de », en dollars, à faire valider avant publication.',
+        description: 'Montant « à partir de », en dollars canadiens.',
       },
     },
     { name: 'photo', label: 'Photo', type: 'upload', relationTo: 'media' },
+    {
+      name: 'photos',
+      label: 'Photos',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      maxRows: 5,
+      admin: {
+        description: 'Jusqu’à cinq images. Elles s’affichent dans le bandeau de la fiche.',
+      },
+    },
     {
       name: 'order',
       label: 'Ordre',

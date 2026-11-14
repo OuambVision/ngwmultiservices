@@ -14,17 +14,20 @@ export const mainNav = [
   { href: '/', labelKey: 'nav.home' },
   { href: '/services', labelKey: 'nav.services' },
   { href: '/realisations', labelKey: 'nav.projects' },
-  { href: '/a-propos', labelKey: 'nav.about' },
   { href: '/contact', labelKey: 'nav.contact' },
 ] as const
 
 export const serviceFamilies = [
-  { href: '/services', labelKey: 'families.automotive' },
-  { href: '/services', labelKey: 'families.residential' },
-  { href: '/services', labelKey: 'families.commercial' },
-  { href: '/services', labelKey: 'families.specialized' },
+  { href: '/services/automobile', labelKey: 'families.automotive' },
+  { href: '/services/residentiel', labelKey: 'families.residential' },
+  { href: '/services/commercial', labelKey: 'families.commercial' },
+  { href: '/services/specialise', labelKey: 'families.specialized' },
 ] as const
 
 export const reservationHref = '/reservation'
+
+export function reservationHrefFor(serviceSlug: string) {
+  return `${reservationHref}?service=${encodeURIComponent(serviceSlug)}`
+}
 export const quoteHref = '/soumission'
 export const clientSpaceHref = '/espace-client'
