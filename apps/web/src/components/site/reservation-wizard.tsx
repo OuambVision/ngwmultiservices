@@ -158,7 +158,7 @@ export function ReservationWizard({
   const services = useMemo(() => categories.flatMap((category) => category.services), [categories])
   const initial = services.find((service) => service.slug === initialSlug) ?? null
   const [step, setStep] = useState(1)
-  const [openCategory, setOpenCategory] = useState(initial?.categorySlug ?? categories[0]?.slug ?? '')
+  const [openCategory, setOpenCategory] = useState(initial?.categorySlug ?? '')
   const [service, setService] = useState<ReservationService | null>(initial)
   const [month, setMonth] = useState(() => {
     const [year, value] = bookingWindow.start.split('-').map(Number)
