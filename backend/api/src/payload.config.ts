@@ -65,13 +65,20 @@ export default buildConfig({
     meta: {
       titleSuffix: '— NGW MULTISERVICES',
       description: 'Administration NGW MULTISERVICES',
-      icons: [{ rel: 'icon', url: '/logo.png' }],
+      icons: [
+        { rel: 'icon', type: 'image/png', sizes: '192x192', url: '/icons/icon-192.png' },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', url: '/icons/icon-512.png' },
+        { rel: 'apple-touch-icon', type: 'image/png', url: '/apple-icon.png' },
+      ],
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
     components: {
-      providers: ['/components/admin/KeepNavDocked#KeepNavDocked'],
+      providers: [
+        '/components/admin/InstallableAdmin#InstallableAdmin',
+        '/components/admin/KeepNavDocked#KeepNavDocked',
+      ],
       graphics: {
         Logo: '/components/admin/Logo',
         Icon: '/components/admin/Icon',

@@ -5,6 +5,14 @@ export const fr = {
   },
   skip: 'Aller au contenu',
   backToTop: 'Revenir en haut',
+  install: {
+    title: 'Installer l’application',
+    text: 'Ajoutez {{name}} à votre écran d’accueil pour un accès plus rapide.',
+    action: 'Installer',
+    later: 'Plus tard',
+    close: 'Fermer',
+    iosHint: 'Sur iPhone : appuyez sur Partager, puis « Sur l’écran d’accueil ».',
+  },
   form: {
     required: 'Ce champ est requis.',
     email: 'Entrez une adresse courriel valide.',
@@ -377,6 +385,14 @@ export const en: typeof fr = {
   },
   skip: 'Skip to content',
   backToTop: 'Back to top',
+  install: {
+    title: 'Install the app',
+    text: 'Add {{name}} to your home screen for faster access.',
+    action: 'Install',
+    later: 'Not now',
+    close: 'Close',
+    iosHint: 'On iPhone: tap Share, then “Add to Home Screen”.',
+  },
   form: {
     required: 'This field is required.',
     email: 'Enter a valid email address.',
