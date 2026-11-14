@@ -67,14 +67,14 @@ function initials(name: string) {
 
 function Stars({ label, value }: { label?: string; value: number }) {
   return (
-    <span className="inline-flex gap-0.5" aria-label={label}>
+    <span className="inline-flex gap-px" aria-label={label}>
       {Array.from({ length: 5 }, (_, index) => {
         const fill = Math.min(1, Math.max(0, value - index))
         return (
-          <span key={index} className="relative inline-flex size-4" aria-hidden>
-            <Star className="size-4 text-navy/15" />
+          <span key={index} className="relative inline-flex size-3" aria-hidden>
+            <Star className="size-3 text-navy/15" strokeWidth={1.75} />
             <span className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
-              <Star className="size-4 fill-highlight text-highlight" />
+              <Star className="size-3 fill-highlight text-highlight" strokeWidth={1.75} />
             </span>
           </span>
         )
@@ -125,11 +125,11 @@ export function ReviewsBoard({
               <span className="h-2 w-12 rounded-full bg-highlight" aria-hidden />
               {t('reviews.eyebrow')}
             </p>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-[#1e2b6e] sm:text-4xl lg:text-5xl">{t('reviews.title')}</h1>
-            <p className="mt-3 text-lg text-navy/70">{t('reviews.lead')}</p>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-navy/60">{t('reviews.text')}</p>
+            <h1 className="mt-3 text-xl font-semibold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">{t('reviews.title')}</h1>
+            <p className="mt-3 text-sm leading-6 text-navy/65 sm:text-base">{t('reviews.lead')}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-navy/65">{t('reviews.text')}</p>
           </div>
-          <div className="relative min-h-56 overflow-hidden rounded-3xl bg-[#d7e4f8]">
+          <div className="relative min-h-52 overflow-hidden rounded-3xl bg-[#d7e4f8]">
             <Image
               src={banner}
               alt=""
@@ -138,18 +138,18 @@ export function ReviewsBoard({
               sizes="420px"
               className="object-cover object-center"
             />
-            <div className="relative z-10 m-4 max-w-[16rem] rounded-3xl bg-white/95 p-5 shadow-lg">
+            <div className="relative z-10 m-4 max-w-[14rem] rounded-2xl bg-white/95 p-4 shadow-lg">
               {listed.length > 0 ? (
                 <>
-                  <p className="text-4xl font-bold tracking-tight text-[#1e2b6e]">
+                  <p className="text-2xl font-semibold tracking-tight text-[#1e2b6e]">
                     {averageLabel}
-                    <span className="ml-1 text-xl font-semibold text-navy/35">/ 5</span>
+                    <span className="ml-1 text-sm font-medium text-navy/35">/ 5</span>
                   </p>
-                  <span className="mt-2 block">
+                  <span className="mt-1.5 block">
                     <Stars label={averageLabel} value={average} />
                   </span>
-                  <p className="mt-3 text-sm font-bold text-[#1e2b6e]">{t('reviews.count', { count: listed.length })}</p>
-                  <p className="mt-1 text-xs leading-5 text-navy/55">{t('reviews.basedOn')}</p>
+                  <p className="mt-2.5 text-xs font-semibold text-[#1e2b6e]">{t('reviews.count', { count: listed.length })}</p>
+                  <p className="mt-1 text-[11px] leading-4 text-navy/55">{t('reviews.basedOn')}</p>
                 </>
               ) : (
                 <p className="text-sm leading-6 text-navy/70">{focus ? t('reviews.serviceEmpty') : t('reviews.empty')}</p>
@@ -205,30 +205,30 @@ export function ReviewsBoard({
                   const Icon = familyIcon[review.categorySlug] ?? Sparkles
                   return (
                     <li key={review.id}>
-                      <article className="flex h-full flex-col rounded-3xl bg-white p-5 shadow-sm ring-1 ring-navy/10">
-                        <div className="flex items-center gap-3">
+                      <article className="flex h-full flex-col rounded-2xl bg-white p-4 shadow-sm ring-1 ring-navy/10">
+                        <div className="flex items-center gap-2.5">
                           <span
-                            className={`inline-flex size-11 items-center justify-center rounded-full text-sm font-bold ${avatarClass[review.id % avatarClass.length]}`}
+                            className={`inline-flex size-9 items-center justify-center rounded-full text-xs font-semibold ${avatarClass[review.id % avatarClass.length]}`}
                           >
                             {initials(review.author)}
                           </span>
                           <span>
-                            <span className="block font-bold text-[#1e2b6e]">{review.author}</span>
-                            <span className="block text-xs text-navy/50">{review.date}</span>
+                            <span className="block text-sm font-semibold text-[#1e2b6e]">{review.author}</span>
+                            <span className="block text-[11px] text-navy/50">{review.date}</span>
                           </span>
                         </div>
-                        <div className="mt-3 flex items-center justify-between gap-3">
+                        <div className="mt-2.5 flex items-center justify-between gap-2">
                           <Stars label={`${review.rating} / 5`} value={review.rating} />
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white py-1 pr-2.5 pl-1 text-xs font-semibold text-[#1e2b6e] ring-1 ring-navy/10">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-white py-0.5 pr-2 pl-0.5 text-[11px] font-medium text-[#1e2b6e] ring-1 ring-navy/10">
                             <span
-                              className={`inline-flex size-5 items-center justify-center rounded-md ${badgeIconClass[review.categorySlug] ?? 'bg-navy text-white'}`}
+                              className={`inline-flex size-4 items-center justify-center rounded-md ${badgeIconClass[review.categorySlug] ?? 'bg-navy text-white'}`}
                             >
-                              <Icon className="size-3" aria-hidden />
+                              <Icon className="size-2.5" aria-hidden />
                             </span>
                             {t(familyLabel[review.categorySlug] ?? 'projects.labelSpecialise')}
                           </span>
                         </div>
-                        <p className="mt-3 text-sm leading-6 text-navy/75">{review.text}</p>
+                        <p className="mt-2.5 text-sm leading-6 text-navy/75">{review.text}</p>
                         <ReviewPhotos review={review} />
                       </article>
                     </li>
@@ -360,12 +360,12 @@ function FilterButton({
       type="button"
       role="tab"
       aria-selected={active}
-      className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ${
+      className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ${
         active ? 'bg-action text-white' : 'bg-white text-navy ring-1 ring-navy/15 hover:ring-action'
       }`}
       onClick={onClick}
     >
-      {Icon ? <Icon className="size-4" aria-hidden /> : null}
+      {Icon ? <Icon className="size-3.5" aria-hidden /> : null}
       {label}
     </button>
   )
