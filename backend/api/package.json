@@ -22,6 +22,8 @@
     "seed:realizations": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-realizations.ts",
     "seed:reviews": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-reviews.ts",
     "seed:locales": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/enable-locales.ts",
+    "audit:locales": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/audit-locales.ts",
+    "fill:locales": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/fill-locales.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start --port 3000",
     "stripe-webhooks": "stripe listen --forward-to localhost:3000/api/stripe/webhooks",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test",
