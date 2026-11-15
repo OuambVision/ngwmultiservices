@@ -166,14 +166,18 @@ export const Availability: CollectionConfig = {
       type: 'row',
       admin: {
         condition: (data) => data.type === 'fermeture',
-        description: 'Optionnel : bloquer seulement une sous-plage (ex. 12:00–14:00). Sinon journée entière.',
       },
       fields: [
         {
           name: 'blockStart',
           label: 'Bloquer de',
           type: 'text',
-          admin: { placeholder: '12:00', width: '50%' },
+          admin: {
+            placeholder: '12:00',
+            width: '50%',
+            description:
+              'Optionnel : bloquer seulement une sous-plage (ex. 12:00–14:00). Sinon journée entière.',
+          },
           validate: (value: unknown) =>
             value == null || value === '' || isTime(value) || 'Heure au format HH:mm.',
         },
@@ -282,9 +286,9 @@ function sliceDay(value: unknown): string | null {
   return value.slice(0, 10)
 }
 
-function normalizeTime(value: unknown): string | null | undefined {
-  if (value == null || value === '') return value as null | undefined
-  if (typeof value !== 'string') return value as undefined
+function normalizeTime(value: unknown): unknown {
+  if (value == null || value === '') return value
+  if (typeof value !== 'string') return value
   const trimmed = value.trim()
   const match = /^(\d{1,2}):(\d{2})$/.exec(trimmed)
   if (!match) return trimmed

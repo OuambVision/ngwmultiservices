@@ -320,6 +320,9 @@ export interface Availability {
    * Laisser vide pour une seule journée. Utile pour fermer tout un mois.
    */
   dateEnd?: string | null;
+  /**
+   * Optionnel : bloquer seulement une sous-plage (ex. 12:00–14:00). Sinon journée entière.
+   */
   blockStart?: string | null;
   blockEnd?: string | null;
   updatedAt: string;

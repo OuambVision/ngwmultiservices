@@ -18,10 +18,10 @@ const NgwOrbitCanvas = dynamic(
 )
 
 export function NgwOrbitPreview({
-  cards,
+  cards = {},
   ratings = {},
 }: {
-  cards: OrbitCategoryCards
+  cards?: OrbitCategoryCards
   ratings?: Record<string, ServiceScore>
 }) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
