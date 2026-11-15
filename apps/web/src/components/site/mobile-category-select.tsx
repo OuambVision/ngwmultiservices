@@ -53,7 +53,7 @@ export function MobileCategorySelect({
   const rootRef = useRef<HTMLDivElement>(null)
   const listId = useId()
   const current = categories.find((item) => item.slug === currentSlug) ?? categories[0]
-  const CurrentIcon = (current?.slug && categoryIcons[current.slug]) || Sparkles
+  const CurrentIcon = (current?.slug && categoryIcons[current.slug]) || Shield
   const currentLabel =
     current?.slug && shortCategoryLabel[current.slug]
       ? t(shortCategoryLabel[current.slug])
@@ -120,7 +120,7 @@ export function MobileCategorySelect({
           >
             {categories.map((item) => {
               const active = item.slug === currentSlug
-              const Icon = categoryIcons[item.slug] || Sparkles
+              const Icon = categoryIcons[item.slug] || Shield
               const label = shortCategoryLabel[item.slug]
                 ? t(shortCategoryLabel[item.slug])
                 : item.title

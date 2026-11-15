@@ -27,6 +27,7 @@ export const reviewStatuses = [
 ] as const
 
 export const userRoles = [
+  { label: 'Super administrateur', value: 'super-admin' },
   { label: 'Administrateur', value: 'admin' },
   { label: 'Client', value: 'client' },
   { label: 'Employé', value: 'employe' },

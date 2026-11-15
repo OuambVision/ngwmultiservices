@@ -141,9 +141,9 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   /**
-   * Les espaces client, employé, partenaire et immobilier s’ouvrent plus tard.
+   * Super administrateur : tous les droits. Administrateur : tout sauf la gestion des autres utilisateurs.
    */
-  role: 'admin' | 'client' | 'employe' | 'partenaire' | 'gestionnaire_immobilier';
+  role: 'super-admin' | 'admin' | 'client' | 'employe' | 'partenaire' | 'gestionnaire_immobilier';
   updatedAt: string;
   createdAt: string;
   email: string;

@@ -1,6 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminPanel, staff } from '../access'
+import {
+  adminPanel,
+  roleFieldAccess,
+  usersCreate,
+  usersDelete,
+  usersRead,
+  usersUpdate,
+} from '../access'
 import { userRoles } from '../domain/statuses'
 
 export const Users: CollectionConfig = {
@@ -14,10 +21,10 @@ export const Users: CollectionConfig = {
   auth: true,
   access: {
     admin: adminPanel,
-    create: staff,
-    read: staff,
-    update: staff,
-    delete: staff,
+    create: usersCreate,
+    read: usersRead,
+    update: usersUpdate,
+    delete: usersDelete,
   },
   fields: [
     {
@@ -28,8 +35,13 @@ export const Users: CollectionConfig = {
       defaultValue: 'admin',
       saveToJWT: true,
       options: [...userRoles],
+      access: {
+        create: roleFieldAccess,
+        update: roleFieldAccess,
+      },
       admin: {
-        description: 'Les espaces client, employé, partenaire et immobilier s’ouvrent plus tard.',
+        description:
+          'Super administrateur : tous les droits. Administrateur : tout sauf la gestion des autres utilisateurs.',
       },
     },
   ],
