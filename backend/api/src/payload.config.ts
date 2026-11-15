@@ -17,6 +17,7 @@ import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { submitContact } from './endpoints/submitContact'
 import { SiteSettings } from './globals/SiteSettings'
+import { resendEmailAdapter } from './lib/email/resendAdapter'
 import { plugins } from './plugins'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -122,6 +123,7 @@ export default buildConfig({
     },
   }),
   editor: lexicalEditor(),
+  email: resendEmailAdapter(),
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   sharp,
