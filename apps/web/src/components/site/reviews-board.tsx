@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, Building2, Car, ChevronDown, Home, ImagePlus, Info, Send, Sparkles, Star, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Building2, Car, ChevronDown, Home, ImagePlus, Info, Package, Send, Sparkles, Star, Wrench, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
@@ -18,7 +18,14 @@ export type ReviewService = { id: number; slug: string; title: string }
 
 export type ReviewFocus = { id: number; slug: string; title: string }
 
-const familyOrder = ['automobile', 'residentiel', 'commercial', 'specialise'] as const
+const familyOrder = [
+  'automobile',
+  'residentiel',
+  'commercial',
+  'specialise',
+  'demenagement',
+  'petite-maintenance',
+] as const
 const pageSize = 6
 const maxFiles = 5
 const maxBytes = 10 * 1024 * 1024
@@ -29,6 +36,8 @@ const familyIcon: Record<string, LucideIcon> = {
   commercial: Building2,
   residentiel: Home,
   specialise: Sparkles,
+  demenagement: Package,
+  'petite-maintenance': Wrench,
 }
 
 const familyLabel: Record<string, string> = {
@@ -36,6 +45,8 @@ const familyLabel: Record<string, string> = {
   commercial: 'projects.labelCommercial',
   residentiel: 'projects.labelResidentiel',
   specialise: 'projects.labelSpecialise',
+  demenagement: 'projects.labelDemenagement',
+  'petite-maintenance': 'projects.labelPetiteMaintenance',
 }
 
 const badgeIconClass: Record<string, string> = {
@@ -43,6 +54,8 @@ const badgeIconClass: Record<string, string> = {
   commercial: 'bg-action text-white',
   residentiel: 'bg-action text-white',
   specialise: 'bg-highlight text-[#071b4b]',
+  demenagement: 'bg-navy text-white',
+  'petite-maintenance': 'bg-action text-white',
 }
 
 const avatarClass = [

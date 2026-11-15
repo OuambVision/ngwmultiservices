@@ -1,4 +1,11 @@
-const familyOrder = ['automobile', 'residentiel', 'commercial', 'specialise']
+const familyOrder = [
+  'automobile',
+  'residentiel',
+  'commercial',
+  'specialise',
+  'demenagement',
+  'petite-maintenance',
+]
 
 export type RatedService = {
   average: number

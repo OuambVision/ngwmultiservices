@@ -1,7 +1,6 @@
 export const fr = {
   meta: {
-    description:
-      'Nettoyage automobile, résidentiel, commercial et spécialisé à Ottawa et environs.',
+    description: 'Nettoyage, déménagement et petite maintenance à Ottawa et environs.',
   },
   skip: 'Aller au contenu',
   backToTop: 'Revenir en haut',
@@ -78,6 +77,8 @@ export const fr = {
     residential: 'Résidentiel',
     commercial: 'Commercial',
     specialized: 'Spécialisé',
+    moving: 'Déménagement',
+    maintenance: 'Petite maintenance',
   },
   footer: {
     quick: 'Liens rapides',
@@ -157,13 +158,15 @@ export const fr = {
     labelResidentiel: 'Résidentiel',
     labelCommercial: 'Commercial',
     labelSpecialise: 'Spécialisé',
+    labelDemenagement: 'Déménagement',
+    labelPetiteMaintenance: 'Petite maintenance',
     done: 'Ce qui a été fait',
     empty: 'Aucune réalisation affichée pour le moment.',
   },
   about: {
     eyebrow: 'À propos',
-    title: 'Un partenaire de nettoyage à Ottawa et environs',
-    lead: 'NGW MULTISERVICES accompagne particuliers et entreprises pour l’automobile, le résidentiel, le commercial et le spécialisé.',
+    title: 'Un partenaire multiservices à Ottawa et environs',
+    lead: 'NGW MULTISERVICES accompagne particuliers et entreprises pour le nettoyage, le déménagement et la petite maintenance.',
     text: 'Réservez en ligne, demandez un devis ou laissez un avis après une intervention. Notre équipe intervient chez vous ou à notre emplacement, selon le service.',
     areaTitle: 'Zone desservie',
     areaText: 'Ottawa, Gatineau, Orléans, Kanata et les environs.',
@@ -381,7 +384,7 @@ export const fr = {
 
 export const en: typeof fr = {
   meta: {
-    description: 'Automotive, residential, commercial and specialized cleaning in Ottawa and the surrounding area.',
+    description: 'Cleaning, moving and light maintenance in Ottawa and the surrounding area.',
   },
   skip: 'Skip to content',
   backToTop: 'Back to top',
@@ -458,6 +461,8 @@ export const en: typeof fr = {
     residential: 'Residential',
     commercial: 'Commercial',
     specialized: 'Specialized',
+    moving: 'Moving',
+    maintenance: 'Light maintenance',
   },
   footer: {
     quick: 'Quick links',
@@ -537,13 +542,15 @@ export const en: typeof fr = {
     labelResidentiel: 'Residential',
     labelCommercial: 'Commercial',
     labelSpecialise: 'Specialized',
+    labelDemenagement: 'Moving',
+    labelPetiteMaintenance: 'Light maintenance',
     done: 'What was done',
     empty: 'No project is on display right now.',
   },
   about: {
     eyebrow: 'About',
-    title: 'A cleaning partner in Ottawa and the surrounding area',
-    lead: 'NGW MULTISERVICES helps households and businesses with automotive, residential, commercial and specialized cleaning.',
+    title: 'A multiservice partner in Ottawa and the surrounding area',
+    lead: 'NGW MULTISERVICES helps households and businesses with cleaning, moving and light maintenance.',
     text: 'Book online, request a quote or leave a review after a visit. Our team comes to you, or you come to our location, depending on the service.',
     areaTitle: 'Service area',
     areaText: 'Ottawa, Gatineau, Orléans, Kanata and the surrounding area.',

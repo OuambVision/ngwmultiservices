@@ -8,34 +8,20 @@ import { useTranslation } from 'react-i18next'
 import { ScrollReveal } from '@/components/site/scroll-reveal'
 import { ServiceRating } from '@/components/site/service-rating'
 import {
-  getCategoryCard,
   NGW_CATEGORY_ORDER,
-  type NgwCategoryName,
+  type CategoryCardCopy,
+  type OrbitCategoryCards,
 } from '@/data/ngw-service-catalog'
 import type { ServiceScore } from '@/lib/reviews'
 
-const CATEGORY_IMAGES: Record<Exclude<NgwCategoryName, 'NGW_AllServices'>, string> = {
-  NGW_Automotive: '/3d/services/nettoyage-auto.png',
-  NGW_Commercial: '/3d/services/nettoyage-commercial.png',
-  NGW_Residential: '/3d/services/nettoyage-residentiel.png',
-  NGW_Specialized: '/3d/services/nettoyage-specialise.png',
-}
-
-const MOBILE_CATEGORIES = NGW_CATEGORY_ORDER.filter(
-  (name): name is Exclude<NgwCategoryName, 'NGW_AllServices'> => name !== 'NGW_AllServices',
-)
-
 function MobileCategoryCard({
-  name,
+  card,
   ratings,
 }: {
-  name: Exclude<NgwCategoryName, 'NGW_AllServices'>
+  card: CategoryCardCopy
   ratings: Record<string, ServiceScore>
 }) {
   const { i18n, t } = useTranslation()
-  const card = getCategoryCard(name, i18n.language)
-  const imageSrc = CATEGORY_IMAGES[name]
-  if (!card || !imageSrc) return null
 
   const countLabel = i18n.language.startsWith('en')
     ? `${card.services.length} services`
@@ -49,8 +35,8 @@ function MobileCategoryCard({
           className="group relative block aspect-[16/9] overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight"
         >
           <Image
-            src={imageSrc}
-            alt=""
+            src={card.imageSrc}
+            alt={card.imageAlt}
             fill
             sizes="(min-width: 924px) 30vw, (min-width: 540px) 45vw, 100vw"
             className="object-cover transition duration-500 ease-out group-hover:scale-105"
@@ -112,16 +98,23 @@ function MobileCategoryCard({
 }
 
 export function MobileServiceCategories({
+  cards,
   ratings = {},
 }: {
+  cards: OrbitCategoryCards
   ratings?: Record<string, ServiceScore>
 }) {
+  const visible = NGW_CATEGORY_ORDER.flatMap((name) => {
+    const card = cards[name]
+    return card ? [{ name, card }] : []
+  })
+
   return (
     // Wrapper : lg:hidden doit rester hors de .ngw-card-grid (display:grid écraserait le hide).
     <div className="px-5 pb-2 sm:px-6 lg:hidden">
       <ul className="ngw-card-grid ngw-card-grid--4 gap-5">
-        {MOBILE_CATEGORIES.map((name) => (
-          <MobileCategoryCard key={name} name={name} ratings={ratings} />
+        {visible.map(({ name, card }) => (
+          <MobileCategoryCard key={name} card={card} ratings={ratings} />
         ))}
       </ul>
     </div>

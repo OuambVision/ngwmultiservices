@@ -14,6 +14,7 @@
     "seed:catalog": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-catalog.ts",
     "seed:categories": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-category-descriptions.ts",
     "seed:category-images": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-category-images.ts",
+    "seed:service-images": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-service-images.ts",
     "seed:services": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-service-details.ts",
     "seed:availability": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-availability.ts",
     "seed:hero": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-hero.ts",

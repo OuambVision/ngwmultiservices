@@ -2,7 +2,8 @@ export const site = {
   name: 'NGW MULTISERVICES',
   legalName: 'NGW MULTISERVICES',
   tagline: 'Cleaning . Moving . Maintenance',
-  description: 'Nettoyage automobile, résidentiel, commercial et spécialisé à Ottawa et environs.',
+  description:
+    'Nettoyage, déménagement et petite maintenance à Ottawa et environs.',
   phoneDisplay: '613-698-2837',
   phoneHref: 'tel:+16136982837',
   email: 'ngwmultiservice@gmail.com',
@@ -22,6 +23,8 @@ export const serviceFamilies = [
   { href: '/services/residentiel', labelKey: 'families.residential' },
   { href: '/services/commercial', labelKey: 'families.commercial' },
   { href: '/services/specialise', labelKey: 'families.specialized' },
+  { href: '/services/demenagement', labelKey: 'families.moving' },
+  { href: '/services/petite-maintenance', labelKey: 'families.maintenance' },
 ] as const
 
 export const reservationHref = '/reservation'

@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, BadgeCheck, Building2, Calendar, Camera, Car, CircleCheck, Home, MapPin, Sparkles, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BadgeCheck, Building2, Calendar, Camera, Car, CircleCheck, Home, MapPin, Package, Sparkles, Users, Wrench, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
@@ -19,13 +19,22 @@ export type RealizationCard = {
   title: string
 }
 
-const familyOrder = ['automobile', 'residentiel', 'commercial', 'specialise'] as const
+const familyOrder = [
+  'automobile',
+  'residentiel',
+  'commercial',
+  'specialise',
+  'demenagement',
+  'petite-maintenance',
+] as const
 
 const badgeIconClass: Record<string, string> = {
   automobile: 'bg-accent text-white',
   commercial: 'bg-action text-white',
   residentiel: 'bg-action text-white',
   specialise: 'bg-highlight text-[#071b4b]',
+  demenagement: 'bg-navy text-white',
+  'petite-maintenance': 'bg-action text-white',
 }
 
 const badgeIcon: Record<string, LucideIcon> = {
@@ -33,6 +42,8 @@ const badgeIcon: Record<string, LucideIcon> = {
   commercial: Building2,
   residentiel: Home,
   specialise: Sparkles,
+  demenagement: Package,
+  'petite-maintenance': Wrench,
 }
 
 const badgeLabel: Record<string, string> = {
@@ -40,6 +51,8 @@ const badgeLabel: Record<string, string> = {
   commercial: 'projects.labelCommercial',
   residentiel: 'projects.labelResidentiel',
   specialise: 'projects.labelSpecialise',
+  demenagement: 'projects.labelDemenagement',
+  'petite-maintenance': 'projects.labelPetiteMaintenance',
 }
 
 export function RealizationsGallery({

@@ -49,7 +49,7 @@ export async function loadHome(): Promise<HomeContent> {
   const locale = await getLocale()
   const t = await getT()
   const [categories, services, settings] = await Promise.all([
-    readJson<ListResponse<Category>>(withLocale('/categories?limit=20&sort=order&depth=0', locale)),
+    readJson<ListResponse<Category>>(withLocale('/categories?limit=20&sort=order&depth=1', locale)),
     readJson<ListResponse<Service>>(withLocale('/services?limit=100&sort=order&depth=0', locale)),
     readJson<SiteSetting>(withLocale('/globals/siteSettings', locale)),
   ])

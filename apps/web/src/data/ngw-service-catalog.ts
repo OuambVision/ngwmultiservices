@@ -3,85 +3,21 @@ export const NGW_CATEGORY_ORDER = [
   'NGW_Commercial',
   'NGW_Residential',
   'NGW_Specialized',
-  'NGW_AllServices',
+  'NGW_Demenagement',
+  'NGW_PetiteMaintenance',
 ] as const
 
 export type NgwCategoryName = (typeof NGW_CATEGORY_ORDER)[number]
 
-const AUTOMOTIVE_SERVICES = [
-  'Nettoyage intérieur',
-  'Nettoyage extérieur',
-  'Nettoyage complet',
-  'Sièges et tapis',
-  'Tableau de bord',
-  'Camionnettes et VUS',
-] as const
-
-const COMMERCIAL_SERVICES = [
-  'Commerces et institutions',
-  'Entrepôts et espaces communs',
-  'Planchers et vitres',
-] as const
-
-const RESIDENTIAL_SERVICES = [
-  'Grand ménage et entretien régulier',
-  'Maisons, appartements et condos',
-  'Cuisines et salles de bain',
-  'Tapis, moquettes et meubles',
-] as const
-
-const SPECIALIZED_SERVICES = [
-  'Nettoyage après construction',
-  'Nettoyage après sinistre',
-  'Désinfection et assainissement',
-] as const
-
-export const NGW_CATEGORY_SERVICES = {
-  NGW_Automotive: AUTOMOTIVE_SERVICES,
-  NGW_Commercial: COMMERCIAL_SERVICES,
-  NGW_Residential: RESIDENTIAL_SERVICES,
-  NGW_Specialized: SPECIALIZED_SERVICES,
-} as const
-
-export const NGW_ALL_SERVICES = [
-  ...AUTOMOTIVE_SERVICES,
-  ...COMMERCIAL_SERVICES,
-  ...RESIDENTIAL_SERVICES,
-  ...SPECIALIZED_SERVICES,
-] as const
-
-export function getCategoryServices(name: string) {
-  if (name === 'NGW_AllServices') return NGW_ALL_SERVICES
-  return NGW_CATEGORY_SERVICES[name as keyof typeof NGW_CATEGORY_SERVICES] ?? []
+/** GLB mesh name → Payload category slug */
+export const NGW_CATEGORY_SLUGS: Record<NgwCategoryName, string> = {
+  NGW_Automotive: 'automobile',
+  NGW_Commercial: 'commercial',
+  NGW_Residential: 'residentiel',
+  NGW_Specialized: 'specialise',
+  NGW_Demenagement: 'demenagement',
+  NGW_PetiteMaintenance: 'petite-maintenance',
 }
-
-const AUTOMOTIVE_SERVICES_EN = [
-  'Interior cleaning',
-  'Exterior cleaning',
-  'Complete cleaning',
-  'Seats and carpets',
-  'Dashboard',
-  'Vans and SUVs',
-] as const
-
-const COMMERCIAL_SERVICES_EN = [
-  'Shops and institutions',
-  'Warehouses and common areas',
-  'Floors and windows',
-] as const
-
-const RESIDENTIAL_SERVICES_EN = [
-  'Deep clean and regular upkeep',
-  'Houses, apartments and condos',
-  'Kitchens and bathrooms',
-  'Rugs, carpeting and furniture',
-] as const
-
-const SPECIALIZED_SERVICES_EN = [
-  'Post-construction cleaning',
-  'Post-disaster cleaning',
-  'Disinfection and sanitizing',
-] as const
 
 export type CategoryServiceLink = {
   href: string
@@ -91,138 +27,146 @@ export type CategoryServiceLink = {
 export type CategoryCardCopy = {
   eyebrow: string
   href: string
+  imageAlt: string
+  imageSrc: string
   services: readonly CategoryServiceLink[]
   title: string
 }
 
-const CATEGORY_HREFS: Record<NgwCategoryName, string> = {
-  NGW_Automotive: '/services/automobile',
-  NGW_Commercial: '/services/commercial',
-  NGW_Residential: '/services/residentiel',
-  NGW_Specialized: '/services/specialise',
-  NGW_AllServices: '/services',
+export type OrbitCategoryCards = Partial<Record<NgwCategoryName, CategoryCardCopy>>
+
+type CatalogService = {
+  order?: number | null
+  published?: boolean | null
+  slug?: string | null
+  title: string
 }
 
-const AUTOMOTIVE_HREFS = [
-  '/services/automobile/nettoyage-interieur',
-  '/services/automobile/lavage-exterieur',
-  '/services/automobile/detail-complet',
-  '/services/automobile/sieges-et-tapis',
-  '/services/automobile/tableau-de-bord',
-  '/services/automobile/camionnettes-et-vus',
-] as const
+type CatalogCategory = {
+  image?: { alt?: string | null; url?: string | null } | number | null
+  services: CatalogService[]
+  slug?: string | null
+  title: string
+}
 
-const COMMERCIAL_HREFS = [
-  '/services/commercial/commerces-et-institutions',
-  '/services/commercial/entrepots-et-espaces-communs',
-  '/services/commercial/planchers-et-vitres',
-] as const
+const CATEGORY_IMAGE_FALLBACKS: Record<string, string> = {
+  automobile: '/3d/services/nettoyage-auto.png',
+  residentiel: '/3d/services/nettoyage-residentiel.png',
+  commercial: '/3d/services/nettoyage-commercial.png',
+  specialise: '/3d/services/nettoyage-specialise.png',
+  demenagement: '/3d/services/demenagement.png',
+  'petite-maintenance': '/3d/services/petite-maintenance.png',
+}
 
-const RESIDENTIAL_HREFS = [
-  '/services/residentiel/grand-menage-et-entretien-regulier',
-  '/services/residentiel/maisons-appartements-condos',
-  '/services/residentiel/cuisines-et-salles-de-bain',
-  '/services/residentiel/tapis-moquettes-et-meubles',
-] as const
-
-const SPECIALIZED_HREFS = [
-  '/services/specialise/nettoyage-apres-construction',
-  '/services/specialise/nettoyage-apres-sinistre',
-  '/services/specialise/desinfection-et-assainissement',
-] as const
-
-const ALL_HREFS = [
-  ...AUTOMOTIVE_HREFS,
-  ...COMMERCIAL_HREFS,
-  ...RESIDENTIAL_HREFS,
-  ...SPECIALIZED_HREFS,
-] as const
-
-function linkServices(labels: readonly string[], hrefs: readonly string[]): CategoryServiceLink[] {
-  return labels.map((label, index) => ({ label, href: hrefs[index] ?? '/services' }))
+function categoryCardImage(category: CatalogCategory, slug: string) {
+  const image = category.image
+  if (image && typeof image === 'object' && image.url) {
+    return { src: image.url, alt: image.alt?.trim() || category.title }
+  }
+  return {
+    src: CATEGORY_IMAGE_FALLBACKS[slug] ?? '/3d/services/tous-services.png',
+    alt: category.title,
+  }
 }
 
 export function categoryPageHref(name: string) {
-  if (name in CATEGORY_HREFS) return CATEGORY_HREFS[name as NgwCategoryName]
+  if (name in NGW_CATEGORY_SLUGS) {
+    return `/services/${NGW_CATEGORY_SLUGS[name as NgwCategoryName]}`
+  }
   return null
 }
 
-const FRENCH_CARDS: Record<NgwCategoryName, CategoryCardCopy> = {
-  NGW_Automotive: {
-    eyebrow: 'Automobile',
-    title: 'Nettoyage Automobile',
-    href: CATEGORY_HREFS.NGW_Automotive,
-    services: linkServices(AUTOMOTIVE_SERVICES, AUTOMOTIVE_HREFS),
-  },
-  NGW_Commercial: {
-    eyebrow: 'Commercial',
-    title: 'Nettoyage Commercial',
-    href: CATEGORY_HREFS.NGW_Commercial,
-    services: linkServices(COMMERCIAL_SERVICES, COMMERCIAL_HREFS),
-  },
-  NGW_Residential: {
-    eyebrow: 'Résidentiel',
-    title: 'Nettoyage Résidentiel',
-    href: CATEGORY_HREFS.NGW_Residential,
-    services: linkServices(RESIDENTIAL_SERVICES, RESIDENTIAL_HREFS),
-  },
-  NGW_Specialized: {
-    eyebrow: 'Spécialisé',
-    title: 'Nettoyage Spécialisé',
-    href: CATEGORY_HREFS.NGW_Specialized,
-    services: linkServices(SPECIALIZED_SERVICES, SPECIALIZED_HREFS),
-  },
-  NGW_AllServices: {
-    eyebrow: 'Catalogue',
-    title: 'Tous les services',
-    href: CATEGORY_HREFS.NGW_AllServices,
-    services: linkServices(NGW_ALL_SERVICES, ALL_HREFS),
-  },
+export function ngwNameForSlug(slug: string): NgwCategoryName | null {
+  const entry = (Object.entries(NGW_CATEGORY_SLUGS) as [NgwCategoryName, string][]).find(
+    ([, value]) => value === slug,
+  )
+  return entry?.[0] ?? null
 }
 
-const ENGLISH_CARDS: Record<NgwCategoryName, CategoryCardCopy> = {
-  NGW_Automotive: {
-    eyebrow: 'Automotive',
-    title: 'Automotive cleaning',
-    href: CATEGORY_HREFS.NGW_Automotive,
-    services: linkServices(AUTOMOTIVE_SERVICES_EN, AUTOMOTIVE_HREFS),
-  },
-  NGW_Commercial: {
-    eyebrow: 'Commercial',
-    title: 'Commercial cleaning',
-    href: CATEGORY_HREFS.NGW_Commercial,
-    services: linkServices(COMMERCIAL_SERVICES_EN, COMMERCIAL_HREFS),
-  },
-  NGW_Residential: {
-    eyebrow: 'Residential',
-    title: 'Residential cleaning',
-    href: CATEGORY_HREFS.NGW_Residential,
-    services: linkServices(RESIDENTIAL_SERVICES_EN, RESIDENTIAL_HREFS),
-  },
-  NGW_Specialized: {
-    eyebrow: 'Specialized',
-    title: 'Specialized cleaning',
-    href: CATEGORY_HREFS.NGW_Specialized,
-    services: linkServices(SPECIALIZED_SERVICES_EN, SPECIALIZED_HREFS),
-  },
-  NGW_AllServices: {
-    eyebrow: 'Catalogue',
-    title: 'All services',
-    href: CATEGORY_HREFS.NGW_AllServices,
-    services: linkServices(
-      [
-        ...AUTOMOTIVE_SERVICES_EN,
-        ...COMMERCIAL_SERVICES_EN,
-        ...RESIDENTIAL_SERVICES_EN,
-        ...SPECIALIZED_SERVICES_EN,
-      ],
-      ALL_HREFS,
-    ),
-  },
+/** Build home/orbit cards from Payload categories + nested services. */
+export function buildOrbitCategoryCards(categories: CatalogCategory[]): OrbitCategoryCards {
+  const bySlug = new Map<string, CatalogCategory>()
+  for (const category of categories) {
+    if (!category.slug) continue
+    bySlug.set(category.slug, category)
+  }
+
+  const cards: OrbitCategoryCards = {}
+  for (const name of NGW_CATEGORY_ORDER) {
+    const slug = NGW_CATEGORY_SLUGS[name]
+    const category = bySlug.get(slug)
+    if (!category) continue
+
+    const services = [...category.services]
+      .filter((service) => Boolean(service.slug) && service.published !== false)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((service) => ({
+        label: service.title,
+        href: `/services/${slug}/${service.slug}`,
+      }))
+
+    const image = categoryCardImage(category, slug)
+    cards[name] = {
+      eyebrow: category.title,
+      title: category.title,
+      href: `/services/${slug}`,
+      imageAlt: image.alt,
+      imageSrc: image.src,
+      services,
+    }
+  }
+
+  return cards
 }
 
-export function getCategoryCard(name: string, locale: string): CategoryCardCopy | null {
-  const cards = locale.startsWith('en') ? ENGLISH_CARDS : FRENCH_CARDS
-  if (name in cards) return cards[name as NgwCategoryName]
-  return null
+/** Legacy dive-orbit labels (mesh object names in older GLB scenes). */
+export const NGW_CATEGORY_SERVICES = {
+  NGW_Automotive: [
+    'Nettoyage intérieur',
+    'Nettoyage extérieur',
+    'Nettoyage complet',
+    'Sièges et tapis',
+    'Tableau de bord',
+    'Camionnettes et VUS',
+  ],
+  NGW_Commercial: [
+    'Commerces et institutions',
+    'Entrepôts et espaces communs',
+    'Planchers et vitres',
+  ],
+  NGW_Residential: [
+    'Grand ménage et entretien régulier',
+    'Maisons, appartements et condos',
+    'Cuisines et salles de bain',
+    'Tapis, moquettes et meubles',
+  ],
+  NGW_Specialized: [
+    'Nettoyage après construction',
+    'Nettoyage après sinistre',
+    'Désinfection et assainissement',
+  ],
+  NGW_Demenagement: [
+    'Emballage des effets',
+    'Démontage et assemblage des meubles',
+    'Protection et emballage des meubles',
+    'Collecte des effets à domicile',
+    'Manutention des meubles',
+    'Chargement du camion',
+    'Transport local et interurbain',
+    'Déchargement du camion',
+    'Rangement des effets',
+  ],
+  NGW_PetiteMaintenance: [
+    'Installation de tringles à rideaux',
+    'Fixation des tableaux décoratifs',
+    'Installation des cadres et miroirs muraux',
+    'Installation et fixation des télévisions murales',
+    "Montage d'armoires, placards, lits, bureaux, tables et chaises",
+    'Changement de serrures et poignées des portes',
+    'Rénovation des peintures',
+  ],
+} as const
+
+export function getCategoryServices(name: string) {
+  return NGW_CATEGORY_SERVICES[name as keyof typeof NGW_CATEGORY_SERVICES] ?? []
 }

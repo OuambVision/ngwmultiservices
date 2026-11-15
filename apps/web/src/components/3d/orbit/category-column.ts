@@ -8,7 +8,8 @@ const COLUMN_ORDER = [
   'NGW_Commercial',
   'NGW_Residential',
   'NGW_Specialized',
-  'NGW_AllServices',
+  'NGW_Demenagement',
+  'NGW_PetiteMaintenance',
 ] as const
 
 const ROW_SPACING = 10.5

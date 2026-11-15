@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { NgwOrbitPreview } from '@/components/3d/ngw-orbit-preview'
 import { reservationHref, site } from '@/config/site'
+import { buildOrbitCategoryCards } from '@/data/ngw-service-catalog'
 import { getLocale, getT } from '@/i18n/server'
 import { categoryOf, formatPrice, loadServices, serviceImage } from '@/lib/catalog'
 import { pickTopRated } from '@/lib/featured'
@@ -67,6 +68,7 @@ export async function HomeView({ content }: { content: HomeContent }) {
       ]
     }),
   )
+  const categoryCards = buildOrbitCategoryCards(content.categories)
 
   return (
     <>
@@ -149,7 +151,7 @@ export async function HomeView({ content }: { content: HomeContent }) {
         backgroundImage="/construction.png"
         bleed
       >
-        <NgwOrbitPreview ratings={ratings} />
+        <NgwOrbitPreview cards={categoryCards} ratings={ratings} />
       </Section>
 
       <HomeFeatured services={featured} t={t} />

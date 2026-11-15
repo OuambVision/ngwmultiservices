@@ -24,7 +24,14 @@ export type ServiceScore = {
   count: number
 }
 
-const familyOrder = ['automobile', 'residentiel', 'commercial', 'specialise'] as const
+const familyOrder = [
+  'automobile',
+  'residentiel',
+  'commercial',
+  'specialise',
+  'demenagement',
+  'petite-maintenance',
+] as const
 
 function categoryOf(service: Review['service']): Category | null {
   if (!service || typeof service !== 'object') return null

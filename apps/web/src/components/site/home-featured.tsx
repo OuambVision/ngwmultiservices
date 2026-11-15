@@ -12,6 +12,8 @@ const familyLabel: Record<string, string> = {
   commercial: 'families.commercial',
   residentiel: 'families.residential',
   specialise: 'families.specialized',
+  demenagement: 'families.moving',
+  'petite-maintenance': 'families.maintenance',
 }
 
 export type FeaturedService = {

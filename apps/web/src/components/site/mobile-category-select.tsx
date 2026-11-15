@@ -6,8 +6,9 @@ import {
   Check,
   ChevronDown,
   Home,
+  Package,
   Shield,
-  Sparkles,
+  Wrench,
   type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -21,6 +22,8 @@ const categoryIcons: Record<string, LucideIcon> = {
   residentiel: Home,
   commercial: Building2,
   specialise: Shield,
+  demenagement: Package,
+  'petite-maintenance': Wrench,
 }
 
 const shortCategoryLabel: Record<string, string> = {
@@ -28,6 +31,8 @@ const shortCategoryLabel: Record<string, string> = {
   residentiel: 'families.residential',
   commercial: 'families.commercial',
   specialise: 'families.specialized',
+  demenagement: 'families.moving',
+  'petite-maintenance': 'families.maintenance',
 }
 
 export type MobileCategoryOption = {

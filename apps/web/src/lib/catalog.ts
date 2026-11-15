@@ -26,6 +26,8 @@ const categoryFallbacks: Record<string, string> = {
   residentiel: '/3d/services/nettoyage-residentiel.png',
   commercial: '/3d/services/nettoyage-commercial.png',
   specialise: '/3d/services/nettoyage-specialise.png',
+  demenagement: '/3d/services/demenagement.png',
+  'petite-maintenance': '/3d/services/petite-maintenance.png',
 }
 
 export async function loadCategories(): Promise<Category[]> {

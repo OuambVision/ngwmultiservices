@@ -475,12 +475,21 @@ body.ngw-nav-overlay-open .template-default__nav-toggler {
 .btn--style-primary {
   background: var(--ngw-action) !important;
   border-color: var(--ngw-action) !important;
+  color: #fff !important;
+}
+
+.btn.btn--style-primary:hover,
+.btn--style-primary:hover,
+.btn.btn--style-primary:focus-visible,
+.btn--style-primary:focus-visible {
+  color: #fff !important;
 }
 
 .btn.btn--style-error,
 .btn--style-error {
   background: var(--ngw-accent) !important;
   border-color: var(--ngw-accent) !important;
+  color: #fff !important;
 }
 
 /* Sélecteur de locale : masquer « Paramètres régionaux » et les codes (fr)/(en) */

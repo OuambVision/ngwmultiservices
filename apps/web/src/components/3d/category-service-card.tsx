@@ -1,11 +1,11 @@
 'use client'
 
-import { Building2, Car, Check, Home, Layers, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { Building2, Car, Check, Home, Package, ShieldCheck, Wrench, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getCategoryCard, type NgwCategoryName } from '@/data/ngw-service-catalog'
+import type { NgwCategoryName, OrbitCategoryCards } from '@/data/ngw-service-catalog'
 import type { ServiceScore } from '@/lib/reviews'
 import { cn } from '@/lib/utils'
 
@@ -16,14 +16,17 @@ const CATEGORY_ICONS: Record<NgwCategoryName, { icon: LucideIcon; tile: string }
   NGW_Commercial: { icon: Building2, tile: 'bg-action text-white' },
   NGW_Residential: { icon: Home, tile: 'bg-action text-white' },
   NGW_Specialized: { icon: ShieldCheck, tile: 'bg-highlight text-navy' },
-  NGW_AllServices: { icon: Layers, tile: 'bg-navy text-white' },
+  NGW_Demenagement: { icon: Package, tile: 'bg-navy text-white' },
+  NGW_PetiteMaintenance: { icon: Wrench, tile: 'bg-action text-white' },
 }
 
 export function CategoryServiceCard({
   name,
+  cards,
   ratings = {},
 }: {
   name: string | null
+  cards: OrbitCategoryCards
   ratings?: Record<string, ServiceScore>
 }) {
   const { i18n } = useTranslation()
@@ -51,7 +54,8 @@ export function CategoryServiceCard({
     return () => window.clearTimeout(timeout)
   }, [holding, name])
 
-  const card = shown ? getCategoryCard(shown, i18n.language) : null
+  const card =
+    shown && shown in cards ? cards[shown as NgwCategoryName] ?? null : null
   const visual = shown && shown in CATEGORY_ICONS ? CATEGORY_ICONS[shown as NgwCategoryName] : null
   const Icon = visual?.icon
   const wide = (card?.services.length ?? 0) > 6
