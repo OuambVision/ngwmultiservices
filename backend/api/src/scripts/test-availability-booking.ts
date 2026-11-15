@@ -54,7 +54,7 @@ try {
   assert(nye.slots.includes('08:00') || nye.slots.includes('09:00') || nye.slots.includes('10:00'), 'Matinée 31 déc. ouverte')
   console.log('NYE_PARTIAL ok', nye.slots)
 
-  // Create pending booking → slot disappears
+  // Create pending booking → slot disappears for ALL services
   const created = await payload.create({
     collection: 'bookings',
     overrideAccess: true,
@@ -74,6 +74,22 @@ try {
   const after = await listBookableSlots(payload, { service: serviceId, date: openDay })
   assert(!after.slots.includes(slot), `Le créneau ${slot} doit disparaître après réservation`)
   console.log('HIDDEN_AFTER_BOOKING ok', after.slots.length)
+
+  const other = await payload.find({
+    collection: 'services',
+    depth: 0,
+    limit: 2,
+    overrideAccess: true,
+  })
+  const otherService = other.docs.find((doc) => doc.id !== service.id)
+  if (otherService) {
+    const cross = await listBookableSlots(payload, {
+      service: String(otherService.id),
+      date: openDay,
+    })
+    assert(!cross.slots.includes(slot), `Le créneau ${slot} doit aussi être masqué pour un autre service`)
+    console.log('HIDDEN_CROSS_SERVICE ok')
+  }
 
   // Double booking same slot must fail
   let blocked = false

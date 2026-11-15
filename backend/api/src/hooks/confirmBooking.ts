@@ -49,7 +49,6 @@ export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
     overrideAccess: true,
     where: {
       and: [
-        { service: { equals: service } },
         { status: { in: [...BLOCKING_BOOKING_STATUSES] } },
         { time: { equals: time } },
         { date: { greater_than_equal: range.start } },
@@ -64,7 +63,7 @@ export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
       collection: 'bookings',
       errors: [
         {
-          message: 'Ce créneau est déjà pris pour ce service.',
+          message: 'Ce créneau est déjà pris.',
           path: 'status',
         },
       ],

@@ -173,9 +173,9 @@ function buildSlotsForDay(
   return { closed: slots.size === 0 && (fullClose || exceptions.length === 0 && !weekday), slots: [...slots].sort() }
 }
 
-async function takenTimesForService(
+/** Occupied slots for any service — a taken time is global. */
+async function takenTimes(
   payload: Payload,
-  service: string,
   from: string,
   to: string,
 ): Promise<Map<string, Set<string>>> {
@@ -187,7 +187,6 @@ async function takenTimesForService(
     pagination: false,
     where: {
       and: [
-        { service: { equals: service } },
         { status: { in: [...BLOCKING_BOOKING_STATUSES] } },
         { date: { greater_than_equal: `${from}T00:00:00.000Z` } },
         { date: { less_than: `${nextCalendarDay(to)}T00:00:00.000Z` } },
@@ -225,7 +224,7 @@ export async function listBookableSlots(
 
   const [all, takenByDay] = await Promise.all([
     loadAvailability(payload),
-    takenTimesForService(payload, input.service, day, day),
+    takenTimes(payload, day, day),
   ])
 
   const result = buildSlotsForDay(
@@ -253,7 +252,7 @@ export async function listOpenDates(
   const window = await resolveBookingWindow(payload)
   const [all, takenByDay] = await Promise.all([
     loadAvailability(payload),
-    takenTimesForService(payload, input.service, from, to),
+    takenTimes(payload, from, to),
   ])
 
   const docs = all.docs as AvailabilityDoc[]
