@@ -1,6 +1,4 @@
-import React from 'react'
-
 /** Marque compacte dans la barre latérale. */
 export default function Icon() {
-  return <img alt="NGW MULTISERVICES" height={28} src="/icons/icon-192.png" width={28} />
+  return <img alt="Ngw Multiservices" height={28} src="/icons/icon-192.png" width={28} />
 }

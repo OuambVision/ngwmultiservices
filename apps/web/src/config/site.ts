@@ -1,9 +1,8 @@
 export const site = {
-  name: 'NGW MULTISERVICES',
-  legalName: 'NGW MULTISERVICES',
+  name: 'Ngw Multiservices',
+  legalName: 'Ngw Multiservices',
   tagline: 'Cleaning . Moving . Maintenance',
-  description:
-    'Nettoyage, déménagement et petite maintenance à Ottawa et environs.',
+  description: 'Nettoyage, déménagement et petite maintenance à Ottawa et environs.',
   phoneDisplay: '613-698-2837',
   phoneHref: 'tel:+16136982837',
   email: 'ngwmultiservice@gmail.com',

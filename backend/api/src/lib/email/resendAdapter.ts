@@ -13,7 +13,7 @@ function parseFrom(value: unknown): { address: string; name: string } | null {
   if (!raw) return null
   const match = /^"?([^"<]+)"?\s*<([^>]+)>$/.exec(raw)
   if (match) return { name: match[1].trim(), address: match[2].trim() }
-  return { name: 'NGW MULTISERVICES', address: raw }
+  return { name: 'Ngw Multiservices', address: raw }
 }
 
 /**
@@ -22,8 +22,8 @@ function parseFrom(value: unknown): { address: string; name: string } | null {
 export const resendEmailAdapter = (): EmailAdapter => {
   const configured = process.env.RESEND_FROM_EMAIL?.trim() || 'noreply@kwat.live'
   const parsed = parseFrom(
-    configured.includes('<') ? configured : `NGW MULTISERVICES <${configured}>`,
-  ) || { name: 'NGW MULTISERVICES', address: configured }
+    configured.includes('<') ? configured : `Ngw Multiservices <${configured}>`,
+  ) || { name: 'Ngw Multiservices', address: configured }
 
   return () => ({
     name: 'resend',
@@ -41,7 +41,7 @@ export const resendEmailAdapter = (): EmailAdapter => {
             : ''
       if (!html) throw new Error('Contenu HTML manquant pour l’envoi du courriel.')
 
-      const subject = typeof message.subject === 'string' ? message.subject : 'NGW MULTISERVICES'
+      const subject = typeof message.subject === 'string' ? message.subject : 'Ngw Multiservices'
       const replyTo = parseAddress(message.replyTo)
       const fromOverride = parseAddress(message.from)
 

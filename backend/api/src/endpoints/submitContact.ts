@@ -57,17 +57,16 @@ export const submitContact: Endpoint = {
         to: ngwInbox,
         replyTo: email,
         subject: 'Nouveau message de contact',
-        html: renderBookingEmail('Nouveau message de contact', 'Un visiteur a envoyé un message depuis la page Contact.', [
-          ...rows,
-          ['Nom', name],
-          ['Courriel', email],
-          ['Téléphone', phone],
-        ]),
+        html: renderBookingEmail(
+          'Nouveau message de contact',
+          'Un visiteur a envoyé un message depuis la page Contact.',
+          [...rows, ['Nom', name], ['Courriel', email], ['Téléphone', phone]],
+        ),
       })
       const clientMail = deliver({
         to: email,
         replyTo: ngwInbox,
-        subject: 'NGW MULTISERVICES — nous avons bien reçu votre message',
+        subject: 'Message reçu - Ngw Multiservices',
         html: renderBookingEmail(
           'Message reçu',
           'Merci de nous avoir écrit. Notre équipe vous répondra sous peu par courriel ou par téléphone.',
@@ -76,7 +75,10 @@ export const submitContact: Endpoint = {
       })
       const [ownerResult, clientResult] = await Promise.allSettled([ownerMail, clientMail])
       if (ownerResult.status === 'rejected') {
-        const reason = ownerResult.reason instanceof Error ? ownerResult.reason.message : String(ownerResult.reason)
+        const reason =
+          ownerResult.reason instanceof Error
+            ? ownerResult.reason.message
+            : String(ownerResult.reason)
         console.error('[courriel] Échec du contact propriétaire', reason)
         return fail('save', 500)
       }

@@ -24,14 +24,16 @@ export const Users: CollectionConfig = {
     forgotPassword: {
       /** Lien valable 1 heure. */
       expiration: 1000 * 60 * 60,
-      generateEmailSubject: () => 'Réinitialisation de votre mot de passe — NGW MULTISERVICES',
+      generateEmailSubject: () => 'Réinitialisation de votre mot de passe — Ngw Multiservices',
       generateEmailHTML: (args) => {
         const req = args?.req
         const token = args?.token ?? ''
         const user = args?.user
         const config = req?.payload?.config
         const configuredServerURL =
-          typeof config?.serverURL === 'string' && config.serverURL.trim() ? config.serverURL.trim() : ''
+          typeof config?.serverURL === 'string' && config.serverURL.trim()
+            ? config.serverURL.trim()
+            : ''
         let serverURL = configuredServerURL
         if (!serverURL && req?.url) {
           try {

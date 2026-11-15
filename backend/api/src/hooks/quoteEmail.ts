@@ -4,7 +4,12 @@ import { renderBookingEmail } from '../lib/email/bookingTemplate'
 import { ngwInbox, sendMail } from '../lib/email/sendMail'
 
 async function categoryTitle(category: unknown, req: PayloadRequest) {
-  if (category && typeof category === 'object' && 'title' in category && typeof category.title === 'string') {
+  if (
+    category &&
+    typeof category === 'object' &&
+    'title' in category &&
+    typeof category.title === 'string'
+  ) {
     return category.title
   }
   const id =
@@ -39,7 +44,7 @@ export const sendQuoteEmail: CollectionAfterChangeHook = async ({ doc, operation
     const clientMail = sendMail({
       to: client,
       replyTo: ngwInbox,
-      subject: 'NGW MULTISERVICES — votre demande de devis',
+      subject: 'Votre demande de devis - Ngw Multiservices',
       html: renderBookingEmail(
         'Demande de devis reçue',
         'Nous avons bien reçu votre besoin. Notre équipe vous répondra par courriel avec une estimation. Ce n’est pas encore un rendez-vous.',
@@ -50,18 +55,32 @@ export const sendQuoteEmail: CollectionAfterChangeHook = async ({ doc, operation
       to: ngwInbox,
       replyTo: client,
       subject: 'Nouvelle demande de devis',
-      html: renderBookingEmail('Nouvelle demande de devis', 'Une demande de devis vient d’être enregistrée sur le site.', [
-        ...rows,
-        ['Nom', String(doc.name ?? '')],
-        ['Courriel', client],
-        ['Téléphone', String(doc.phone ?? '')],
-      ]),
+      html: renderBookingEmail(
+        'Nouvelle demande de devis',
+        'Une demande de devis vient d’être enregistrée sur le site.',
+        [
+          ...rows,
+          ['Nom', String(doc.name ?? '')],
+          ['Courriel', client],
+          ['Téléphone', String(doc.phone ?? '')],
+        ],
+      ),
     })
     const [clientResult, ownerResult] = await Promise.allSettled([clientMail, ownerMail])
-    if (clientResult.status === 'fulfilled') console.log('[courriel] Devis envoyé au client', { to: client })
-    else console.error('[courriel] Échec du devis client', clientResult.reason instanceof Error ? clientResult.reason.message : clientResult.reason)
-    if (ownerResult.status === 'fulfilled') console.log('[courriel] Devis envoyé au propriétaire', { to: ngwInbox })
-    else console.error('[courriel] Échec du devis propriétaire', ownerResult.reason instanceof Error ? ownerResult.reason.message : ownerResult.reason)
+    if (clientResult.status === 'fulfilled')
+      console.log('[courriel] Devis envoyé au client', { to: client })
+    else
+      console.error(
+        '[courriel] Échec du devis client',
+        clientResult.reason instanceof Error ? clientResult.reason.message : clientResult.reason,
+      )
+    if (ownerResult.status === 'fulfilled')
+      console.log('[courriel] Devis envoyé au propriétaire', { to: ngwInbox })
+    else
+      console.error(
+        '[courriel] Échec du devis propriétaire',
+        ownerResult.reason instanceof Error ? ownerResult.reason.message : ownerResult.reason,
+      )
   } catch (error) {
     console.error('[courriel] Échec du devis', error instanceof Error ? error.message : error)
   }

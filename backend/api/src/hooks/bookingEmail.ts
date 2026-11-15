@@ -66,7 +66,7 @@ export const sendBookingEmail: CollectionAfterChangeHook = async ({ doc, operati
     await sendMail({
       to: String(doc.email),
       replyTo: ngwInbox,
-      subject: `NGW MULTISERVICES — demande ${reference}`,
+      subject: `Demande ${reference} - Ngw Multiservices`,
       html: renderBookingEmail(
         'Demande bien reçue',
         'Nous avons bien reçu votre demande. Elle est en cours de traitement. Notre équipe vous contactera pour confirmer le rendez-vous.',

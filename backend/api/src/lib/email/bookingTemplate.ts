@@ -43,7 +43,7 @@ function shell(options: {
                 <table role="presentation" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="padding-right:8px;vertical-align:middle;">
-                      <img src="${logoUrl}" width="40" height="42" alt="NGW MULTISERVICES" style="display:block;border:0;width:40px;height:42px;" />
+                      <img src="${logoUrl}" width="40" height="42" alt="Ngw Multiservices" style="display:block;border:0;width:40px;height:42px;" />
                     </td>
                     <td style="vertical-align:middle;font-family:Arial,Helvetica,sans-serif;">
                       <div style="font-size:15px;font-weight:700;line-height:1.15;letter-spacing:0.01em;">

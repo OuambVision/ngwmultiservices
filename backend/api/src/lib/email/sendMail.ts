@@ -16,11 +16,11 @@ export async function sendMail({ to, subject, html, replyTo, from: fromOverride 
   if (!apiKey) throw new Error('RESEND_API_KEY is not configured')
 
   const address = fromOverride || process.env.RESEND_FROM_EMAIL || 'noreply@kwat.live'
-  const from = address.includes('<') ? address : `NGW MULTISERVICES <${address}>`
+  const from = address.includes('<') ? address : `Ngw Multiservices <${address}>`
   const resend = new Resend(apiKey)
   const { error } = await resend.emails.send({ from, to, subject, html, replyTo })
   if (error) throw new Error(error.message)
 }
 
 /** Fallback when the production From domain is not verified yet. */
-export const resendTestFrom = 'NGW MULTISERVICES <beth.t@example.com>'
+export const resendTestFrom = 'Ngw Multiservices <beth.t@example.com>'

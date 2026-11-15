@@ -1,6 +1,5 @@
-import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
-import React from 'react'
+import type { AdminViewServerProps } from 'payload'
 
 import './dashboard.scss'
 import { loadDashboardData } from './loadDashboardData'
@@ -9,7 +8,9 @@ function Stars({ rating }: { rating: number }) {
   return (
     <span aria-label={`${rating} sur 5`} className="ngw-dash__stars">
       {'★★★★★'.slice(0, Math.max(0, Math.min(5, rating)))}
-      <span className="ngw-dash__stars-empty">{'★★★★★'.slice(Math.max(0, Math.min(5, rating)))}</span>
+      <span className="ngw-dash__stars-empty">
+        {'★★★★★'.slice(Math.max(0, Math.min(5, rating)))}
+      </span>
     </span>
   )
 }
@@ -36,7 +37,7 @@ export async function NgwDashboard(props: AdminViewServerProps) {
           <div>
             <h1 className="ngw-dash__title">Tableau de bord</h1>
             <p className="ngw-dash__subtitle">
-              Bienvenue ! Voici un aperçu de l’activité de NGW MULTISERVICES.
+              Bienvenue ! Voici un aperçu de l’activité de Ngw Multiservices.
             </p>
           </div>
           <div className="ngw-dash__range" title="Semaine civile en cours (Amérique/Toronto)">
@@ -46,13 +47,20 @@ export async function NgwDashboard(props: AdminViewServerProps) {
 
         <section aria-label="Indicateurs" className="ngw-dash__metrics">
           {data.metrics.map((metric) => (
-            <article className={`ngw-dash__metric ngw-dash__metric--${metric.tone}`} key={metric.key}>
+            <article
+              className={`ngw-dash__metric ngw-dash__metric--${metric.tone}`}
+              key={metric.key}
+            >
               <div className="ngw-dash__metric-top">
                 <span className="ngw-dash__metric-label">{metric.label}</span>
                 <span aria-hidden className="ngw-dash__metric-icon" />
               </div>
               <p className="ngw-dash__metric-value">{metric.value}</p>
-              {metric.hint ? <p className="ngw-dash__metric-hint">{metric.hint}</p> : <p className="ngw-dash__metric-hint is-empty">—</p>}
+              {metric.hint ? (
+                <p className="ngw-dash__metric-hint">{metric.hint}</p>
+              ) : (
+                <p className="ngw-dash__metric-hint is-empty">—</p>
+              )}
             </article>
           ))}
         </section>
@@ -90,10 +98,15 @@ export async function NgwDashboard(props: AdminViewServerProps) {
                           </td>
                           <td>{row.when}</td>
                           <td>
-                            <span className={`ngw-dash__pill ${statusClass(row.status)}`}>{row.statusLabel}</span>
+                            <span className={`ngw-dash__pill ${statusClass(row.status)}`}>
+                              {row.statusLabel}
+                            </span>
                           </td>
                           <td>
-                            <a className="ngw-dash__link" href={`/admin/collections/bookings/${row.id}`}>
+                            <a
+                              className="ngw-dash__link"
+                              href={`/admin/collections/bookings/${row.id}`}
+                            >
                               Ouvrir
                             </a>
                           </td>
@@ -109,7 +122,11 @@ export async function NgwDashboard(props: AdminViewServerProps) {
               <div className="ngw-dash__card-head">
                 <h2>Réservations de la semaine</h2>
               </div>
-              <div className="ngw-dash__chart" role="img" aria-label="Réservations par jour de la semaine">
+              <div
+                className="ngw-dash__chart"
+                role="img"
+                aria-label="Réservations par jour de la semaine"
+              >
                 {data.weekBars.map((bar) => (
                   <div className="ngw-dash__bar" key={bar.key}>
                     <div className="ngw-dash__bar-track">
@@ -133,17 +150,29 @@ export async function NgwDashboard(props: AdminViewServerProps) {
                 <h2>Actions rapides</h2>
               </div>
               <div className="ngw-dash__actions">
-                <a className="ngw-dash__btn ngw-dash__btn--primary" href="/admin/collections/services/create">
+                <a
+                  className="ngw-dash__btn ngw-dash__btn--primary"
+                  href="/admin/collections/services/create"
+                >
                   Ajouter un service
                 </a>
-                <a className="ngw-dash__btn ngw-dash__btn--accent" href="/admin/collections/realizations/create">
+                <a
+                  className="ngw-dash__btn ngw-dash__btn--accent"
+                  href="/admin/collections/realizations/create"
+                >
                   Publier une réalisation
                 </a>
-                <a className="ngw-dash__btn ngw-dash__btn--muted" href="/admin/collections/reviews?where%5Bstatus%5D%5Bequals%5D=en_attente">
+                <a
+                  className="ngw-dash__btn ngw-dash__btn--muted"
+                  href="/admin/collections/reviews?where%5Bstatus%5D%5Bequals%5D=en_attente"
+                >
                   Modérer les avis
                   {data.pendingReviewCount > 0 ? ` (${data.pendingReviewCount})` : ''}
                 </a>
-                <a className="ngw-dash__btn ngw-dash__btn--ghost" href="/admin/collections/quoteRequests">
+                <a
+                  className="ngw-dash__btn ngw-dash__btn--ghost"
+                  href="/admin/collections/quoteRequests"
+                >
                   Voir les devis
                 </a>
               </div>

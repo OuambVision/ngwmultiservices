@@ -64,8 +64,8 @@ export default buildConfig({
     user: Users.slug,
     theme: 'light',
     meta: {
-      titleSuffix: '— NGW MULTISERVICES',
-      description: 'Administration NGW MULTISERVICES',
+      titleSuffix: '— Ngw Multiservices',
+      description: 'Administration Ngw Multiservices',
       icons: [
         { rel: 'icon', type: 'image/png', sizes: '192x192', url: '/icons/icon-192.png' },
         { rel: 'icon', type: 'image/png', sizes: '512x512', url: '/icons/icon-512.png' },

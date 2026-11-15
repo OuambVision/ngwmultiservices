@@ -60,7 +60,8 @@ export const fr = {
     reasonsTitle: 'Pourquoi choisir NGW ?',
     reasonsSubtitle: 'Un parcours clair, de la demande jusqu’au suivi de votre intervention.',
     reasonBookingTitle: 'Réservation simplifiée',
-    reasonBookingText: 'Choisissez votre prestation, renseignez vos besoins et envoyez votre demande.',
+    reasonBookingText:
+      'Choisissez votre prestation, renseignez vos besoins et envoyez votre demande.',
     reasonQuoteTitle: 'Soumission transparente',
     reasonQuoteText: 'Visualisez les informations de votre demande avant toute confirmation.',
     reasonServicesTitle: 'Plusieurs services',
@@ -93,7 +94,8 @@ export const fr = {
     metaTitle: 'Services',
     eyebrow: 'Services',
     title: 'Automobile, résidentiel, commercial et spécialisé.',
-    description: 'Choisissez une famille, puis un service publié, pour réserver ou demander un devis.',
+    description:
+      'Choisissez une famille, puis un service publié, pour réserver ou demander un devis.',
     breadcrumb: 'Fil d’Ariane',
     reserve: 'Réserver',
     details: 'Détails',
@@ -166,7 +168,7 @@ export const fr = {
   about: {
     eyebrow: 'À propos',
     title: 'Un partenaire multiservices à Ottawa et environs',
-    lead: 'NGW MULTISERVICES accompagne particuliers et entreprises pour le nettoyage, le déménagement et la petite maintenance.',
+    lead: 'Ngw Multiservices accompagne particuliers et entreprises pour le nettoyage, le déménagement et la petite maintenance.',
     text: 'Réservez en ligne, demandez un devis ou laissez un avis après une intervention. Notre équipe intervient chez vous ou à notre emplacement, selon le service.',
     areaTitle: 'Zone desservie',
     areaText: 'Ottawa, Gatineau, Orléans, Kanata et les environs.',
@@ -202,7 +204,7 @@ export const fr = {
     privacyMeta: 'Confidentialité',
     privacyEyebrow: 'Légal',
     privacyTitle: 'Confidentialité',
-    privacyLead: 'Comment NGW MULTISERVICES traite les renseignements que vous nous confiez.',
+    privacyLead: 'Comment Ngw Multiservices traite les renseignements que vous nous confiez.',
     privacyCollectTitle: 'Ce que nous recueillons',
     privacyCollect:
       'Nom, courriel, téléphone et informations liées à une réservation, un devis, un avis ou un message de contact. Des fichiers que vous joignez à un avis peuvent aussi être conservés.',
@@ -217,7 +219,7 @@ export const fr = {
     cancelTitle: 'Conditions d’annulation',
     cancelLead: 'Le texte officiel sera publié dès que NGW l’aura fourni.',
     cancelDraft:
-      'Cette page est en brouillon. Aucune règle d’annulation n’est affichée tant que le texte juridique n’a pas été validé par NGW MULTISERVICES. Pour une question urgente, appelez-nous ou écrivez-nous.',
+      'Cette page est en brouillon. Aucune règle d’annulation n’est affichée tant que le texte juridique n’a pas été validé par Ngw Multiservices. Pour une question urgente, appelez-nous ou écrivez-nous.',
     cancelContact: 'Nous contacter',
   },
   reservation: {
@@ -239,7 +241,8 @@ export const fr = {
     stepConfirm: 'Confirmation',
     stepConfirmHint: 'Validation finale',
     chooseService: 'Quel service souhaitez-vous réserver ?',
-    chooseServiceText: 'Choisissez une catégorie puis un service pour voir les détails et continuer.',
+    chooseServiceText:
+      'Choisissez une catégorie puis un service pour voir les détails et continuer.',
     nextDate: 'Suivant : Choisir une date',
     previous: 'Précédent',
     next: 'Suivant',
@@ -309,7 +312,8 @@ export const fr = {
     submit: 'Envoyer la demande',
     sending: 'Envoi…',
     asideTitle: 'Après l’envoi',
-    asideText: 'Nous lisons la demande, estimons le travail et vous répondons par courriel. Aucun rendez-vous n’est créé.',
+    asideText:
+      'Nous lisons la demande, estimons le travail et vous répondons par courriel. Aucun rendez-vous n’est créé.',
     stepReceive: 'Demande reçue',
     stepEstimate: 'Estimation du travail',
     stepReply: 'Réponse par courriel',
@@ -345,20 +349,22 @@ export const fr = {
     service: 'Service utilisé',
     servicePlaceholder: 'Sélectionner un service',
     textLabel: 'Votre avis',
-    textPlaceholder: 'Partagez votre expérience… (qualité du service, ponctualité, équipe, résultats, etc.)',
+    textPlaceholder:
+      'Partagez votre expérience… (qualité du service, ponctualité, équipe, résultats, etc.)',
     files: 'Ajouter des photos ou vidéos (facultatif)',
     filesHint: 'Cliquez pour ajouter des fichiers',
     filesTypes: 'Photos ou vidéos (JPG, PNG, MP4, MOV)',
     filesSize: 'Taille maximale : 10 Mo par fichier',
     consent:
-      'J’accepte que mon avis et les médias soumis soient publiés après vérification par l’équipe de NGW MULTISERVICES.',
+      'J’accepte que mon avis et les médias soumis soient publiés après vérification par l’équipe de Ngw Multiservices.',
     submit: 'Envoyer mon avis',
     sending: 'Envoi…',
     footnote:
       'Tous les avis sont vérifiés par notre équipe avant publication afin d’assurer la qualité et la pertinence du contenu.',
     successTitle: 'Merci pour votre avis',
     successText: 'Il sera publié après vérification par notre équipe.',
-    missing: 'Indiquez votre nom, une note, un service et votre avis, puis acceptez la vérification.',
+    missing:
+      'Indiquez votre nom, une note, un service et votre avis, puis acceptez la vérification.',
     'too-long': '500 caractères au maximum.',
     'file-too-big': 'Chaque fichier doit faire 10 Mo au maximum.',
     'file-type': 'Formats acceptés : JPG, PNG, MP4 et MOV.',
@@ -552,7 +558,7 @@ export const en: typeof fr = {
   about: {
     eyebrow: 'About',
     title: 'A multiservice partner in Ottawa and the surrounding area',
-    lead: 'NGW MULTISERVICES helps households and businesses with cleaning, moving and light maintenance.',
+    lead: 'Ngw Multiservices helps households and businesses with cleaning, moving and light maintenance.',
     text: 'Book online, request a quote or leave a review after a visit. Our team comes to you, or you come to our location, depending on the service.',
     areaTitle: 'Service area',
     areaText: 'Ottawa, Gatineau, Orléans, Kanata and the surrounding area.',
@@ -588,7 +594,7 @@ export const en: typeof fr = {
     privacyMeta: 'Privacy',
     privacyEyebrow: 'Legal',
     privacyTitle: 'Privacy',
-    privacyLead: 'How NGW MULTISERVICES handles the information you share with us.',
+    privacyLead: 'How Ngw Multiservices handles the information you share with us.',
     privacyCollectTitle: 'What we collect',
     privacyCollect:
       'Name, email, phone and details linked to a booking, quote, review or contact message. Files you attach to a review may also be kept.',
@@ -603,7 +609,7 @@ export const en: typeof fr = {
     cancelTitle: 'Cancellation terms',
     cancelLead: 'The official text will be published once NGW has provided it.',
     cancelDraft:
-      'This page is a draft. No cancellation rule is shown until the legal text has been approved by NGW MULTISERVICES. For an urgent question, call or write to us.',
+      'This page is a draft. No cancellation rule is shown until the legal text has been approved by Ngw Multiservices. For an urgent question, call or write to us.',
     cancelContact: 'Contact us',
   },
   reservation: {
@@ -695,7 +701,8 @@ export const en: typeof fr = {
     submit: 'Send the request',
     sending: 'Sending…',
     asideTitle: 'What happens next',
-    asideText: 'We read the request, estimate the work and reply by email. No appointment is created.',
+    asideText:
+      'We read the request, estimate the work and reply by email. No appointment is created.',
     stepReceive: 'Request received',
     stepEstimate: 'Work estimate',
     stepReply: 'Reply by email',
@@ -735,10 +742,12 @@ export const en: typeof fr = {
     filesHint: 'Click to add files',
     filesTypes: 'Photos or videos (JPG, PNG, MP4, MOV)',
     filesSize: 'Maximum size: 10 MB per file',
-    consent: 'I accept that my review and the files I submit may be published after review by the NGW MULTISERVICES team.',
+    consent:
+      'I accept that my review and the files I submit may be published after review by the Ngw Multiservices team.',
     submit: 'Send my review',
     sending: 'Sending…',
-    footnote: 'Every review is checked by our team before publication, so the content stays relevant.',
+    footnote:
+      'Every review is checked by our team before publication, so the content stays relevant.',
     successTitle: 'Thank you for your review',
     successText: 'It will be published after our team has checked it.',
     missing: 'Enter your name, a rating, a service and your review, then accept the check.',
@@ -753,11 +762,13 @@ export const en: typeof fr = {
     metaTitle: 'Client area',
     eyebrow: 'Client area',
     title: 'Your bookings, quotes and invoices.',
-    description: 'Sign-in and request tracking will be available once client accounts are in place.',
+    description:
+      'Sign-in and request tracking will be available once client accounts are in place.',
   },
   notFound: {
     title: 'This page does not exist.',
-    description: 'The link is incorrect or the page has not been published yet. Return home from the menu.',
+    description:
+      'The link is incorrect or the page has not been published yet. Return home from the menu.',
   },
   error: {
     title: 'Something went wrong',

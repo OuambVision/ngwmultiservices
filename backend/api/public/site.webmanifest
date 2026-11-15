@@ -1,7 +1,7 @@
 {
   "name": "NGW Admin",
   "short_name": "NGW Admin",
-  "description": "Administration NGW MULTISERVICES",
+  "description": "Administration Ngw Multiservices",
   "start_url": "/admin",
   "scope": "/admin",
   "display": "standalone",
