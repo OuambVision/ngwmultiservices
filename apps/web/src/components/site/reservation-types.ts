@@ -1,5 +1,10 @@
+export type BookingWindow = { end: string; start: string }
+
 /** Fallback until `/availability/window` responds. */
-export const bookingWindowFallback = { start: '2026-11-01', end: '2027-03-31' } as const
+export const bookingWindowFallback: BookingWindow = {
+  start: '2026-11-01',
+  end: '2027-03-31',
+}
 
 /** @deprecated Prefer window loaded from API. */
 export const bookingWindow = bookingWindowFallback

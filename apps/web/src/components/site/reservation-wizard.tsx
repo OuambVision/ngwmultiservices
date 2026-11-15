@@ -31,6 +31,7 @@ import { createBooking } from '@/app/reservation/actions'
 import {
   bookingWindowFallback,
   reservationReceiptKey,
+  type BookingWindow,
   type ReservationCategory,
   type ReservationReceipt,
   type ReservationService,
@@ -160,7 +161,7 @@ export function ReservationWizard({
   const [step, setStep] = useState(1)
   const [openCategory, setOpenCategory] = useState(initial?.categorySlug ?? '')
   const [service, setService] = useState<ReservationService | null>(initial)
-  const [bookingWindow, setBookingWindow] = useState(bookingWindowFallback)
+  const [bookingWindow, setBookingWindow] = useState<BookingWindow>(bookingWindowFallback)
   const [month, setMonth] = useState(() => {
     const [year, value] = bookingWindowFallback.start.split('-').map(Number)
     return { year, month: value }
@@ -199,11 +200,13 @@ export function ReservationWizard({
       .then((response) => (response.ok ? response.json() : null))
       .then((body: { end?: string; start?: string } | null) => {
         if (ignore || !body?.start || !body?.end) return
-        setBookingWindow({ start: body.start, end: body.end })
+        const start = body.start
+        const end = body.end
+        setBookingWindow({ start, end })
         setMonth((current) => {
           const iso = `${current.year}-${pad(current.month)}`
-          if (iso >= body.start.slice(0, 7) && iso <= body.end.slice(0, 7)) return current
-          const [year, value] = body.start.split('-').map(Number)
+          if (iso >= start.slice(0, 7) && iso <= end.slice(0, 7)) return current
+          const [year, value] = start.split('-').map(Number)
           return { year, month: value }
         })
       })
