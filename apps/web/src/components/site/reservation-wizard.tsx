@@ -23,7 +23,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm, type UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -147,6 +147,58 @@ function Stepper({
   )
 }
 
+function StepNav({
+  backLabel,
+  backDisabled,
+  compact,
+  nextDisabled,
+  nextLabel,
+  nextSubmit,
+  nextType = 'button',
+  onBack,
+  onNext,
+}: {
+  backLabel?: string
+  backDisabled?: boolean
+  compact?: boolean
+  nextDisabled?: boolean
+  nextLabel: string
+  nextSubmit?: boolean
+  nextType?: 'button' | 'submit'
+  onBack?: () => void
+  onNext?: () => void
+}) {
+  const size = compact
+    ? 'rounded-lg px-3 py-1.5 text-xs font-semibold'
+    : 'rounded-xl px-5 py-3 text-sm font-semibold'
+  const icon = compact ? 'size-3.5' : 'size-4'
+  return (
+    <div className={`flex flex-wrap items-center gap-2 ${onBack ? 'justify-between' : 'justify-end'}`}>
+      {onBack ? (
+        <button
+          type="button"
+          disabled={backDisabled}
+          className={`inline-flex cursor-pointer items-center gap-1.5 border border-navy/15 bg-white text-navy disabled:cursor-not-allowed disabled:opacity-50 ${size}`}
+          onClick={onBack}
+        >
+          <ArrowLeft className={icon} aria-hidden />
+          {backLabel}
+        </button>
+      ) : null}
+      <button
+        type={nextType}
+        form={nextSubmit ? 'reservation-contact' : undefined}
+        disabled={nextDisabled}
+        className={`inline-flex cursor-pointer items-center gap-1.5 bg-action text-white hover:bg-[#0544c4] disabled:cursor-wait disabled:opacity-70 ${size}`}
+        onClick={nextType === 'button' ? onNext : undefined}
+      >
+        {nextLabel}
+        <ArrowRight className={icon} aria-hidden />
+      </button>
+    </div>
+  )
+}
+
 export function ReservationWizard({
   categories,
   initialSlug,
@@ -156,6 +208,7 @@ export function ReservationWizard({
 }) {
   const { t, i18n } = useTranslation()
   const router = useRouter()
+  const stepTopRef = useRef<HTMLDivElement>(null)
   const services = useMemo(() => categories.flatMap((category) => category.services), [categories])
   const initial = services.find((service) => service.slug === initialSlug) ?? null
   const [step, setStep] = useState(1)
@@ -193,6 +246,15 @@ export function ReservationWizard({
   const monthEnd = `${month.year}-${pad(month.month)}-${pad(monthEndDate)}`
   const from = monthStart < bookingWindow.start ? bookingWindow.start : monthStart
   const to = monthEnd > bookingWindow.end ? bookingWindow.end : monthEnd
+
+  useEffect(() => {
+    const target = stepTopRef.current
+    if (!target) return
+    const header = document.querySelector('header.sticky')
+    const headerOffset = (header instanceof HTMLElement ? header.offsetHeight : 64) + 12
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset
+    window.scrollTo({ top: Math.max(0, top), left: 0, behavior: 'auto' })
+  }, [step])
 
   useEffect(() => {
     let ignore = false
@@ -340,12 +402,15 @@ export function ReservationWizard({
   return (
     <div className="bg-canvas">
       {step === 1 ? (
-        <div className="mx-auto w-full max-w-[90rem] px-4 pt-10 sm:px-6">
+        <div ref={stepTopRef} className="mx-auto w-full max-w-[90rem] px-4 pt-10 sm:px-6">
           <h1 className="text-xl font-bold tracking-tight text-[#1e2b6e] sm:text-3xl lg:text-4xl">
             {t('reservation.step1Title')}
           </h1>
           <div className="mt-8">
             <Stepper serviceTitle={service?.title} step={1} />
+          </div>
+          <div className="mt-4">
+            <StepNav compact nextLabel={t('reservation.next')} onNext={continueFromService} />
           </div>
         </div>
       ) : (
@@ -389,9 +454,35 @@ export function ReservationWizard({
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 lg:pb-20">
+      <div
+        ref={step > 1 ? stepTopRef : undefined}
+        className="mx-auto w-full max-w-[90rem] px-4 py-8 sm:px-6 lg:pb-20"
+      >
         {step > 1 ? (
-          <Stepper serviceTitle={service?.title} step={step} />
+          <>
+            <Stepper serviceTitle={service?.title} step={step} />
+            <div className="mt-4">
+              {step === 2 ? (
+                <StepNav
+                  compact
+                  backLabel={t('reservation.previous')}
+                  nextLabel={t('reservation.next')}
+                  onBack={() => setStep(1)}
+                  onNext={continueFromDate}
+                />
+              ) : (
+                <StepNav
+                  compact
+                  backLabel={t('reservation.previous')}
+                  nextDisabled={isSubmitting}
+                  nextLabel={isSubmitting ? t('reservation.sending') : t('reservation.confirmShort')}
+                  nextSubmit
+                  nextType="submit"
+                  onBack={() => setStep(2)}
+                />
+              )}
+            </div>
+          </>
         ) : null}
 
         {error ? (
@@ -643,15 +734,13 @@ export function ReservationWizard({
                 ) : null}
               </section>
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-              <button type="button" className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-navy/15 bg-white px-5 py-3 text-sm font-semibold text-navy" onClick={() => setStep(1)}>
-                <ArrowLeft className="size-4" aria-hidden />
-                {t('reservation.previous')}
-              </button>
-              <button type="button" className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-action px-5 py-3 text-sm font-semibold text-white hover:bg-[#0544c4]" onClick={continueFromDate}>
-                {t('reservation.nextInfo')}
-                <ArrowRight className="size-4" aria-hidden />
-              </button>
+            <div className="mt-6">
+              <StepNav
+                backLabel={t('reservation.previous')}
+                nextLabel={t('reservation.nextInfo')}
+                onBack={() => setStep(1)}
+                onNext={continueFromDate}
+              />
             </div>
           </div>
         ) : null}
@@ -808,20 +897,15 @@ export function ReservationWizard({
                 </dl>
               </aside>
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-end gap-3">
-              <button type="button" className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-navy/15 bg-white px-5 py-3 text-sm font-semibold text-navy" onClick={() => setStep(2)}>
-                <ArrowLeft className="size-4" aria-hidden />
-                {t('reservation.previous')}
-              </button>
-              <button
-                type="submit"
-                form="reservation-contact"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-action px-5 py-3 text-sm font-semibold text-white hover:bg-[#0544c4] disabled:cursor-wait disabled:opacity-70"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? t('reservation.sending') : t('reservation.confirm')}
-                <ArrowRight className="size-4" aria-hidden />
-              </button>
+            <div className="mt-6">
+              <StepNav
+                backLabel={t('reservation.previous')}
+                nextDisabled={isSubmitting}
+                nextLabel={isSubmitting ? t('reservation.sending') : t('reservation.confirm')}
+                nextSubmit
+                nextType="submit"
+                onBack={() => setStep(2)}
+              />
             </div>
           </div>
         ) : null}
