@@ -21,6 +21,7 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { PlanningLink as PlanningLink_df92acec264b3dacf1e62e155d3d89db } from '../../../components/admin/availability/PlanningLink'
 import { BookingActions as BookingActions_f14676ba39bbe4de98026691ab4737a2 } from '../../../components/admin/BookingActions'
 import { QuoteActions as QuoteActions_ba728b108c542cc3ab62ffd20ad316a3 } from '../../../components/admin/QuoteActions'
 import { RealizationActions as RealizationActions_32663eed23f47ba0a1d04a8092bf47d8 } from '../../../components/admin/RealizationActions'
@@ -30,9 +31,11 @@ import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../co
 import { HeaderSearch as HeaderSearch_f480760f54e85607d00cdef929c57b91 } from '../../../components/admin/HeaderSearch'
 import { HeaderNotifications as HeaderNotifications_b87523bade245b5adef097896e50b5ea } from '../../../components/admin/HeaderNotifications'
 import { DashboardNavLink as DashboardNavLink_fc56cb2194b7502b86cb11a3f2f00e19 } from '../../../components/admin/DashboardNavLink'
+import { PlanningNavLink as PlanningNavLink_4af64f64a83643c7e2d9dc77f24bf1ba } from '../../../components/admin/availability/PlanningNavLink'
 import { InstallableAdmin as InstallableAdmin_47be3af8893954dd278cdd42eb9232fd } from '../../../components/admin/InstallableAdmin'
 import { KeepNavDocked as KeepNavDocked_4a28093bbf96f4a24e10245bc6fcfc53 } from '../../../components/admin/KeepNavDocked'
 import { NgwDashboard as NgwDashboard_1d4cb9f96f1554792a01955e7abe902a } from '../../../components/admin/dashboard/NgwDashboard'
+import { AvailabilityPlanner as AvailabilityPlanner_eb4e6646d09e8c8a52522d05ec6d4f69 } from '../../../components/admin/availability/AvailabilityPlanner'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -58,6 +61,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/components/admin/availability/PlanningLink#PlanningLink": PlanningLink_df92acec264b3dacf1e62e155d3d89db,
   "/components/admin/BookingActions#BookingActions": BookingActions_f14676ba39bbe4de98026691ab4737a2,
   "/components/admin/QuoteActions#QuoteActions": QuoteActions_ba728b108c542cc3ab62ffd20ad316a3,
   "/components/admin/RealizationActions#RealizationActions": RealizationActions_32663eed23f47ba0a1d04a8092bf47d8,
@@ -67,7 +71,9 @@ export const importMap = {
   "/components/admin/HeaderSearch#HeaderSearch": HeaderSearch_f480760f54e85607d00cdef929c57b91,
   "/components/admin/HeaderNotifications#HeaderNotifications": HeaderNotifications_b87523bade245b5adef097896e50b5ea,
   "/components/admin/DashboardNavLink#DashboardNavLink": DashboardNavLink_fc56cb2194b7502b86cb11a3f2f00e19,
+  "/components/admin/availability/PlanningNavLink#PlanningNavLink": PlanningNavLink_4af64f64a83643c7e2d9dc77f24bf1ba,
   "/components/admin/InstallableAdmin#InstallableAdmin": InstallableAdmin_47be3af8893954dd278cdd42eb9232fd,
   "/components/admin/KeepNavDocked#KeepNavDocked": KeepNavDocked_4a28093bbf96f4a24e10245bc6fcfc53,
-  "/components/admin/dashboard/NgwDashboard#NgwDashboard": NgwDashboard_1d4cb9f96f1554792a01955e7abe902a
+  "/components/admin/dashboard/NgwDashboard#NgwDashboard": NgwDashboard_1d4cb9f96f1554792a01955e7abe902a,
+  "/components/admin/availability/AvailabilityPlanner#AvailabilityPlanner": AvailabilityPlanner_eb4e6646d09e8c8a52522d05ec6d4f69
 }

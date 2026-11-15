@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next'
 
 import { createBooking } from '@/app/reservation/actions'
 import {
-  bookingWindow,
+  bookingWindowFallback,
   reservationReceiptKey,
   type ReservationCategory,
   type ReservationReceipt,
@@ -160,8 +160,9 @@ export function ReservationWizard({
   const [step, setStep] = useState(1)
   const [openCategory, setOpenCategory] = useState(initial?.categorySlug ?? '')
   const [service, setService] = useState<ReservationService | null>(initial)
+  const [bookingWindow, setBookingWindow] = useState(bookingWindowFallback)
   const [month, setMonth] = useState(() => {
-    const [year, value] = bookingWindow.start.split('-').map(Number)
+    const [year, value] = bookingWindowFallback.start.split('-').map(Number)
     return { year, month: value }
   })
   const [openDates, setOpenDates] = useState<string[]>([])
@@ -191,6 +192,26 @@ export function ReservationWizard({
   const monthEnd = `${month.year}-${pad(month.month)}-${pad(monthEndDate)}`
   const from = monthStart < bookingWindow.start ? bookingWindow.start : monthStart
   const to = monthEnd > bookingWindow.end ? bookingWindow.end : monthEnd
+
+  useEffect(() => {
+    let ignore = false
+    fetch(`${API_URL}/availability/window`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((body: { end?: string; start?: string } | null) => {
+        if (ignore || !body?.start || !body?.end) return
+        setBookingWindow({ start: body.start, end: body.end })
+        setMonth((current) => {
+          const iso = `${current.year}-${pad(current.month)}`
+          if (iso >= body.start.slice(0, 7) && iso <= body.end.slice(0, 7)) return current
+          const [year, value] = body.start.split('-').map(Number)
+          return { year, month: value }
+        })
+      })
+      .catch(() => undefined)
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   useEffect(() => {
     if (!service || step !== 2) return

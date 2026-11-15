@@ -276,7 +276,7 @@ export interface Service {
   createdAt: string;
 }
 /**
- * Pour fermer une journée : créer une entrée, Type = Date fermée, choisir la date. Un jour ouvert propose les heures réservables.
+ * Préférez le Planning Outlook (menu) pour définir les horaires. Ici : réglages avancés (plages, périodes, exceptions).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "availability".
@@ -284,14 +284,31 @@ export interface Service {
 export interface Availability {
   id: number;
   /**
-   * Date fermée = journée entière indisponible à la réservation.
+   * Horaire = plage récurrente sur une période. Fermeture = jour ou période indisponible. Exception = horaires spéciaux pour une date.
    */
-  type: 'jour' | 'fermeture';
+  type: 'jour' | 'fermeture' | 'exception';
   /**
-   * Rempli à partir du jour ou de la date.
+   * Rempli automatiquement.
    */
   label?: string | null;
   day?: ('dimanche' | 'lundi' | 'mardi' | 'mercredi' | 'jeudi' | 'vendredi' | 'samedi') | null;
+  startTime?: string | null;
+  endTime?: string | null;
+  /**
+   * Durée entre deux départs (ex. 60).
+   */
+  slotMinutes?: number | null;
+  /**
+   * Début d’application de cet horaire.
+   */
+  validFrom?: string | null;
+  /**
+   * Ex. 2027-03-31 pour ouvrir jusqu’à fin mars 2027.
+   */
+  validTo?: string | null;
+  /**
+   * Optionnel si Début/Fin sont renseignés. Conservé pour compatibilité.
+   */
   times?:
     | {
         time: string;
@@ -299,6 +316,12 @@ export interface Availability {
       }[]
     | null;
   date?: string | null;
+  /**
+   * Laisser vide pour une seule journée. Utile pour fermer tout un mois.
+   */
+  dateEnd?: string | null;
+  blockStart?: string | null;
+  blockEnd?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -624,6 +647,11 @@ export interface AvailabilitySelect<T extends boolean = true> {
   type?: T;
   label?: T;
   day?: T;
+  startTime?: T;
+  endTime?: T;
+  slotMinutes?: T;
+  validFrom?: T;
+  validTo?: T;
   times?:
     | T
     | {
@@ -631,6 +659,9 @@ export interface AvailabilitySelect<T extends boolean = true> {
         id?: T;
       };
   date?: T;
+  dateEnd?: T;
+  blockStart?: T;
+  blockEnd?: T;
   updatedAt?: T;
   createdAt?: T;
 }

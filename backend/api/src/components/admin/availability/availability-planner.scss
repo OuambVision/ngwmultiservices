@@ -1,0 +1,263 @@
+.ngw-planner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+  color: #071b4b;
+}
+
+.ngw-planner__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.ngw-planner__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.ngw-planner h1 {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 1.85rem;
+}
+
+.ngw-planner__lead {
+  margin: 0;
+  max-width: 40rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.ngw-planner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.ngw-planner__save {
+  appearance: none;
+  border: 0;
+  border-radius: 0.65rem;
+  background: #0755f5;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.ngw-planner__save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ngw-planner__ghost {
+  border-radius: 0.65rem;
+  border: 1px solid #cbd5e1;
+  padding: 0.65rem 0.9rem;
+  text-decoration: none;
+  color: #071b4b;
+  font-weight: 600;
+  background: #fff;
+}
+
+.ngw-planner__ok {
+  background: #ecfdf5;
+  color: #047857;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.ngw-planner__err {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.ngw-planner__card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem 1.1rem 1.15rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 30px rgba(7, 27, 75, 0.04);
+}
+
+.ngw-planner__card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.ngw-planner__card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.ngw-planner__hint {
+  margin: 0.35rem 0 0.85rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.ngw-planner__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.ngw-planner__row label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ngw-planner__row input,
+.ngw-planner__day-fields input,
+.ngw-planner__day-fields select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.55rem;
+  font: inherit;
+}
+
+.ngw-planner__week {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.ngw-planner__day {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+}
+
+.ngw-planner__day.is-on {
+  background: #eef4ff;
+}
+
+.ngw-planner__day-toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-weight: 700;
+}
+
+.ngw-planner__day-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.ngw-planner__linkish {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #0755f5;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ngw-planner__month-nav {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.ngw-planner__month-nav button {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  cursor: pointer;
+}
+
+.ngw-planner__cal-head,
+.ngw-planner__cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+}
+
+.ngw-planner__cal-head {
+  margin-bottom: 0.35rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ngw-planner__cell {
+  aspect-ratio: 1;
+  border-radius: 0.65rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.ngw-planner__cell.is-empty {
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.ngw-planner__cell.is-closed {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.ngw-planner__cell.is-range {
+  outline: 2px solid #0755f5;
+}
+
+.ngw-planner__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.ngw-planner__legend i {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 0.25rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  margin-right: 0.35rem;
+  vertical-align: -2px;
+}
+
+.ngw-planner__legend i.is-closed {
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+@media (max-width: 720px) {
+  .ngw-planner__day {
+    grid-template-columns: 1fr;
+  }
+}

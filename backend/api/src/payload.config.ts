@@ -79,7 +79,10 @@ export default buildConfig({
         '/components/admin/InstallableAdmin#InstallableAdmin',
         '/components/admin/KeepNavDocked#KeepNavDocked',
       ],
-      beforeNavLinks: ['/components/admin/DashboardNavLink#DashboardNavLink'],
+      beforeNavLinks: [
+        '/components/admin/DashboardNavLink#DashboardNavLink',
+        '/components/admin/availability/PlanningNavLink#PlanningNavLink',
+      ],
       graphics: {
         Logo: '/components/admin/Logo',
         Icon: '/components/admin/Icon',
@@ -91,6 +94,10 @@ export default buildConfig({
       views: {
         dashboard: {
           Component: '/components/admin/dashboard/NgwDashboard#NgwDashboard',
+        },
+        planning: {
+          Component: '/components/admin/availability/AvailabilityPlanner#AvailabilityPlanner',
+          path: '/planning',
         },
       },
     },

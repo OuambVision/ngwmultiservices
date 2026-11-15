@@ -283,12 +283,32 @@ export interface Service {
  */
 export interface Availability {
   id: number;
-  type: 'jour' | 'fermeture';
   /**
-   * Rempli à partir du jour ou de la date.
+   * Horaire = plage récurrente sur une période. Fermeture = jour ou période indisponible. Exception = horaires spéciaux pour une date.
+   */
+  type: 'jour' | 'fermeture' | 'exception';
+  /**
+   * Rempli automatiquement.
    */
   label?: string | null;
   day?: ('dimanche' | 'lundi' | 'mardi' | 'mercredi' | 'jeudi' | 'vendredi' | 'samedi') | null;
+  startTime?: string | null;
+  endTime?: string | null;
+  /**
+   * Durée entre deux départs (ex. 60).
+   */
+  slotMinutes?: number | null;
+  /**
+   * Début d’application de cet horaire.
+   */
+  validFrom?: string | null;
+  /**
+   * Ex. 2027-03-31 pour ouvrir jusqu’à fin mars 2027.
+   */
+  validTo?: string | null;
+  /**
+   * Optionnel si Début/Fin sont renseignés. Conservé pour compatibilité.
+   */
   times?:
     | {
         time: string;
@@ -296,6 +316,12 @@ export interface Availability {
       }[]
     | null;
   date?: string | null;
+  /**
+   * Laisser vide pour une seule journée. Utile pour fermer tout un mois.
+   */
+  dateEnd?: string | null;
+  blockStart?: string | null;
+  blockEnd?: string | null;
   updatedAt: string;
   createdAt: string;
 }

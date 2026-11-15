@@ -1,6 +1,6 @@
 import { ValidationError, type PayloadRequest } from 'payload'
 
-import { calendarDay, dayRange, TIME } from '../lib/calendar'
+import { BLOCKING_BOOKING_STATUSES, calendarDay, dayRange, TIME } from '../lib/calendar'
 import { relationId } from '../lib/relation'
 
 type BookingData = {
@@ -19,7 +19,8 @@ type ConfirmArgs = {
 export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
   if (!data) return data
   const status = data.status ?? originalDoc?.status
-  if (status !== 'confirmee') return data
+  const blocking = BLOCKING_BOOKING_STATUSES as readonly string[]
+  if (typeof status !== 'string' || !blocking.includes(status)) return data
 
   const service = relationId(data.service) ?? relationId(originalDoc?.service)
   const day = calendarDay(data.date ?? originalDoc?.date)
@@ -32,7 +33,7 @@ export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
       collection: 'bookings',
       errors: [
         {
-          message: 'Un créneau confirmé exige un service, une date et une heure.',
+          message: 'Un créneau réservé exige un service, une date et une heure.',
           path: 'status',
         },
       ],
@@ -49,7 +50,7 @@ export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
     where: {
       and: [
         { service: { equals: service } },
-        { status: { equals: 'confirmee' } },
+        { status: { in: [...BLOCKING_BOOKING_STATUSES] } },
         { time: { equals: time } },
         { date: { greater_than_equal: range.start } },
         { date: { less_than: range.end } },
@@ -63,7 +64,7 @@ export async function rejectTakenSlot({ data, originalDoc, req }: ConfirmArgs) {
       collection: 'bookings',
       errors: [
         {
-          message: 'Ce créneau est déjà confirmé pour ce service.',
+          message: 'Ce créneau est déjà pris pour ce service.',
           path: 'status',
         },
       ],

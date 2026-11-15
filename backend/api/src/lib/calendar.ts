@@ -13,6 +13,27 @@ export type Weekday = (typeof WEEKDAYS)[number]
 const DAY = /^(\d{4})-(\d{2})-(\d{2})$/
 export const TIME = /^([01]\d|2[0-3]):[0-5]\d$/
 
+export const WORK_WEEKDAYS: Weekday[] = [
+  'lundi',
+  'mardi',
+  'mercredi',
+  'jeudi',
+  'vendredi',
+  'samedi',
+]
+
+/** Bookings that still occupy a slot (hidden from public availability). */
+export const BLOCKING_BOOKING_STATUSES = [
+  'en_attente',
+  'recue',
+  'a_estimer',
+  'devis_envoye',
+  'acceptee',
+  'confirmee',
+  'en_cours',
+  'litige',
+] as const
+
 export function calendarDay(value: unknown): string | null {
   if (typeof value === 'string' && DAY.test(value)) return value
   if (typeof value !== 'string' && !(value instanceof Date)) return null
@@ -42,11 +63,6 @@ export function dayRange(day: string) {
     end: `${nextCalendarDay(day)}T00:00:00.000Z`,
   }
 }
-
-export const bookingWindow = {
-  start: '2026-11-01',
-  end: '2026-12-31',
-} as const
 
 export function todayInToronto(now = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', {
@@ -79,6 +95,43 @@ export function eachDay(start: string, end: string): string[] {
     cursor = next
   }
   return days
+}
+
+export function timeToMinutes(time: string): number | null {
+  if (!TIME.test(time)) return null
+  const [hour, minute] = time.split(':').map(Number)
+  return hour * 60 + minute
+}
+
+export function minutesToTime(total: number): string {
+  const hour = Math.floor(total / 60)
+  const minute = total % 60
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+}
+
+/** Expand [start, end) into discrete slots. */
+export function expandTimeRange(
+  startTime: string,
+  endTime: string,
+  slotMinutes = 60,
+): string[] {
+  const start = timeToMinutes(startTime)
+  const end = timeToMinutes(endTime)
+  const step = Number(slotMinutes)
+  if (start == null || end == null || !Number.isFinite(step) || step < 5 || start >= end) {
+    return []
+  }
+  const slots: string[] = []
+  for (let cursor = start; cursor + step <= end; cursor += step) {
+    slots.push(minutesToTime(cursor))
+  }
+  // Also allow a final slot that starts before end even if shorter remainder was skipped:
+  // Outlook-style: last start must be at least `step` before end, already handled.
+  // If range is shorter than step but valid (e.g. 10:00-10:30 with 30 min), allow one slot:
+  if (slots.length === 0 && end - start >= Math.min(step, 30)) {
+    slots.push(minutesToTime(start))
+  }
+  return slots
 }
 
 export const weekdayOptions = WEEKDAYS.map((day) => ({

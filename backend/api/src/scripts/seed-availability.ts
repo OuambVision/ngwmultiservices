@@ -1,51 +1,68 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-import { bookingWindow } from '../lib/calendar'
+import { WORK_WEEKDAYS } from '../lib/calendar'
 
-const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'] as const
-const times = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
+const validFrom = '2026-11-01'
+const validTo = '2027-03-31'
 
 const payload = await getPayload({ config })
 
 try {
-  let updated = 0
-  let created = 0
-  for (const day of days) {
-    const existing = await payload.find({
+  const existing = await payload.find({
+    collection: 'availability',
+    depth: 0,
+    limit: 500,
+    overrideAccess: true,
+    pagination: false,
+  })
+  for (const doc of existing.docs) {
+    await payload.delete({
       collection: 'availability',
-      depth: 0,
-      limit: 1,
+      id: doc.id,
       overrideAccess: true,
-      where: {
-        and: [{ type: { equals: 'jour' } }, { day: { equals: day } }],
+    })
+  }
+
+  let created = 0
+  for (const day of WORK_WEEKDAYS) {
+    await payload.create({
+      collection: 'availability',
+      overrideAccess: true,
+      data: {
+        type: 'jour',
+        day,
+        startTime: '08:00',
+        endTime: '17:00',
+        slotMinutes: 60,
+        validFrom,
+        validTo,
       },
     })
-    const data = {
-      type: 'jour' as const,
-      day,
-      times: times.map((time) => ({ time })),
-    }
-    const current = existing.docs[0]
-    if (current) {
-      await payload.update({
-        collection: 'availability',
-        id: current.id,
-        overrideAccess: true,
-        data,
-      })
-      updated += 1
-    } else {
-      await payload.create({
-        collection: 'availability',
-        overrideAccess: true,
-        data,
-      })
-      created += 1
-    }
+    created += 1
   }
+
+  // Sample closures: Christmas week + New Year day + a half-day block example
+  const closures = [
+    { date: '2026-12-24', dateEnd: '2026-12-26' },
+    { date: '2027-01-01' },
+    { date: '2026-12-31', blockStart: '12:00', blockEnd: '17:00' },
+  ] as const
+
+  for (const row of closures) {
+    await payload.create({
+      collection: 'availability',
+      overrideAccess: true,
+      data: {
+        type: 'fermeture',
+        ...row,
+      },
+    })
+    created += 1
+  }
+
   console.log(
-    `${created} jour(s) créé(s), ${updated} mis à jour. Lundi à samedi, ${times[0]} à ${times.at(-1)}. Le dimanche reste fermé. Fenêtre de réservation : ${bookingWindow.start} au ${bookingWindow.end}.`,
+    `Disponibilités rechargées : ${created} entrées. Lun–sam 08:00–17:00 (créneaux 60 min), valide du ${validFrom} au ${validTo}. Fermetures Noël / Jour de l’an + 31 déc. après-midi.`,
   )
 } finally {
   await payload.destroy()
